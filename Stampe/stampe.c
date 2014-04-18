@@ -75,12 +75,20 @@ stampa cancella_job_stampa(stampa nodo, int jobid){
 }
 
 stampa staccamin(stampa nodo, stampa padre){
-    if(!nodo) return NULL;
+    if(!nodo || !padre) return NULL;
     if(nodo->sx) return staccamin(nodo->sx, nodo);
     if(padre->sx == nodo) padre->sx = nodo->dx;
     if(padre->dx == nodo) padre->dx = nodo->dx;
     nodo->dx = NULL;
     return nodo;
+}
+
+stampa pop_stampa(stampa *nodo){
+    if(!(*nodo)) return NULL;
+    if((*nodo)->sx) return staccamin((*nodo)->sx, (*nodo));
+    stampa ret = (*nodo);
+    (*nodo) = (*nodo)->dx;
+    return ret;
 }
 
 stampa inserisci_stampa(stampa albero, stampa nodo){
