@@ -1,3 +1,4 @@
+#include "stampe.h"
 
 typedef struct spc* pc;
 

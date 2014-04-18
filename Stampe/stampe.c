@@ -11,7 +11,7 @@ struct sstampa{
 };
 
 stampa nuova_stampa(job cont){
-    stampa brum = (stampe)malloc(sizeof(struct sstampe));
+    stampa brum = (stampa)malloc(sizeof(struct sstampa));
     brum->cont = cont;
     brum->sx = NULL;
     brum->dx = NULL;
@@ -47,13 +47,13 @@ stampa cancella_job_stampa(stampa nodo, int jobid){
             return NULL;
         }
         else if(nodo->sx && !nodo->dx){
-            stampa ret = nodo->sx
+            stampa ret = nodo->sx;
             nodo->sx = NULL;
             cancella_stampa(nodo);
             return ret;
         }
         else if(!nodo->sx && nodo->dx){
-            stampa ret = nodo->dx
+            stampa ret = nodo->dx;
             nodo->dx = NULL;
             cancella_stampa(nodo);
             return ret;
@@ -61,7 +61,7 @@ stampa cancella_job_stampa(stampa nodo, int jobid){
         else{
             stampa min = staccamin(nodo->dx, nodo);
             cancella_job(nodo->cont);
-            cont = min->cont;
+            nodo->cont = min->cont;
             min->cont = NULL;
             cancella_stampa(min);
             return nodo;
@@ -109,7 +109,7 @@ stampa cerca_inserisci_job_stampa(stampa *nodo, int jobid){
     }
     if((*nodo)->cont && get_id_job((*nodo)->cont) > jobid) return cerca_inserisci_job_stampa(&((*nodo)->sx),jobid);
     if((*nodo)->cont && get_id_job((*nodo)->cont) < jobid) return cerca_inserisci_job_stampa(&((*nodo)->dx),jobid);
-    if((*nodo)->cont && get_id_job((*nodo)->cont) == jobid) return nodo;
+    if((*nodo)->cont && get_id_job((*nodo)->cont) == jobid) return *nodo;
     stampa ret = cerca_job_stampa((*nodo)->dx, jobid);
     if(!ret) return cerca_inserisci_job_stampa(&((*nodo)->sx),jobid);
     else return ret;

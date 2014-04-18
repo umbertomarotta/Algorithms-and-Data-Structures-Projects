@@ -15,3 +15,55 @@
 	<stdlib.h>
 	<time.h>
 
+1397841391 source:/home/garrett/server_stampa/ProgettiLASD/Stampe/heap.c
+	<string.h>
+	<stdlib.h>
+	"pc.h"
+	"heap.h"
+
+1397841836 /home/garrett/server_stampa/ProgettiLASD/Stampe/pc.h
+	"stampe.h"
+
+1397842788 /home/garrett/server_stampa/ProgettiLASD/Stampe/stampe.h
+	"job.h"
+
+1397840547 /home/garrett/server_stampa/ProgettiLASD/Stampe/job.h
+
+1397841877 /home/garrett/server_stampa/ProgettiLASD/Stampe/heap.h
+	"pc.h"
+
+1397840917 source:/home/garrett/server_stampa/ProgettiLASD/Stampe/infrastruttura.c
+	<stdio.h>
+	<stdlib.h>
+	"heap.h"
+
+1397840547 source:/home/garrett/server_stampa/ProgettiLASD/Stampe/job.c
+	<stdio.h>
+	<stdlib.h>
+	"job.h"
+
+1397840547 source:/home/garrett/server_stampa/ProgettiLASD/Stampe/main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+
+1397841885 source:/home/garrett/server_stampa/ProgettiLASD/Stampe/pc.c
+	<stdio.h>
+	<stdlib.h>
+	<limits.h>
+	"stampe.h"
+	"job.h"
+	"pc.h"
+
+1397842273 source:/home/garrett/server_stampa/ProgettiLASD/Stampe/stampe.c
+	<stdio.h>
+	<stdlib.h>
+	<limits.h>
+	"job.h"
+	"stampe.h"
+
+1397840547 source:/home/garrett/server_stampa/ProgettiLASD/Stampe/utils.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+

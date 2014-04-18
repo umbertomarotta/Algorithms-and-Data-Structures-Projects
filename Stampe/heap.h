@@ -1,3 +1,4 @@
+#include "pc.h"
 #define max 128
 
 typedef struct s_heap* Heap;

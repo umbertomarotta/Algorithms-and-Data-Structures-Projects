@@ -55,6 +55,6 @@ int stampa_pc(pc brum){
         printf("\n\n");
         return 1;
     }
-    else {
+    else
         return printf("NO PC\n\n");
 }
