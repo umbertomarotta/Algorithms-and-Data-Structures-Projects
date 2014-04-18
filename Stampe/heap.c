@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "pc.h"
 #include "heap.h"
-#define max 128
+#define max 32
 
 struct s_heap {
         pc pc[max];
@@ -10,10 +10,12 @@ struct s_heap {
 };
 
 
-Heap initHeap(Heap coda){
-    coda=(Heap)malloc(sizeof(struct s_heap));
+Heap initHeap()
+{
+    int i;
+    Heap coda=(Heap)malloc(sizeof(struct s_heap));
     coda->heapsize=-1;
-    memset(coda->pc,0,max);
+    for(i=0;i<max;i++) coda->pc[i]=NULL;
     return coda;
 }
 
@@ -100,3 +102,24 @@ void deleteNode(Heap coda, int node)
 
 }
 
+
+int get_heapsize(Heap coda){
+    return coda->heapsize;
+}
+
+pc get_top_priority_pc(Heap coda){
+    pc top = coda->pc[0];
+    deleteNode(coda, 0);
+    return top;
+}
+
+void set_heapsize(Heap coda, int n){
+    if(coda!=NULL && n < max)
+        coda->heapsize = n;
+}
+
+pc get_pc(Heap coda, int n){
+    if(n<coda->heapsize)
+        return coda->pc[n];
+    else return NULL;
+}

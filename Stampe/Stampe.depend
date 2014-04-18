@@ -15,39 +15,46 @@
 	<stdlib.h>
 	<time.h>
 
-1397841391 source:/home/garrett/server_stampa/ProgettiLASD/Stampe/heap.c
+1397856518 source:/home/garrett/server_stampa/ProgettiLASD/Stampe/heap.c
 	<string.h>
 	<stdlib.h>
 	"pc.h"
 	"heap.h"
 
-1397841836 /home/garrett/server_stampa/ProgettiLASD/Stampe/pc.h
+1397856783 /home/garrett/server_stampa/ProgettiLASD/Stampe/pc.h
 	"stampe.h"
 
-1397842788 /home/garrett/server_stampa/ProgettiLASD/Stampe/stampe.h
+1397856818 /home/garrett/server_stampa/ProgettiLASD/Stampe/stampe.h
 	"job.h"
 
-1397840547 /home/garrett/server_stampa/ProgettiLASD/Stampe/job.h
+1397855618 /home/garrett/server_stampa/ProgettiLASD/Stampe/job.h
 
-1397841877 /home/garrett/server_stampa/ProgettiLASD/Stampe/heap.h
+1397856518 /home/garrett/server_stampa/ProgettiLASD/Stampe/heap.h
 	"pc.h"
 
-1397840917 source:/home/garrett/server_stampa/ProgettiLASD/Stampe/infrastruttura.c
+1397857560 source:/home/garrett/server_stampa/ProgettiLASD/Stampe/infrastruttura.c
 	<stdio.h>
+	<math.h>
 	<stdlib.h>
+	<time.h>
 	"heap.h"
+	"infrastruttura.h"
+	"pc.h"
+	"stampe.h"
 
-1397840547 source:/home/garrett/server_stampa/ProgettiLASD/Stampe/job.c
+1397855618 source:/home/garrett/server_stampa/ProgettiLASD/Stampe/job.c
 	<stdio.h>
 	<stdlib.h>
 	"job.h"
 
-1397840547 source:/home/garrett/server_stampa/ProgettiLASD/Stampe/main.c
+1397857869 source:/home/garrett/server_stampa/ProgettiLASD/Stampe/main.c
 	<stdio.h>
 	<stdlib.h>
 	<time.h>
+	"infrastruttura.h"
+	"utils.h"
 
-1397841885 source:/home/garrett/server_stampa/ProgettiLASD/Stampe/pc.c
+1397856795 source:/home/garrett/server_stampa/ProgettiLASD/Stampe/pc.c
 	<stdio.h>
 	<stdlib.h>
 	<limits.h>
@@ -55,7 +62,7 @@
 	"job.h"
 	"pc.h"
 
-1397842816 source:/home/garrett/server_stampa/ProgettiLASD/Stampe/stampe.c
+1397855619 source:/home/garrett/server_stampa/ProgettiLASD/Stampe/stampe.c
 	<stdio.h>
 	<stdlib.h>
 	<limits.h>
@@ -66,4 +73,8 @@
 	<stdio.h>
 	<stdlib.h>
 	<time.h>
+
+1397857126 /home/garrett/server_stampa/ProgettiLASD/Stampe/infrastruttura.h
+
+1397840547 /home/garrett/server_stampa/ProgettiLASD/Stampe/utils.h
 

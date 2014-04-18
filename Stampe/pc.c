@@ -58,3 +58,13 @@ int stampa_pc(pc brum){
     else
         return printf("NO PC\n\n");
 }
+
+void set_coda_pc(pc curr,stampa abr){
+    if(curr!=NULL)
+        curr->coda=abr;
+}
+
+stampa get_coda(pc curr){
+    if(curr!=NULL)
+        return curr->coda;
+}

@@ -9,4 +9,6 @@ int set_id_pc(pc car, int id);
 int set_priority_job(pc car, int priority);
 int cancella_pc(pc car);
 int stampa_pc(pc brum);
+void set_coda_pc(pc curr,stampa abr);
+stampa get_coda(pc curr);
 

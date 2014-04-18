@@ -102,7 +102,7 @@ stampa inserisci_stampa(stampa albero, stampa nodo){
     return albero;
 }
 
-stampa cerca_inserisci_job_stampa(stampa *nodo, int jobid){
+stampa cerca_inserisci_job_stampa(stampa *nodo, long jobid){
     if(!(*nodo)) {
         (*nodo) = nuova_stampa(nuovo_job(jobid));
         return NULL;
