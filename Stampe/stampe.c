@@ -129,7 +129,7 @@ stampa stampa_stampe_ex(stampa alb, stampa story){
     return Istampa_stampe_ex(alb, story, 0);
 }
 
-stampa Istampa_stampe_ex(stampa alb, stampa *story, int liv){
+stampa Istampa_stampe_ex(stampa alb, stampa story, int liv){
     if (!alb) return story;
     story = Istampa_stampe_ex(alb->sx, story, liv + 1);
     if(alb->cont && !cerca_job_stampa(story, get_id_job(alb->cont))){
