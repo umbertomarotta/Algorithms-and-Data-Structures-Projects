@@ -1,0 +1,17 @@
+# depslib dependency file v1.0
+1397749293 source:c:\users\umberto\dropbox\lasd\alberi\stampe\job.c
+	<stdio.h>
+	<stdlib.h>
+	"job.h"
+
+1397749263 c:\users\umberto\dropbox\lasd\alberi\stampe\job.h
+
+1397748852 c:\users\umberto\dropbox\lasd\alberi\stampe\pc.h
+
+1397742696 c:\users\umberto\dropbox\lasd\alberi\stampe\stampe.h
+
+1397740787 source:c:\users\umberto\dropbox\lasd\alberi\stampe\main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+
