@@ -18,6 +18,15 @@ stampa nuova_stampa(job cont){
     return brum;
 }
 
+stampa nuova_stampa_random(stampa alb, int num, int max){
+    if (!max) return alb;
+    while(num){
+        alb = inserisci_stampa(alb, nuova_stampa(nuovo_job(rand()%max)));
+        num--;
+    }
+    return alb;
+}
+
 stampa cerca_job_stampa(stampa nodo, int jobid){
     if(!nodo) return NULL;
     if(nodo->cont && get_id_job(nodo->cont) > jobid) return cerca_job_stampa(nodo->sx,jobid);
