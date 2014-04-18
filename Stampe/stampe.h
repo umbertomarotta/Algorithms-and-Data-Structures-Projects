@@ -10,6 +10,7 @@ stampa pop_stampa(stampa *nodo);
 stampa inserisci_stampa(stampa albero, stampa nodo);
 int cancella_stampa(stampa nodo);
 int stampa_stampe(stampa alb);
+stampa stampa_stampe_ex(stampa alb, stampa story);
 int is_abr(stampa alb);
 
 

@@ -125,6 +125,23 @@ int Istampa_stampe(stampa alb, int liv){
     return 1;
 }
 
+stampa stampa_stampe_ex(stampa alb, stampa story){
+    return Istampa_stampe_ex(alb, story, 0);
+}
+
+stampa Istampa_stampe_ex(stampa alb, stampa *story, int liv){
+    if (!alb) return story;
+    story = Istampa_stampe_ex(alb->sx, story, liv + 1);
+    if(alb->cont && !cerca_job_stampa(story, get_id_job(alb->cont))){
+        story = inserisci_stampa(story, nuova_stampa(nuovo_job(get_id_job(alb->cont))));
+        printf("(%d)", liv);
+        stampa_job(alb->cont);
+        printf(" ");
+    }
+    story = Istampa_stampe_ex(alb->dx, story, liv + 1);
+    return story;
+}
+
 int is_abr(stampa alb){
     return I_is_abr(alb, INT_MAX, INT_MIN);
 }
