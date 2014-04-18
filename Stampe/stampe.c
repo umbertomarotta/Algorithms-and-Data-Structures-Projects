@@ -102,6 +102,19 @@ stampa inserisci_stampa(stampa albero, stampa nodo){
     return albero;
 }
 
+stampa cerca_inserisci_job_stampa(stampa *nodo, int jobid){
+    if(!(*nodo)) {
+        (*nodo) = nuova_stampa(nuovo_job(jobid));
+        return NULL;
+    }
+    if((*nodo)->cont && get_id_job((*nodo)->cont) > jobid) return cerca_inserisci_job_stampa(&((*nodo)->sx),jobid);
+    if((*nodo)->cont && get_id_job((*nodo)->cont) < jobid) return cerca_inserisci_job_stampa(&((*nodo)->dx),jobid);
+    if((*nodo)->cont && get_id_job((*nodo)->cont) == jobid) return nodo;
+    stampa ret = cerca_job_stampa((*nodo)->dx, jobid);
+    if(!ret) return cerca_inserisci_job_stampa(&((*nodo)->sx),jobid);
+    else return ret;
+}
+
 int cancella_stampa(stampa nodo){
     if (!nodo) return 0;
     cancella_stampa(nodo->sx);
