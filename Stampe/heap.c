@@ -59,18 +59,18 @@ void insert_heap(Heap coda, pc new_pc)
 
 void Heapify(Heap coda, int i)
 {
-        int l,r,largest;
+        int l,r,smallest;
         l = left(i);
         r = right(i);
-        if (l < coda->heapsize && get_priority_pc(coda->pc[l]) > get_priority_pc(coda->pc[i]))
-                largest = l;
-        else largest = i;
-        if (r < coda->heapsize && get_priority_pc(coda->pc[r]) > get_priority_pc(coda->pc[largest]))
-                largest = r;
+        if (l < coda->heapsize && get_priority_pc(coda->pc[l]) < get_priority_pc(coda->pc[i]))
+                smallest = l;
+        else smallest = i;
+        if (r < coda->heapsize && get_priority_pc(coda->pc[r]) < get_priority_pc(coda->pc[smallest]))
+                smallest = r;
 
-        if (largest != i) {
-                swap(coda, i, largest);
-                Heapify(coda, largest);
+        if (smallest != i) {
+                swap(coda, i, smallest);
+                Heapify(coda, smallest);
         }
 }
 
