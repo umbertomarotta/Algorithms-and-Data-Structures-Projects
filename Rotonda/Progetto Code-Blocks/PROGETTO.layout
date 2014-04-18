@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Debug" />
+	<File name="automobile.c" open="0" top="0" tabpos="0">
+		<Cursor position="62" topLine="0" />
+	</File>
+	<File name="automobile.h" open="0" top="0" tabpos="2">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="coda.c" open="0" top="0" tabpos="3">
+		<Cursor position="80" topLine="0" />
+	</File>
+	<File name="coda.h" open="0" top="0" tabpos="2">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="main.c" open="0" top="0" tabpos="2">
+		<Cursor position="181" topLine="0" />
+	</File>
+	<File name="menu.c" open="0" top="0" tabpos="3">
+		<Cursor position="179" topLine="0" />
+	</File>
+	<File name="menu.h" open="0" top="0" tabpos="2">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="rotonda.c" open="0" top="0" tabpos="4">
+		<Cursor position="1142" topLine="0" />
+	</File>
+	<File name="rotonda.h" open="1" top="1" tabpos="0">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="strada.c" open="0" top="0" tabpos="2">
+		<Cursor position="100" topLine="0" />
+	</File>
+	<File name="strada.h" open="0" top="0" tabpos="2">
+		<Cursor position="0" topLine="0" />
+	</File>
+</CodeBlocks_layout_file>

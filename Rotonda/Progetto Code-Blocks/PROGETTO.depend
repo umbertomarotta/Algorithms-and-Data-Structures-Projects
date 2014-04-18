@@ -1,0 +1,321 @@
+# depslib dependency file v1.0
+1396620445 source:/home/umberto/Dropbox/LASD/PROGETTO/automobile.c
+	<stdio.h>
+	<stdlib.h>
+	"automobile.h"
+
+1396649625 e.h"
+
+1396620445 /home/umberto/Dropbox/LASD/PROGETTO/automobile.h
+	"utils.h"
+
+1396722915 
+
+1396619534 /home/umberto/Dropbox/LASD/PROGETTO/utils.h
+
+1396620477 source:/home/umberto/Dropbox/LASD/PROGETTO/coda.c
+	<stdio.h>
+	<stdlib.h>
+	"automobile.h"
+	"coda.h"
+
+1396619455 /home/umberto/Dropbox/LASD/PROGETTO/coda.h
+	"automobile.h"
+	"utils.h"
+
+1396620169 source:/home/umberto/Dropbox/LASD/PROGETTO/main.c
+	<stdio.h>
+	<stdlib.h>
+	"automobile.h"
+	"coda.h"
+	"strada.h"
+	"rotonda.h"
+	"menu.h"
+
+1396621106 /home/umberto/Dropbox/LASD/PROGETTO/strada.h
+	"automobile.h"
+	"coda.h"
+	"utils.h"
+
+1396618641 /home/umberto/Dropbox/LASD/PROGETTO/rotonda.h
+	"automobile.h"
+	"coda.h"
+	"strada.h"
+	"utils.h"
+
+1396620247 /home/umberto/Dropbox/LASD/PROGETTO/menu.h
+	"rotonda.h"
+
+1396722461 "
+
+1396620505 source:/home/umberto/Dropbox/LASD/PROGETTO/menu.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	"rotonda.h"
+	"menu.h"
+
+1396723273 source:c:\users\umberto\dropbox\lasd\progetto\coda.c
+	<stdio.h>
+	<stdlib.h>
+	"automobile.h"
+	"coda.h"
+
+1396640806 c:\users\umberto\dropbox\lasd\progetto\automobile.h
+
+1396717849 c:\users\umberto\dropbox\lasd\progetto\coda.h
+
+1396718218 source:c:\users\umberto\dropbox\lasd\progetto\main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	"automobile.h"
+	"coda.h"
+	"strada.h"
+	"rotonda.h"
+	"utils.h"
+	"menu.h"
+
+1396717801 c:\users\umberto\dropbox\lasd\progetto\strada.h
+
+1396722461 c:\users\umberto\dropbox\lasd\progetto\rotonda.h
+
+1396640806 c:\users\umberto\dropbox\lasd\progetto\menu.h
+
+1396618482 c:\users\umberto\dropbox\lasd\progetto\utils.h
+
+1396722615 source:c:\users\umberto\dropbox\lasd\progetto\menu.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	"automobile.h"
+	"coda.h"
+	"strada.h"
+	"rotonda.h"
+	"utils.h"
+	"menu.h"
+
+1396722461 source:c:\users\umberto\dropbox\lasd\progetto\rotonda.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	"automobile.h"
+	"coda.h"
+	"strada.h"
+	"rotonda.h"
+
+1396722915 source:c:\users\umberto\dropbox\lasd\progetto\strada.c
+	<stdio.h>
+	<stdlib.h>
+	"automobile.h"
+	"coda.h"
+	"strada.h"
+
+1396619537 source:c:\users\umberto\dropbox\lasd\progetto\utils.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+
+1396649625 source:c:\users\umberto\dropbox\lasd\progetto\automobile.c
+	<stdio.h>
+	<stdlib.h>
+	"automobile.h"
+
+1396649625 source:/home/garrett/LASD/automobile.c
+	<stdio.h>
+	<stdlib.h>
+	"automobile.h"
+
+1396640806 /home/garrett/LASD/automobile.h
+
+1396723273 source:/home/garrett/LASD/coda.c
+	<stdio.h>
+	<stdlib.h>
+	"automobile.h"
+	"coda.h"
+
+1396717849 /home/garrett/LASD/coda.h
+
+1396747368 source:/home/garrett/LASD/main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	"automobile.h"
+	"coda.h"
+	"strada.h"
+	"rotonda.h"
+	"utils.h"
+	"menu.h"
+
+1396717801 /home/garrett/LASD/strada.h
+
+1396722461 /home/garrett/LASD/rotonda.h
+
+1396618482 /home/garrett/LASD/utils.h
+
+1396640806 /home/garrett/LASD/menu.h
+
+1396722615 source:/home/garrett/LASD/menu.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	"automobile.h"
+	"coda.h"
+	"strada.h"
+	"rotonda.h"
+	"utils.h"
+	"menu.h"
+
+1396722915 source:/home/garrett/LASD/strada.c
+	<stdio.h>
+	<stdlib.h>
+	"automobile.h"
+	"coda.h"
+	"strada.h"
+
+1396619537 source:/home/garrett/LASD/utils.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+
+1396746965 source:/home/garrett/LASD/rotonda.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	"automobile.h"
+	"coda.h"
+	"strada.h"
+	"rotonda.h"
+
+1396649624 source:/home/garrett/Documenti/LASD/automobile.c
+	<stdio.h>
+	<stdlib.h>
+	"automobile.h"
+
+1396640806 /home/garrett/Documenti/LASD/automobile.h
+
+1396723272 source:/home/garrett/Documenti/LASD/coda.c
+	<stdio.h>
+	<stdlib.h>
+	"automobile.h"
+	"coda.h"
+
+1396717848 /home/garrett/Documenti/LASD/coda.h
+
+1396722614 source:/home/garrett/Documenti/LASD/menu.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	"automobile.h"
+	"coda.h"
+	"strada.h"
+	"rotonda.h"
+	"utils.h"
+	"menu.h"
+
+1396717800 /home/garrett/Documenti/LASD/strada.h
+
+1396722460 /home/garrett/Documenti/LASD/rotonda.h
+
+1396618482 /home/garrett/Documenti/LASD/utils.h
+
+1396640806 /home/garrett/Documenti/LASD/menu.h
+
+1396746964 source:/home/garrett/Documenti/LASD/rotonda.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	"automobile.h"
+	"coda.h"
+	"strada.h"
+	"rotonda.h"
+
+1396722914 source:/home/garrett/Documenti/LASD/strada.c
+	<stdio.h>
+	<stdlib.h>
+	"automobile.h"
+	"coda.h"
+	"strada.h"
+
+1396619536 source:/home/garrett/Documenti/LASD/utils.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+
+1396857186 source:/home/garrett/Documenti/LASD/main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	"automobile.h"
+	"coda.h"
+	"strada.h"
+	"rotonda.h"
+	"utils.h"
+	"menu.h"
+
+1396857316 source:c:\users\umberto\desktop\progetto code-blocks\main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	"automobile.h"
+	"coda.h"
+	"strada.h"
+	"rotonda.h"
+	"utils.h"
+	"menu.h"
+
+1396640806 c:\users\umberto\desktop\progetto code-blocks\automobile.h
+
+1396717848 c:\users\umberto\desktop\progetto code-blocks\coda.h
+
+1396717800 c:\users\umberto\desktop\progetto code-blocks\strada.h
+
+1396988378 c:\users\umberto\desktop\progetto code-blocks\rotonda.h
+
+1396618482 c:\users\umberto\desktop\progetto code-blocks\utils.h
+
+1396640806 c:\users\umberto\desktop\progetto code-blocks\menu.h
+
+1396619536 source:c:\users\umberto\desktop\progetto code-blocks\utils.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+
+1396988367 source:c:\users\umberto\desktop\progetto code-blocks\coda.c
+	<stdio.h>
+	<stdlib.h>
+	"automobile.h"
+	"coda.h"
+
+1396988367 source:c:\users\umberto\desktop\progetto code-blocks\menu.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	"automobile.h"
+	"coda.h"
+	"strada.h"
+	"rotonda.h"
+	"utils.h"
+	"menu.h"
+
+1396988489 source:c:\users\umberto\desktop\progetto code-blocks\rotonda.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	"automobile.h"
+	"coda.h"
+	"strada.h"
+	"rotonda.h"
+
+1396988367 source:c:\users\umberto\desktop\progetto code-blocks\strada.c
+	<stdio.h>
+	<stdlib.h>
+	"automobile.h"
+	"coda.h"
+	"strada.h"
+
+1396988367 source:c:\users\umberto\desktop\progetto code-blocks\automobile.c
+	<stdio.h>
+	<stdlib.h>
+	"automobile.h"
+

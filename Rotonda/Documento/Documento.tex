@@ -1,0 +1,507 @@
+%% LyX 2.0.7 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{listings}
+\usepackage[a4paper]{geometry}
+\geometry{verbose}
+\usepackage{fancybox}
+\usepackage{calc}
+\usepackage{babel}
+\begin{document}
+
+\title{PROGETTO L.A.S.D. Gestione Rotatoria.}
+
+
+\author{Umberto Marotta N86/1035 e Francesco Lentisco N86/1092}
+
+\maketitle
+\tableofcontents{}
+
+\pagebreak{}
+
+
+\section{Funzionalita' del Software}
+
+Al momento del lancio, il software presenta un semplice menù che propone
+all'utente un set completo di funzionalità per la gestione e la simulazione
+di una Rotatoria. Tra le varie voci vi sono inoltre funzionalità aggiuntive
+quali ad esempio la randomizzazione e automatizzazione di alcune operazioni
+che altrimenti andrebbero eseguite manualmente.
+
+Le prime due voci riguardano l'entità Rotatoria, in particolare la
+prima voce si occupa unicamente di allocare l'oggetto in questione,
+mentre la seconda di generare una Rotatoria completamente casuale
+già pronta all'uso, dando all'utente la possibilità di scegliere di
+quante auto e uscite sarà provvista.
+
+Le voci 3, 4 e 5 riguardano invece la stampa e la simulazione. Per
+quanto riguarda quest'ultima, si è convenuto di dare la possibilità
+all'utente stesso di scegliere il numero di Step da visualizzare,
+così come ogni quanto stampare a video una istantanea (in termini
+di secondi). Per comodità è stata implementata una simulazione temporizzata
+dalla pressione del tasto 'Invio'. Per accedervi basterà selezionare
+'0' alla voce 'Secondi per lo step'.
+
+Al momento della stampa, così come ad ogni istante della simulazione,
+il programma mostrerà visivamente, servendosi di semplici accorgimenti
+grafici, la situazione corrente della Rotatoria.
+
+Una singola Automobile è identificata da un numero univoco tra parentesi
+quadre e da un intero positivo che indica la sua posizione relativa
+rispetto la propria destinazione, ad esempio: '{[}17{]}2' è un'Automobile
+con ID pari a 17 che dovrà uscire tra due incroci.
+
+Quando un'Automobile si trova in corrispondenza di una uscita che
+non è la sua ultima destinazione, tale indice verrà opportunamente
+decrementato. Una singola Uscita è identificata da una lettera maiuscola,
+e verrà stampata come una lista di Automobili in corrispondenza di
+una certa casella della Rotatoria. Le voci 6 e 7 riguardano l'acquisizione
+e il salvataggio di una Rotatoria da/su un file.
+
+È possibile salvare su file ogni istantanea mostrata dal programma.
+I file altro non sono che una codifica di tutta l'informazione utile
+per ricostruire la situazione di una rotatoria al momento del salvataggio.
+Si è optato per un formato minimale, al fine di rendere il caricamento
+da file quanto più semplice e robusto possibile.
+
+I file riconosciuti correttamente sono formati da interi positivi
+(fatta eccezione per -1, per indicare una casella della rotatoria
+vuota), lettere maiuscole dalla A alla Z per indicare, se c'è, il
+nome di una uscita adiacente, il carattere '|', per indicare l'assenza
+di una uscita, oppure, se si è già in acquisizione di una coda, per
+indicarne la terminazione, e infine il carattere '-', per indicare
+che l'acquisizione di una coda non è ancora terminata. Il formato
+è dunque formato da triple di due interi e un carattere, opportunamente
+separati da spazi. Nel file non ci saranno caratteri di newline ed
+è codificato interamente su una sola riga.
+
+Le voci 8, 9 e 10 comprendono le operazioni possibili sulle Strade,
+ossia l'inserimento di un certo numero di strade (ed il suo corrispettivo
+randomizzato) e la cancellazione di una strada.
+
+Le voci 11, 12, 13 e 14 sono le operazioni possibili sulle Automobili.
+Come per le strade, l'inserimento può essere randomizzato. Dopo il
+numero di Automobili da inserire, è richiesta la destinazione di ognuna
+di esse ed infine la strada di partenza. Oltre la cancellazione, è
+stata implementata una funzionalità di modifica di una Automobile.
+
+\pagebreak{}
+
+
+\section{Implementazione Oggetti}
+
+Le funzionalita' del software sono implementate attraverso l'uso di
+4 tipi di oggetti con i loro rispettivi metodi:
+
+
+\subsection{Automobile }
+
+Come da traccia e' composta da un intero che la indentifica e un intero
+che indica la i-esima uscita, relativa però a dove l'auto entra, come
+risulta più naturale anche nel mondo reale.
+
+
+\subsection{Coda}
+
+Non è null altro che una coda puntata FIFO di Automobili.
+
+
+\subsection{Strada }
+
+E' la strada tramite la quale un Automobile può entrare e uscire dalla
+rotatoria, in essa è presente la coda a cui ci si può riferire tramite
+il suo inizio o la fine, è presente inoltre un \textquotedbl{}nome\textquotedbl{}
+per la strada, per identificarle e per permettere alle automobili
+di uscire in base al nome della strada qualora si voglia farlo.
+
+
+\subsection{Rotonda }
+
+Con l'oggetto Rotonda identifichiamo non solo la Rotatoria ma tutto
+il sistema (con Automobili, Code e Strade), come da traccia la sua
+dimensione è costante, è infatti realizzata tramite l'uso di due Array
+(posizione e incrocio) di dimensione 15 che contengono rispettivamente
+tutto ciò che si muove nella rotatoria (le automobili) e tutto ciò
+che sta fermo (le strade), l'uso di un doppio array consente di far
+muovere le automobili in tempo costante (una sola istruzione), infatti
+in rotonda sono presenti anche altri campi, che sono un intero per
+il numero di strade incidenti, un intero ed un carattere usati come
+sequenza e soprattutto due interi che sono l'inizio della rotonda
+e il numero di automobli, è infatti grazie al primo che il movimento
+delle auto è costante, il suo incremento fa \textquotedbl{}girare\textquotedbl{}
+il primo array come una roulette rispetto al secondo. Dal momento
+che anche il numero di auto presenti nella rotonda è preservato, anche
+la conta (e quindi la verifica che la rotonda sia vuota) diventa costante.
+
+\pagebreak{}
+
+
+\section{Implementazione metodi e complessità asintotica:}
+
+
+\subsection{Automobile}
+
+
+\subsubsection{automobile nuova\_auto (int dest, int id)}
+
+(Costante) Crea ed inizializza una nuova automobile con dest (i-esima
+uscita che deve prendere) ed ID (il suo numero identificativo)
+
+
+\subsubsection{int set\_id\_auto (automobile car, int id)}
+
+(Costante) Metodo standard che permette ad altri oggetti di modificare
+l'ID dell'Automobile
+
+
+\subsubsection{int set\_dest\_auto (automobile car, int dest)}
+
+(Costante) Metodo standard che permette ad altri oggetti di modificare
+la destinazione dell'Automobile
+
+
+\subsubsection{int get\_id\_auto (automobile car)}
+
+(Costante) Metodo standard che permette ad altri oggetti di conoscre
+l'ID dell'Automobile
+
+
+\subsubsection{int get\_dest\_auto (automobile car)}
+
+(Costante) Metodo standard che permette ad altri oggetti di conoscre
+la destinazione dell'Automobile 
+
+
+\subsubsection{int cancella\_auto (automobile car)}
+
+(Costante) Si occupa di cancellare correttamente un Automobile
+
+
+\subsubsection{void stampa\_auto (automobile brum)}
+
+(Costante) Stampa in Standard Output un Auto mobile nella forma \textquotedbl{}{[}ID{]}dest\textquotedbl{}
+dove ID è il numero in modulo 100 che indentifica l'auto e dest il
+numero in modulo 10 della sua destinazione
+
+\pagebreak{}
+
+
+\subsection{Coda}
+
+
+\subsubsection{coda nuova\_coda (automobile car)}
+
+(Costante) Crea ed inizializza un nuovo nodo della coda con l'automobile
+car
+
+
+\subsubsection{automobile get\_auto\_coda (coda brum)}
+
+(Costante) Metodo standard che permette ad altri oggetti di conoscre
+l'Automobile persente nel nodo \textquotedbl{}brum\textquotedbl{}
+della coda
+
+
+\subsubsection{automobile cerca\_auto\_coda (coda brum, int ID)}
+
+(Lineare sulla lunghezza della coda) Cerca e restituisce se la trova
+un Automobile identificata da ID nella coda che inizia con il nodo
+\textquotedbl{}brum\textquotedbl{}
+
+
+\subsubsection{coda get\_next\_coda (coda brum)}
+
+(Costante) Metodo standard che permette ad altri oggetti di conoscre
+il nodo successivo (se presente) a \textquotedbl{}brum\textquotedbl{}
+
+
+\subsubsection{coda get\_prev\_coda (coda inizio, coda fine)}
+
+(Lineare sulla lunghezza della coda)%
+\footnote{N.B. Nel programma questo metodo viene chiamato solo quando viene
+cancellato l'ultimo nodo di una coda che non coincide con il primo%
+} Metodo che permette ad altri oggetti di conoscre il nodo precedente
+(se presente) a \textquotedbl{}fine\textquotedbl{} nella coda che
+inizia con il nodo \textquotedbl{}inizio\textquotedbl{} 
+
+
+\subsubsection{coda accoda\_auto\_coda (coda brum, automobile car)}
+
+(Lineare sulla lunghezza della coda)%
+\footnote{N.B. Nel programma questo metodo viene chiamato sempre e solo sull'ultimo
+nodo della coda, rendendo di fatto l'operazione Costante%
+} Metodo standard che permette di accodare un automobile ad una coda
+che inizia con il nodo \textquotedbl{}brum\textquotedbl{}
+
+
+\subsubsection{coda fine\_coda (coda que)}
+
+(Lineare sulla lunghezza della coda)%
+\footnote{N.B. Nel programma questo metodo viene chiamato sempre e solo sull'ultimo
+nodo della coda, rendendo di fatto l'operazione Costante%
+} Equivalente a get\_prev\_coda(coda, NULL), restituisce l'ultimo nodo
+della coda; 
+
+
+\subsubsection{int cancella\_coda (coda que)}
+
+(Lineare sulla lunghezza della coda) Si occupa di cancellare correttamente
+l'intera coda che inizia con il nodo \textquotedbl{}que\textquotedbl{}
+e restituisce il numero di Automobili cancellate
+
+
+\subsubsection{int cancella\_auto\_coda (coda parent, coda curr, int ID)}
+
+(Lineare sulla lunghezza della coda)%
+\footnote{N.B. Per cancellare la testa si dovrebbe usare un metodo interfaccia
+che alla fine corrisponde al metodo \textquotedbl{}decoda\_auto\_strada(strada
+brum)\textquotedbl{} di strada%
+} Cerca e cancella se lo trova il nodo contenente l'Automobile identificata
+da ID, nella sotto-coda che inizia con il nodo \textquotedbl{}curr\textquotedbl{},
+di cui il nodo \textquotedbl{}parent\textquotedbl{} è quello precedente
+(cancellazione con padre) restituendo 0 se il nodo non è presente
+nella coda, altrimenti 2 se il nodo cancellato era l'ultimo in coda
+e 1 in tutti gli altri casi. 
+
+
+\subsubsection{void stampa\_coda (coda brum)}
+
+(Lineare sulla lunghezza della coda) Stampa in Standard Output nella
+forma \textquotedbl{}< N < N < N\textquotedbl{} dove gli 'N' sono
+il contenuto dei nodi della coda che inizia con il nodo \textquotedbl{}brum\textquotedbl{}
+
+
+\subsubsection{void fout\_coda (FILE {*}fp, coda brum)}
+
+(Lineare sulla lunghezza della coda) Scrive in un file, nella forma
+di 'int int char '. rispettivamente l'ID e la destinazione di una
+automobile presenti in una coda e un carattere che può essere '-'
+o '|' per indicare rispettivamente che esiste un altro elemento nella
+coda oppure no (terminazione della coda).
+
+\pagebreak{}
+
+
+\subsection{Strada}
+
+
+\subsubsection{strada nuova\_strada (char nom, coda que)}
+
+(Lineare sulla lunghezza della coda que) %
+\footnote{N.B. Nel programma questo metodo viene chiamato sempre e solo con
+una nuova coda, rendendo di fatto l'operazione Costante%
+} Crea ed inizializza una nuova strada con nome \textquotedbl{}nom\textquotedbl{},
+in cui è presente la coda che inizia con il nodo \textquotedbl{}que\textquotedbl{}. 
+
+
+\subsubsection{automobile decoda\_auto\_strada (strada brum)}
+
+(Costante) Decoda un nodo dalla sua coda e restituisce l'automobile
+presente in esso.
+
+
+\subsubsection{int cancella\_strada (strada brum)}
+
+(Lineare sulla lunghezza della sua coda) Si occupa di cancellare correttamente
+la strada resituendo il numero di automobili cancellate
+
+
+\subsubsection{int cancella\_auto\_strada (strada road, int ID)}
+
+(Lineare sulla lunghezza della sua coda) Cerca e cancella se lo trova
+il nodo contenente l'Automobile identificata da ID, nella sua coda,
+restituendo 1 se lo trova, 0 altrimenti.
+
+
+\subsubsection{int accoda\_auto\_strada (strada brum, automobile car)}
+
+(Costante) Accoda un automobile nella sua coda restituendo 1 in caso
+di successo.
+
+
+\subsubsection{char get\_nome\_strada (strada brum)}
+
+(Costante) Metodo standard che permette ad altri oggetti di conoscere
+il nome della strada
+
+
+\subsubsection{coda get\_inizio\_strada (strada brum)}
+
+(Costante) Metodo standard che permette ad altri oggetti di conoscre
+il primo nodo della sua coda
+
+
+\subsubsection{int set\_nome\_strada (strada brum, char nom)}
+
+(Costante) Metodo standard che permette ad altri oggetti di modificare
+il nome della strada
+
+\pagebreak{}
+
+
+\subsection{Rotonda:}
+
+
+\subsubsection{rotonda nuova\_rotonda ()}
+
+(Lineare sulla dimensione della rotatoria, ovvero l'array) Crea ed
+inizializza una nuova rotonda
+
+
+\subsubsection{rotonda cancella\_rotonda (rotonda rot)}
+
+(Lineare sulla dimensione dalla rotonda, ovvero il sistema) Si occupa
+di cancellare correttamente la rotonda
+
+
+\subsubsection{rotonda random\_rotonda (int numauto, int numuscite)}
+
+(Randomica) Crea ed inizializza una nuova rotonda il cui numero di
+auto e strade è casuale
+
+
+\subsubsection{int get\_numero\_strade (rotonda rot)}
+
+(Costante) Metodo standard che permette ad altri oggetti di conoscre
+il numero delle strade che entrano nella rotonda
+
+
+\subsubsection{int rotonda\_nextval (rotonda rot):}
+
+(Costante) Restituisce il prossimo numero della sequenza incrementandola.%
+\footnote{N.B. Questo metodo è usato per ottenere facilmente un ID unico per
+le automobili%
+}
+
+
+\subsubsection{char rotonda\_nextchar (rotonda rot)}
+
+(Costante) Restituisce il prossimo carattere della sequenza incrementandola.%
+\footnote{ N.B. Questo metodo è usato per ottenere facilmente un nome unico
+per le strade%
+}
+
+
+\subsubsection{int rotonda\_vuota (rotonda rot)}
+
+(Costante) Restituisce 1 se nella rotonda e nelle strade che incrociano
+non sono presenti auto, 0 altrimenti
+
+
+\subsubsection{strada cerca\_strada (rotonda rot, char nome)}
+
+(Lineare sulla dimensione della rotatoria, ovvero l'array) Cerca e
+restituisce se la trova la strada con nome \textquotedbl{}nome\textquotedbl{}
+che incrocia la rotonda
+
+
+\subsubsection{int inserisci\_strada (rotonda rot, int i)}
+
+(Costante) Inserisce restituendo 1 in caso di successo una nuova strada
+nell' i-esima posizione della rotatoria assegnandogli automaticamente
+un nome
+
+
+\subsubsection{int cancella\_strada\_rotonda (rotonda rot, char nome)}
+
+(Lineare dimensione della rotatoria, ovvero l'array, e sulla dimensione
+della strada di nome 'nome') Cancella l'intera strada identificata
+da 'nome'. Restituisce 1 in caso di cancellazione avvenuta con successo,
+altrimenti 0.
+
+
+\subsubsection{int cancella\_auto\_rotonda (rotonda rot, int ID)}
+
+(Lineare sulla dimensione della rotonda, ovvero del sistema) Cerca
+una cerca Automobile identificata dall'ID nell'intero sistema cancellandola.
+Restituisce un intero: 1 se la cancellazione è avvenuta con successo,
+altrimenti 0.
+
+
+\subsubsection{automobile cerca\_auto (rotonda rot, int ID)}
+
+(Lineare sulla dimensione della rotonda, ovvero del sistema) Cerca
+nell'intera Rotonda l'Automobile identificata da ID, restituendola
+in caso di successo. In caso di insuccesso viene restituito NULL.
+
+
+\subsubsection{int inserisci\_auto\_strada (rotonda rot, automobile car, char nome)}
+
+(Lineare sulla dimensione della rotatoria, ovvero l'array) Inserisce
+restituendo 1 in caso di successo un automobile nella strada di nome
+\textquotedbl{}nome\textquotedbl{}
+
+
+\subsubsection{int accoda\_auto\_rotonda\_random (rotonda rot, int num)}
+
+(Randomica) Accoda restituendo 1 in caso di successo \textquotedbl{}num\textquotedbl{}
+auto alle strade presenti nella rotonda scelte casualmente.
+
+
+\subsubsection{void step\_rotonda (rotonda rot, double secondi)}
+
+(Lineare sulla dimensione della rotatoria, ovvero l'array) Simula
+uno spostamento delle auto nella rotonda prendendosi il numero di
+secondi specificato. Benchè il metodo sia nel complesso lineare per
+via dei controlli, lo spostamento delle auto già presenti nella rotatoria
+è costante, rendendo di fatto il metodo il doppio più efficiente
+
+
+\subsubsection{void stampa\_rotonda (rotonda rot)}
+
+(Lineare sulla dimensione della rotonda, ovvero del sistema) Stampa
+a video una Istantanea della situazione corrente della rotatoria.
+
+
+\subsubsection{rotonda fleggi\_rotatoria (char {*}nomeF)}
+
+(Lineare sulla dimensione del file) Ricostruisce una situazione di
+una rotatoria codificata da file, leggendo volta per volta triple
+nella forma di 'int int char ' (ID, destinazione, e carattere di terminazione
+o continuazione). Inoltre setta i diversi attributi dell'oggetto Rotonda,
+calcolandoli on the fly.
+
+
+\subsubsection{void fout\_rotatoria (rotonda rot, char{*} nomeF)}
+
+(Lineare sulla dimensione della rotonda, ovvero del sistema) Scrive
+su file una codifica della situazione corrente di una rotatoria nella
+forma di 'int int char '. rispettivamente l'ID e la destinazione di
+una automobile presenti in una coda e un carattere che può essere
+'-' o '|' per indicare rispettivamente che esiste un altro elemento
+nella coda oppure no (terminazione della coda).
+
+\pagebreak{}
+
+
+\section{Testing}
+
+lo stesso codice è stato compilato e testato su Windows XP x86, Windows
+7 x64, Windows 8.1 x64 e Windows 8.1 x86 (usando MinGW), Ubuntu Linux
+x64 e Arch Linux x86 (usando GCC), e MAC OSX x64.\\
+E' stato scritto utilizzando l'IDE Code::Blocks (http://it.wikipedia.org/wiki/Code::Blocks).\\
+Il binario è stato infine testato con il Valgrind (http://it.wikipedia.org/wiki/Valgrind),
+un tool open source per trovare problemi di gestione della memoria
+in file eseguibili sotto architettura Linux x86. Esso individua principalmente
+problemi di memory leaks e memory corruption. Output di un caso d'uso
+del file eseguibile con Valgrind\\
+\\
+
+
+\shadowbox{\begin{minipage}[t]{1\columnwidth}%
+\begin{lstlisting}[breaklines=true]
+==20221==
+==20221== HEAP SUMMARY:
+==20221==     in use at exit: 0 bytes in 0 blocks
+==20221==   total heap usage: 92 allocs, 92 frees, 892 bytes allocated
+==20221==
+==20221== All heap blocks were freed -- no leaks are possible
+==20221==
+==20221== For counts of detected and suppressed errors, rerun with: -v
+==20221== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+\end{lstlisting}
+%
+\end{minipage}}
+\end{document}

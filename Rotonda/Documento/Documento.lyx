@@ -1,0 +1,912 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+PROGETTO L.A.S.D.
+ Gestione Rotatoria.
+\end_layout
+
+\begin_layout Author
+Umberto Marotta N86/1035 e Francesco Lentisco N86/1092
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Funzionalita' del Software
+\end_layout
+
+\begin_layout Standard
+Al momento del lancio, il software presenta un semplice menù che propone
+ all'utente un set completo di funzionalità per la gestione e la simulazione
+ di una Rotatoria.
+ Tra le varie voci vi sono inoltre funzionalità aggiuntive quali ad esempio
+ la randomizzazione e automatizzazione di alcune operazioni che altrimenti
+ andrebbero eseguite manualmente.
+\end_layout
+
+\begin_layout Standard
+Le prime due voci riguardano l'entità Rotatoria, in particolare la prima
+ voce si occupa unicamente di allocare l'oggetto in questione, mentre la
+ seconda di generare una Rotatoria completamente casuale già pronta all'uso,
+ dando all'utente la possibilità di scegliere di quante auto e uscite sarà
+ provvista.
+\end_layout
+
+\begin_layout Standard
+Le voci 3, 4 e 5 riguardano invece la stampa e la simulazione.
+ Per quanto riguarda quest'ultima, si è convenuto di dare la possibilità
+ all'utente stesso di scegliere il numero di Step da visualizzare, così
+ come ogni quanto stampare a video una istantanea (in termini di secondi).
+ Per comodità è stata implementata una simulazione temporizzata dalla pressione
+ del tasto 'Invio'.
+ Per accedervi basterà selezionare '0' alla voce 'Secondi per lo step'.
+\end_layout
+
+\begin_layout Standard
+Al momento della stampa, così come ad ogni istante della simulazione, il
+ programma mostrerà visivamente, servendosi di semplici accorgimenti grafici,
+ la situazione corrente della Rotatoria.
+\end_layout
+
+\begin_layout Standard
+Una singola Automobile è identificata da un numero univoco tra parentesi
+ quadre e da un intero positivo che indica la sua posizione relativa rispetto
+ la propria destinazione, ad esempio: '[17]2' è un'Automobile con ID pari
+ a 17 che dovrà uscire tra due incroci.
+\end_layout
+
+\begin_layout Standard
+Quando un'Automobile si trova in corrispondenza di una uscita che non è
+ la sua ultima destinazione, tale indice verrà opportunamente decrementato.
+ Una singola Uscita è identificata da una lettera maiuscola, e verrà stampata
+ come una lista di Automobili in corrispondenza di una certa casella della
+ Rotatoria.
+ Le voci 6 e 7 riguardano l'acquisizione e il salvataggio di una Rotatoria
+ da/su un file.
+\end_layout
+
+\begin_layout Standard
+È possibile salvare su file ogni istantanea mostrata dal programma.
+ I file altro non sono che una codifica di tutta l'informazione utile per
+ ricostruire la situazione di una rotatoria al momento del salvataggio.
+ Si è optato per un formato minimale, al fine di rendere il caricamento
+ da file quanto più semplice e robusto possibile.
+\end_layout
+
+\begin_layout Standard
+I file riconosciuti correttamente sono formati da interi positivi (fatta
+ eccezione per -1, per indicare una casella della rotatoria vuota), lettere
+ maiuscole dalla A alla Z per indicare, se c'è, il nome di una uscita adiacente,
+ il carattere '|', per indicare l'assenza di una uscita, oppure, se si è
+ già in acquisizione di una coda, per indicarne la terminazione, e infine
+ il carattere '-', per indicare che l'acquisizione di una coda non è ancora
+ terminata.
+ Il formato è dunque formato da triple di due interi e un carattere, opportuname
+nte separati da spazi.
+ Nel file non ci saranno caratteri di newline ed è codificato interamente
+ su una sola riga.
+\end_layout
+
+\begin_layout Standard
+Le voci 8, 9 e 10 comprendono le operazioni possibili sulle Strade, ossia
+ l'inserimento di un certo numero di strade (ed il suo corrispettivo randomizzat
+o) e la cancellazione di una strada.
+\end_layout
+
+\begin_layout Standard
+Le voci 11, 12, 13 e 14 sono le operazioni possibili sulle Automobili.
+ Come per le strade, l'inserimento può essere randomizzato.
+ Dopo il numero di Automobili da inserire, è richiesta la destinazione di
+ ognuna di esse ed infine la strada di partenza.
+ Oltre la cancellazione, è stata implementata una funzionalità di modifica
+ di una Automobile.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Implementazione Oggetti
+\end_layout
+
+\begin_layout Standard
+Le funzionalita' del software sono implementate attraverso l'uso di 4 tipi
+ di oggetti con i loro rispettivi metodi:
+\end_layout
+
+\begin_layout Subsection
+Automobile 
+\end_layout
+
+\begin_layout Standard
+Come da traccia e' composta da un intero che la indentifica e un intero
+ che indica la i-esima uscita, relativa però a dove l'auto entra, come risulta
+ più naturale anche nel mondo reale.
+\end_layout
+
+\begin_layout Subsection
+Coda
+\end_layout
+
+\begin_layout Standard
+Non è null altro che una coda puntata FIFO di Automobili.
+\end_layout
+
+\begin_layout Subsection
+Strada 
+\end_layout
+
+\begin_layout Standard
+E' la strada tramite la quale un Automobile può entrare e uscire dalla rotatoria
+, in essa è presente la coda a cui ci si può riferire tramite il suo inizio
+ o la fine, è presente inoltre un "nome" per la strada, per identificarle
+ e per permettere alle automobili di uscire in base al nome della strada
+ qualora si voglia farlo.
+\end_layout
+
+\begin_layout Subsection
+Rotonda 
+\end_layout
+
+\begin_layout Standard
+Con l'oggetto Rotonda identifichiamo non solo la Rotatoria ma tutto il sistema
+ (con Automobili, Code e Strade), come da traccia la sua dimensione è costante,
+ è infatti realizzata tramite l'uso di due Array (posizione e incrocio)
+ di dimensione 15 che contengono rispettivamente tutto ciò che si muove
+ nella rotatoria (le automobili) e tutto ciò che sta fermo (le strade),
+ l'uso di un doppio array consente di far muovere le automobili in tempo
+ costante (una sola istruzione), infatti in rotonda sono presenti anche
+ altri campi, che sono un intero per il numero di strade incidenti, un intero
+ ed un carattere usati come sequenza e soprattutto due interi che sono l'inizio
+ della rotonda e il numero di automobli, è infatti grazie al primo che il
+ movimento delle auto è costante, il suo incremento fa "girare" il primo
+ array come una roulette rispetto al secondo.
+ Dal momento che anche il numero di auto presenti nella rotonda è preservato,
+ anche la conta (e quindi la verifica che la rotonda sia vuota) diventa
+ costante.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Implementazione metodi e complessità asintotica:
+\end_layout
+
+\begin_layout Subsection
+Automobile
+\end_layout
+
+\begin_layout Subsubsection
+automobile nuova_auto (int dest, int id)
+\end_layout
+
+\begin_layout Standard
+(Costante) Crea ed inizializza una nuova automobile con dest (i-esima uscita
+ che deve prendere) ed ID (il suo numero identificativo)
+\end_layout
+
+\begin_layout Subsubsection
+int set_id_auto (automobile car, int id)
+\end_layout
+
+\begin_layout Standard
+(Costante) Metodo standard che permette ad altri oggetti di modificare l'ID
+ dell'Automobile
+\end_layout
+
+\begin_layout Subsubsection
+int set_dest_auto (automobile car, int dest)
+\end_layout
+
+\begin_layout Standard
+(Costante) Metodo standard che permette ad altri oggetti di modificare la
+ destinazione dell'Automobile
+\end_layout
+
+\begin_layout Subsubsection
+int get_id_auto (automobile car)
+\end_layout
+
+\begin_layout Standard
+(Costante) Metodo standard che permette ad altri oggetti di conoscre l'ID
+ dell'Automobile
+\end_layout
+
+\begin_layout Subsubsection
+int get_dest_auto (automobile car)
+\end_layout
+
+\begin_layout Standard
+(Costante) Metodo standard che permette ad altri oggetti di conoscre la
+ destinazione dell'Automobile 
+\end_layout
+
+\begin_layout Subsubsection
+int cancella_auto (automobile car)
+\end_layout
+
+\begin_layout Standard
+(Costante) Si occupa di cancellare correttamente un Automobile
+\end_layout
+
+\begin_layout Subsubsection
+void stampa_auto (automobile brum)
+\end_layout
+
+\begin_layout Standard
+(Costante) Stampa in Standard Output un Auto mobile nella forma "[ID]dest"
+ dove ID è il numero in modulo 100 che indentifica l'auto e dest il numero
+ in modulo 10 della sua destinazione
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Coda
+\end_layout
+
+\begin_layout Subsubsection
+coda nuova_coda (automobile car)
+\end_layout
+
+\begin_layout Standard
+(Costante) Crea ed inizializza un nuovo nodo della coda con l'automobile
+ car
+\end_layout
+
+\begin_layout Subsubsection
+automobile get_auto_coda (coda brum)
+\end_layout
+
+\begin_layout Standard
+(Costante) Metodo standard che permette ad altri oggetti di conoscre l'Automobil
+e persente nel nodo "brum" della coda
+\end_layout
+
+\begin_layout Subsubsection
+automobile cerca_auto_coda (coda brum, int ID)
+\end_layout
+
+\begin_layout Standard
+(Lineare sulla lunghezza della coda) Cerca e restituisce se la trova un
+ Automobile identificata da ID nella coda che inizia con il nodo "brum"
+\end_layout
+
+\begin_layout Subsubsection
+coda get_next_coda (coda brum)
+\end_layout
+
+\begin_layout Standard
+(Costante) Metodo standard che permette ad altri oggetti di conoscre il
+ nodo successivo (se presente) a "brum"
+\end_layout
+
+\begin_layout Subsubsection
+coda get_prev_coda (coda inizio, coda fine)
+\end_layout
+
+\begin_layout Standard
+(Lineare sulla lunghezza della coda)
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+N.B.
+ Nel programma questo metodo viene chiamato solo quando viene cancellato
+ l'ultimo nodo di una coda che non coincide con il primo
+\end_layout
+
+\end_inset
+
+ Metodo che permette ad altri oggetti di conoscre il nodo precedente (se
+ presente) a "fine" nella coda che inizia con il nodo "inizio" 
+\end_layout
+
+\begin_layout Subsubsection
+coda accoda_auto_coda (coda brum, automobile car)
+\end_layout
+
+\begin_layout Standard
+(Lineare sulla lunghezza della coda)
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+N.B.
+ Nel programma questo metodo viene chiamato sempre e solo sull'ultimo nodo
+ della coda, rendendo di fatto l'operazione Costante
+\end_layout
+
+\end_inset
+
+ Metodo standard che permette di accodare un automobile ad una coda che
+ inizia con il nodo "brum"
+\end_layout
+
+\begin_layout Subsubsection
+coda fine_coda (coda que)
+\end_layout
+
+\begin_layout Standard
+(Lineare sulla lunghezza della coda)
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+N.B.
+ Nel programma questo metodo viene chiamato sempre e solo sull'ultimo nodo
+ della coda, rendendo di fatto l'operazione Costante
+\end_layout
+
+\end_inset
+
+ Equivalente a get_prev_coda(coda, NULL), restituisce l'ultimo nodo della
+ coda; 
+\end_layout
+
+\begin_layout Subsubsection
+int cancella_coda (coda que)
+\end_layout
+
+\begin_layout Standard
+(Lineare sulla lunghezza della coda) Si occupa di cancellare correttamente
+ l'intera coda che inizia con il nodo "que" e restituisce il numero di Automobil
+i cancellate
+\end_layout
+
+\begin_layout Subsubsection
+int cancella_auto_coda (coda parent, coda curr, int ID)
+\end_layout
+
+\begin_layout Standard
+(Lineare sulla lunghezza della coda)
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+N.B.
+ Per cancellare la testa si dovrebbe usare un metodo interfaccia che alla
+ fine corrisponde al metodo "decoda_auto_strada(strada brum)" di strada
+\end_layout
+
+\end_inset
+
+ Cerca e cancella se lo trova il nodo contenente l'Automobile identificata
+ da ID, nella sotto-coda che inizia con il nodo "curr", di cui il nodo "parent"
+ è quello precedente (cancellazione con padre) restituendo 0 se il nodo
+ non è presente nella coda, altrimenti 2 se il nodo cancellato era l'ultimo
+ in coda e 1 in tutti gli altri casi.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+void stampa_coda (coda brum)
+\end_layout
+
+\begin_layout Standard
+(Lineare sulla lunghezza della coda) Stampa in Standard Output nella forma
+ "< N < N < N" dove gli 'N' sono il contenuto dei nodi della coda che inizia
+ con il nodo "brum"
+\end_layout
+
+\begin_layout Subsubsection
+void fout_coda (FILE *fp, coda brum)
+\end_layout
+
+\begin_layout Standard
+(Lineare sulla lunghezza della coda) Scrive in un file, nella forma di 'int
+ int char '.
+ rispettivamente l'ID e la destinazione di una automobile presenti in una
+ coda e un carattere che può essere '-' o '|' per indicare rispettivamente
+ che esiste un altro elemento nella coda oppure no (terminazione della coda).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Strada
+\end_layout
+
+\begin_layout Subsubsection
+strada nuova_strada (char nom, coda que)
+\end_layout
+
+\begin_layout Standard
+(Lineare sulla lunghezza della coda que) 
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+N.B.
+ Nel programma questo metodo viene chiamato sempre e solo con una nuova
+ coda, rendendo di fatto l'operazione Costante
+\end_layout
+
+\end_inset
+
+ Crea ed inizializza una nuova strada con nome "nom", in cui è presente
+ la coda che inizia con il nodo "que".
+ 
+\end_layout
+
+\begin_layout Subsubsection
+automobile decoda_auto_strada (strada brum)
+\end_layout
+
+\begin_layout Standard
+(Costante) Decoda un nodo dalla sua coda e restituisce l'automobile presente
+ in esso.
+\end_layout
+
+\begin_layout Subsubsection
+int cancella_strada (strada brum)
+\end_layout
+
+\begin_layout Standard
+(Lineare sulla lunghezza della sua coda) Si occupa di cancellare correttamente
+ la strada resituendo il numero di automobili cancellate
+\end_layout
+
+\begin_layout Subsubsection
+int cancella_auto_strada (strada road, int ID)
+\end_layout
+
+\begin_layout Standard
+(Lineare sulla lunghezza della sua coda) Cerca e cancella se lo trova il
+ nodo contenente l'Automobile identificata da ID, nella sua coda, restituendo
+ 1 se lo trova, 0 altrimenti.
+\end_layout
+
+\begin_layout Subsubsection
+int accoda_auto_strada (strada brum, automobile car)
+\end_layout
+
+\begin_layout Standard
+(Costante) Accoda un automobile nella sua coda restituendo 1 in caso di
+ successo.
+\end_layout
+
+\begin_layout Subsubsection
+char get_nome_strada (strada brum)
+\end_layout
+
+\begin_layout Standard
+(Costante) Metodo standard che permette ad altri oggetti di conoscere il
+ nome della strada
+\end_layout
+
+\begin_layout Subsubsection
+coda get_inizio_strada (strada brum)
+\end_layout
+
+\begin_layout Standard
+(Costante) Metodo standard che permette ad altri oggetti di conoscre il
+ primo nodo della sua coda
+\end_layout
+
+\begin_layout Subsubsection
+int set_nome_strada (strada brum, char nom)
+\end_layout
+
+\begin_layout Standard
+(Costante) Metodo standard che permette ad altri oggetti di modificare il
+ nome della strada
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Rotonda:
+\end_layout
+
+\begin_layout Subsubsection
+rotonda nuova_rotonda ()
+\end_layout
+
+\begin_layout Standard
+(Lineare sulla dimensione della rotatoria, ovvero l'array) Crea ed inizializza
+ una nuova rotonda
+\end_layout
+
+\begin_layout Subsubsection
+rotonda cancella_rotonda (rotonda rot)
+\end_layout
+
+\begin_layout Standard
+(Lineare sulla dimensione dalla rotonda, ovvero il sistema) Si occupa di
+ cancellare correttamente la rotonda
+\end_layout
+
+\begin_layout Subsubsection
+rotonda random_rotonda (int numauto, int numuscite)
+\end_layout
+
+\begin_layout Standard
+(Randomica) Crea ed inizializza una nuova rotonda il cui numero di auto
+ e strade è casuale
+\end_layout
+
+\begin_layout Subsubsection
+int get_numero_strade (rotonda rot)
+\end_layout
+
+\begin_layout Standard
+(Costante) Metodo standard che permette ad altri oggetti di conoscre il
+ numero delle strade che entrano nella rotonda
+\end_layout
+
+\begin_layout Subsubsection
+int rotonda_nextval (rotonda rot):
+\end_layout
+
+\begin_layout Standard
+(Costante) Restituisce il prossimo numero della sequenza incrementandola.
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+N.B.
+ Questo metodo è usato per ottenere facilmente un ID unico per le automobili
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+char rotonda_nextchar (rotonda rot)
+\end_layout
+
+\begin_layout Standard
+(Costante) Restituisce il prossimo carattere della sequenza incrementandola.
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+ N.B.
+ Questo metodo è usato per ottenere facilmente un nome unico per le strade
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+int rotonda_vuota (rotonda rot)
+\end_layout
+
+\begin_layout Standard
+(Costante) Restituisce 1 se nella rotonda e nelle strade che incrociano
+ non sono presenti auto, 0 altrimenti
+\end_layout
+
+\begin_layout Subsubsection
+strada cerca_strada (rotonda rot, char nome)
+\end_layout
+
+\begin_layout Standard
+(Lineare sulla dimensione della rotatoria, ovvero l'array) Cerca e restituisce
+ se la trova la strada con nome "nome" che incrocia la rotonda
+\end_layout
+
+\begin_layout Subsubsection
+int inserisci_strada (rotonda rot, int i)
+\end_layout
+
+\begin_layout Standard
+(Costante) Inserisce restituendo 1 in caso di successo una nuova strada
+ nell' i-esima posizione della rotatoria assegnandogli automaticamente un
+ nome
+\end_layout
+
+\begin_layout Subsubsection
+int cancella_strada_rotonda (rotonda rot, char nome)
+\end_layout
+
+\begin_layout Standard
+(Lineare dimensione della rotatoria, ovvero l'array, e sulla dimensione
+ della strada di nome 'nome') Cancella l'intera strada identificata da 'nome'.
+ Restituisce 1 in caso di cancellazione avvenuta con successo, altrimenti
+ 0.
+\end_layout
+
+\begin_layout Subsubsection
+int cancella_auto_rotonda (rotonda rot, int ID)
+\end_layout
+
+\begin_layout Standard
+(Lineare sulla dimensione della rotonda, ovvero del sistema) Cerca una cerca
+ Automobile identificata dall'ID nell'intero sistema cancellandola.
+ Restituisce un intero: 1 se la cancellazione è avvenuta con successo, altriment
+i 0.
+\end_layout
+
+\begin_layout Subsubsection
+automobile cerca_auto (rotonda rot, int ID)
+\end_layout
+
+\begin_layout Standard
+(Lineare sulla dimensione della rotonda, ovvero del sistema) Cerca nell'intera
+ Rotonda l'Automobile identificata da ID, restituendola in caso di successo.
+ In caso di insuccesso viene restituito NULL.
+\end_layout
+
+\begin_layout Subsubsection
+int inserisci_auto_strada (rotonda rot, automobile car, char nome)
+\end_layout
+
+\begin_layout Standard
+(Lineare sulla dimensione della rotatoria, ovvero l'array) Inserisce restituendo
+ 1 in caso di successo un automobile nella strada di nome "nome"
+\end_layout
+
+\begin_layout Subsubsection
+int accoda_auto_rotonda_random (rotonda rot, int num)
+\end_layout
+
+\begin_layout Standard
+(Randomica) Accoda restituendo 1 in caso di successo "num" auto alle strade
+ presenti nella rotonda scelte casualmente.
+\end_layout
+
+\begin_layout Subsubsection
+void step_rotonda (rotonda rot, double secondi)
+\end_layout
+
+\begin_layout Standard
+(Lineare sulla dimensione della rotatoria, ovvero l'array) Simula uno spostament
+o delle auto nella rotonda prendendosi il numero di secondi specificato.
+ Benchè il metodo sia nel complesso lineare per via dei controlli, lo spostament
+o delle auto già presenti nella rotatoria è costante, rendendo di fatto
+ il metodo il doppio più efficiente
+\end_layout
+
+\begin_layout Subsubsection
+void stampa_rotonda (rotonda rot)
+\end_layout
+
+\begin_layout Standard
+(Lineare sulla dimensione della rotonda, ovvero del sistema) Stampa a video
+ una Istantanea della situazione corrente della rotatoria.
+\end_layout
+
+\begin_layout Subsubsection
+rotonda fleggi_rotatoria (char *nomeF)
+\end_layout
+
+\begin_layout Standard
+(Lineare sulla dimensione del file) Ricostruisce una situazione di una rotatoria
+ codificata da file, leggendo volta per volta triple nella forma di 'int
+ int char ' (ID, destinazione, e carattere di terminazione o continuazione).
+ Inoltre setta i diversi attributi dell'oggetto Rotonda, calcolandoli on
+ the fly.
+\end_layout
+
+\begin_layout Subsubsection
+void fout_rotatoria (rotonda rot, char* nomeF)
+\end_layout
+
+\begin_layout Standard
+(Lineare sulla dimensione della rotonda, ovvero del sistema) Scrive su file
+ una codifica della situazione corrente di una rotatoria nella forma di
+ 'int int char '.
+ rispettivamente l'ID e la destinazione di una automobile presenti in una
+ coda e un carattere che può essere '-' o '|' per indicare rispettivamente
+ che esiste un altro elemento nella coda oppure no (terminazione della coda).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Testing
+\end_layout
+
+\begin_layout Standard
+lo stesso codice è stato compilato e testato su Windows XP x86, Windows
+ 7 x64, Windows 8.1 x64 e Windows 8.1 x86 (usando MinGW), Ubuntu Linux x64
+ e Arch Linux x86 (usando GCC), e MAC OSX x64.
+\begin_inset Newline newline
+\end_inset
+
+E' stato scritto utilizzando l'IDE Code::Blocks (http://it.wikipedia.org/wiki/Code
+::Blocks).
+\begin_inset Newline newline
+\end_inset
+
+Il binario è stato infine testato con il Valgrind (http://it.wikipedia.org/wiki/Va
+lgrind), un tool open source per trovare problemi di gestione della memoria
+ in file eseguibili sotto architettura Linux x86.
+ Esso individua principalmente problemi di memory leaks e memory corruption.
+ Output di un caso d'uso del file eseguibile con Valgrind
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "breaklines=true"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+==20221==
+\end_layout
+
+\begin_layout Plain Layout
+
+==20221== HEAP SUMMARY:
+\end_layout
+
+\begin_layout Plain Layout
+
+==20221==     in use at exit: 0 bytes in 0 blocks
+\end_layout
+
+\begin_layout Plain Layout
+
+==20221==   total heap usage: 92 allocs, 92 frees, 892 bytes allocated
+\end_layout
+
+\begin_layout Plain Layout
+
+==20221==
+\end_layout
+
+\begin_layout Plain Layout
+
+==20221== All heap blocks were freed -- no leaks are possible
+\end_layout
+
+\begin_layout Plain Layout
+
+==20221==
+\end_layout
+
+\begin_layout Plain Layout
+
+==20221== For counts of detected and suppressed errors, rerun with: -v
+\end_layout
+
+\begin_layout Plain Layout
+
+==20221== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
