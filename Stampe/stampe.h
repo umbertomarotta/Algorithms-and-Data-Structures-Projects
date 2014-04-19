@@ -17,3 +17,4 @@ stampa Istampa_stampe_ex(stampa alb, stampa story, int liv, int mute);
 int is_abr(stampa alb);
 int I_is_abr(stampa alb, int maxx, int minn);
 int Istampa_stampe(stampa alb, int liv);
+int get_num_stampe(stampa curr);

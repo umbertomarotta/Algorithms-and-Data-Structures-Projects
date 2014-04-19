@@ -6,6 +6,7 @@
 
 struct sstampa{
     job cont;
+    int n_nodi;
     struct sstampa *sx;
     struct sstampa *dx;
 };
@@ -15,6 +16,7 @@ stampa nuova_stampa(job cont){
     brum->cont = cont;
     brum->sx = NULL;
     brum->dx = NULL;
+    brum->n_nodi = 1;
     return brum;
 }
 
@@ -40,8 +42,17 @@ stampa cerca_job_stampa(stampa nodo, int jobid){
 
 stampa cancella_job_stampa(stampa nodo, int jobid){
     if(!nodo) return NULL;
-    if(nodo->cont && get_id_job(nodo->cont) > jobid) nodo->sx = cancella_job_stampa(nodo->sx,jobid);
-    if(nodo->cont && get_id_job(nodo->cont) < jobid) nodo->dx = cancella_job_stampa(nodo->dx,jobid);
+    int oldnum;
+    if(nodo->cont && get_id_job(nodo->cont) > jobid && nodo->sx){
+        oldnum = nodo->sx->n_nodi;
+        nodo->sx = cancella_job_stampa(nodo->sx,jobid);
+        if(!nodo->sx || nodo->sx->n_nodi != oldnum) nodo->n_nodi--;
+    }
+    if(nodo->cont && get_id_job(nodo->cont) < jobid && nodo->dx){
+        oldnum = nodo->dx->n_nodi;
+        nodo->dx = cancella_job_stampa(nodo->dx,jobid);
+        if(!nodo->dx || nodo->dx->n_nodi != oldnum) nodo->n_nodi--;
+    }
     if(nodo->cont && get_id_job(nodo->cont) == jobid){
         if(!nodo->sx && !nodo->dx){
             cancella_stampa(nodo);
@@ -69,18 +80,30 @@ stampa cancella_job_stampa(stampa nodo, int jobid){
         }
     }
     if(!nodo->cont){
-        nodo->sx = cancella_job_stampa(nodo->sx,jobid);
-        nodo->dx = cancella_job_stampa(nodo->dx,jobid);
+        if (nodo->sx){
+            oldnum = nodo->sx->n_nodi;
+            nodo->sx = cancella_job_stampa(nodo->sx,jobid);
+            if(!nodo->sx || nodo->sx->n_nodi != oldnum) nodo->n_nodi--;
+        }
+        if (nodo->dx){
+            oldnum = nodo->dx->n_nodi;
+            nodo->dx = cancella_job_stampa(nodo->dx,jobid);
+            if(!nodo->dx || nodo->dx->n_nodi != oldnum) nodo->n_nodi--;
+        }
     }
     return nodo;
 }
 
 stampa staccamin(stampa nodo, stampa padre){
     if(!nodo || !padre) return NULL;
-    if(nodo->sx) return staccamin(nodo->sx, nodo);
+    if(nodo->sx) {
+        nodo->n_nodi--;
+        return staccamin(nodo->sx, nodo);
+    }
     if(padre->sx == nodo) padre->sx = nodo->dx;
     if(padre->dx == nodo) padre->dx = nodo->dx;
     nodo->dx = NULL;
+    nodo->n_nodi = 1;
     return nodo;
 }
 
@@ -96,6 +119,7 @@ stampa inserisci_stampa_testa(stampa albero, stampa nodo){
     if(!albero) return nodo;
     if(!nodo || !nodo->cont) return albero;
     nodo->dx = albero;
+    nodo->n_nodi = albero->n_nodi + 1;
     return nodo;
 }
 
@@ -120,19 +144,33 @@ stampa inserisci_stampa(stampa albero, stampa nodo){
         //printf("(id)");
         albero->sx = inserisci_stampa(albero->sx, nodo);
     }
+    albero->n_nodi++;
     return albero;
 }
 
 stampa cerca_inserisci_job_stampa(stampa *nodo, long jobid){
+    stampa res = NULL;
     if(!(*nodo)) {
         (*nodo) = nuova_stampa(nuovo_job(jobid));
-        return NULL;
+        return res;
     }
-    if((*nodo)->cont && get_id_job((*nodo)->cont) > jobid) return cerca_inserisci_job_stampa(&((*nodo)->sx),jobid);
-    if((*nodo)->cont && get_id_job((*nodo)->cont) < jobid) return cerca_inserisci_job_stampa(&((*nodo)->dx),jobid);
+    if((*nodo)->cont && get_id_job((*nodo)->cont) > jobid){
+        res = cerca_inserisci_job_stampa(&((*nodo)->sx),jobid);
+        if (!res) (*nodo)->n_nodi += 1;
+        return res;
+    }
+    if((*nodo)->cont && get_id_job((*nodo)->cont) < jobid){
+        res = cerca_inserisci_job_stampa(&((*nodo)->dx),jobid);
+        if (!res) (*nodo)->n_nodi += 1;
+        return res;
+    }
     if((*nodo)->cont && get_id_job((*nodo)->cont) == jobid) return *nodo;
-    stampa ret = cerca_job_stampa((*nodo)->dx, jobid);
-    if(!ret) return cerca_inserisci_job_stampa(&((*nodo)->sx),jobid);
+    res = cerca_job_stampa((*nodo)->sx, jobid);
+    if(!res){
+        res = cerca_inserisci_job_stampa(&((*nodo)->dx),jobid);
+        if (!res) (*nodo)->n_nodi += 1;
+        return res;
+    }
     else return ret;
 }
 
@@ -199,6 +237,11 @@ int I_is_abr(stampa alb, int maxx, int minn){
     if (!alb->cont) return 0;
     if (get_id_job(alb->cont) < minn || get_id_job(alb->cont) > maxx) return 0;
     return I_is_abr(alb->sx, minn, get_id_job(alb->cont)) && I_is_abr(alb->dx, get_id_job(alb->cont), maxx);
+}
+
+int get_num_stampe(stampa curr){
+    if(curr) return curr->n_nodi;
+    else return 0;
 }
 
 
