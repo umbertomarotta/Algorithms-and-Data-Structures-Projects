@@ -113,3 +113,25 @@ pc get_pc(Heap coda, int n){
         return coda->pc[n];
     else return NULL;
 }
+
+void update_priority(Heap coda, int nodo, int new_priority)
+{
+    if(new_priority>0 && nodo <= get_heapsize(coda))
+    {
+        int curr=nodo, father;
+        if(set_priority_job(coda->pc[nodo], new_priority))
+        {
+            if(get_priority_pc(coda->pc[curr]) < get_priority_pc(coda->pc[parent(curr)]))
+            {
+                father=parent(curr);
+                while(get_priority_pc(coda->pc[curr]) < get_priority_pc(coda->pc[father]))
+                {
+                    swap(coda, curr, father);
+                    curr=father;
+                    father=parent(curr);
+                }
+            }
+            else Heapify(coda,curr);
+        }
+    }
+}

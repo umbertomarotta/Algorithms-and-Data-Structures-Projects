@@ -9,7 +9,7 @@
 #include "infrastruttura.h"
 #include "utils.h"
 #define MAX 17
-#define MIN 16
+#define MIN 6
 #define MUTE 0
 
 struct sinfrastruttura{
@@ -34,9 +34,10 @@ void simulate(infrastruttura system)
 
 infrastruttura initSystem(){
     infrastruttura system = (infrastruttura)malloc(sizeof(struct sinfrastruttura));
+    system->coda = initHeap();
     return system;
 }
-
+//
 infrastruttura get_random_system()
 {
     pc r_pc = NULL;
@@ -44,7 +45,6 @@ infrastruttura get_random_system()
     int n_pc, seq_id = 1;
     srand(time(NULL));
     infrastruttura system = initSystem();
-    system->coda = initHeap();
     n_pc = rand()%(MAX - MIN) + MIN;
     system->n_pc = n_pc;
     //n_job = n_pc*10;

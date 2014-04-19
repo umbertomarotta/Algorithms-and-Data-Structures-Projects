@@ -103,7 +103,7 @@
 
 1397840548 c:\users\umberto\desktop\stampe\utils.h
 
-1397923800 source:/home/garrett/nuovo_prog_lasd/progettiLASD/Stampe/heap.c
+1397928460 source:/home/garrett/nuovo_prog_lasd/progettiLASD/Stampe/heap.c
 	<string.h>
 	<stdlib.h>
 	"job.h"
@@ -117,9 +117,9 @@
 
 1397923183 /home/garrett/nuovo_prog_lasd/progettiLASD/Stampe/pc.h
 
-1397923183 /home/garrett/nuovo_prog_lasd/progettiLASD/Stampe/heap.h
+1397928547 /home/garrett/nuovo_prog_lasd/progettiLASD/Stampe/heap.h
 
-1397923401 source:/home/garrett/nuovo_prog_lasd/progettiLASD/Stampe/infrastruttura.c
+1397925611 source:/home/garrett/nuovo_prog_lasd/progettiLASD/Stampe/infrastruttura.c
 	<stdio.h>
 	<math.h>
 	<stdlib.h>
