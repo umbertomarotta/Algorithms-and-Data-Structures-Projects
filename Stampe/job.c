@@ -5,17 +5,17 @@
 struct sjob{
     //pc sender;
     //char[20] utente;
-    long id;
+    int id;
 };
 
-job nuovo_job(long id){
+job nuovo_job(int id){
     job brum = (job)malloc(sizeof(struct sjob));
     //brum->sender = sender;
     brum->id = id;
     return brum;
 }
 
-long get_id_job(job car){
+int get_id_job(job car){
     if (car) return car->id;
     else return -1;
 }
@@ -25,7 +25,7 @@ long get_id_job(job car){
     return NULL;
 }*/
 
-int set_id_job(job car, long id){
+int set_id_job(job car, int id){
     if (!car) return 0;
     car->id = id;
     return 1;
