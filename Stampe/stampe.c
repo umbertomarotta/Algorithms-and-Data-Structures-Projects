@@ -171,7 +171,7 @@ stampa cerca_inserisci_job_stampa(stampa *nodo, long jobid){
         if (!res) (*nodo)->n_nodi += 1;
         return res;
     }
-    else return ret;
+    else return res;
 }
 
 int cancella_stampa(stampa nodo){

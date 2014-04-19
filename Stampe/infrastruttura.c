@@ -9,8 +9,8 @@
 #include "infrastruttura.h"
 #include "utils.h"
 #define MAX 17
-#define MIN 6
-#define MUTE 0
+#define MIN 16
+#define MUTE 1
 
 struct sinfrastruttura{
     long n_job;
@@ -28,7 +28,7 @@ void simulate(infrastruttura system)
         story = stampa_pc_ex(get_top_priority_pc(system->coda), story, MUTE);
     }
     /* DEBUG */
-    printf("FATTO\n");
+    printf("LAVORI STAMPATI: %d\n", get_num_stampe(story));
     /* ------ */
 }
 
