@@ -10,7 +10,7 @@
 #include "utils.h"
 #define MAX 17
 #define MIN 16
-#define MUTE 0
+#define MUTE 1
 
 struct sinfrastruttura{
     long n_job;
