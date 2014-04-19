@@ -74,8 +74,7 @@ void deleteNode(Heap coda, int node){
         int father, curr;
         if(node<coda->heapsize)
         {
-                swap(coda, node, coda->heapsize);
-                coda->heapsize--;
+                swap(coda, node, --coda->heapsize);
                 if(get_priority_pc(coda->pc[node]) < get_priority_pc(coda->pc[parent(node)]))
                 {
                     curr=node;

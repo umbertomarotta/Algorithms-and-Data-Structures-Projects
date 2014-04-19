@@ -10,7 +10,7 @@
 #include "utils.h"
 #define MAX 17
 #define MIN 16
-#define MUTE 1
+#define MUTE 0
 
 struct sinfrastruttura{
     long n_job;
@@ -41,7 +41,7 @@ infrastruttura get_random_system()
 {
     pc r_pc = NULL;
     long n_job;
-    int n_pc, seq_id = 0;
+    int n_pc, seq_id = 1;
     srand(time(NULL));
     infrastruttura system = initSystem();
     system->coda = initHeap();
