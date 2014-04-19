@@ -11,7 +11,7 @@ struct sstampa{
 };
 
 stampa nuova_stampa(job cont){
-    stampa brum = (stampe)malloc(sizeof(struct sstampe));
+    stampa brum = (stampa)malloc(sizeof(struct sstampa));
     brum->cont = cont;
     brum->sx = NULL;
     brum->dx = NULL;
@@ -22,6 +22,7 @@ stampa nuova_stampa_random(stampa alb, int num, int max){
     if (!max) return alb;
     while(num){
         alb = inserisci_stampa(alb, nuova_stampa(nuovo_job(rand()%max)));
+        //alb = inserisci_stampa_testa(alb, nuova_stampa(nuovo_job(rand()%max)));
         num--;
     }
     return alb;
@@ -47,13 +48,13 @@ stampa cancella_job_stampa(stampa nodo, int jobid){
             return NULL;
         }
         else if(nodo->sx && !nodo->dx){
-            stampa ret = nodo->sx
+            stampa ret = nodo->sx;
             nodo->sx = NULL;
             cancella_stampa(nodo);
             return ret;
         }
         else if(!nodo->sx && nodo->dx){
-            stampa ret = nodo->dx
+            stampa ret = nodo->dx;
             nodo->dx = NULL;
             cancella_stampa(nodo);
             return ret;
@@ -61,7 +62,7 @@ stampa cancella_job_stampa(stampa nodo, int jobid){
         else{
             stampa min = staccamin(nodo->dx, nodo);
             cancella_job(nodo->cont);
-            cont = min->cont;
+            nodo->cont = min->cont;
             min->cont = NULL;
             cancella_stampa(min);
             return nodo;
@@ -91,25 +92,45 @@ stampa pop_stampa(stampa *nodo){
     return ret;
 }
 
-stampa inserisci_stampa(stampa albero, stampa nodo){
+stampa inserisci_stampa_testa(stampa albero, stampa nodo){
     if(!albero) return nodo;
     if(!nodo || !nodo->cont) return albero;
-    if(albero->cont && get_id_job(albero->cont) >= get_id_job(nodo->cont))
+    nodo->dx = albero;
+    return nodo;
+}
+
+stampa inserisci_stampa(stampa albero, stampa nodo){
+    if(!albero) {
+        //printf("(null)");
+        return nodo;
+    }
+    if(!nodo || !nodo->cont){
+        //printf("(azz)");
+        return albero;
+    }
+    if(albero->cont && get_id_job(albero->cont) >= get_id_job(nodo->cont)){
+        //printf("(sx)");
         albero->sx = inserisci_stampa(albero->sx, nodo);
-    if(albero->cont && get_id_job(albero->cont) < get_id_job(nodo->cont))
+    }
+    if(albero->cont && get_id_job(albero->cont) < get_id_job(nodo->cont)){
+        //printf("(dx)");
         albero->dx = inserisci_stampa(albero->dx, nodo);
-    if (!albero->cont) albero->sx = inserisci_stampa(albero->sx, nodo);
+    }
+    if (!albero->cont){
+        //printf("(id)");
+        albero->sx = inserisci_stampa(albero->sx, nodo);
+    }
     return albero;
 }
 
-stampa cerca_inserisci_job_stampa(stampa *nodo, int jobid){
+stampa cerca_inserisci_job_stampa(stampa *nodo, long jobid){
     if(!(*nodo)) {
         (*nodo) = nuova_stampa(nuovo_job(jobid));
         return NULL;
     }
     if((*nodo)->cont && get_id_job((*nodo)->cont) > jobid) return cerca_inserisci_job_stampa(&((*nodo)->sx),jobid);
     if((*nodo)->cont && get_id_job((*nodo)->cont) < jobid) return cerca_inserisci_job_stampa(&((*nodo)->dx),jobid);
-    if((*nodo)->cont && get_id_job((*nodo)->cont) == jobid) return nodo;
+    if((*nodo)->cont && get_id_job((*nodo)->cont) == jobid) return *nodo;
     stampa ret = cerca_job_stampa((*nodo)->dx, jobid);
     if(!ret) return cerca_inserisci_job_stampa(&((*nodo)->sx),jobid);
     else return ret;
@@ -138,20 +159,34 @@ int Istampa_stampe(stampa alb, int liv){
     return 1;
 }
 
-stampa stampa_stampe_ex(stampa alb, stampa story){
-    return Istampa_stampe_ex(alb, story, 0);
+stampa stampa_stampe_ex(stampa alb, stampa story, int mute){
+    return Istampa_stampe_ex(alb, story, 0, mute);
 }
 
-stampa Istampa_stampe_ex(stampa alb, stampa story, int liv){
-    if (!alb) return story;
-    story = Istampa_stampe_ex(alb->sx, story, liv + 1);
-    if(alb->cont && !cerca_job_stampa(story, get_id_job(alb->cont))){
-        story = inserisci_stampa(story, nuova_stampa(nuovo_job(get_id_job(alb->cont))));
-        printf("(%d)", liv);
-        stampa_job(alb->cont);
-        printf(" ");
+stampa Istampa_stampe_ex(stampa alb, stampa story, int liv, int mute){
+    if (!alb){
+        //printf("1");
+        return story;
     }
-    story = Istampa_stampe_ex(alb->dx, story, liv + 1);
+    story = Istampa_stampe_ex(alb->sx, story, liv + 1, mute);
+    //if(alb->cont && !cerca_job_stampa(story, get_id_job(alb->cont))){
+        //story = inserisci_stampa(story, nuova_stampa(nuovo_job(get_id_job(alb->cont))));
+    if(alb->cont && !cerca_inserisci_job_stampa(&story, get_id_job(alb->cont))){
+        if(!mute){
+            //printf("(%d)", liv);
+            stampa_job(alb->cont);
+            printf(" ");
+        }
+    }
+    else{
+        if(!mute){
+            printf("!");
+            //printf("(%d)", liv);
+            stampa_job(alb->cont);
+            printf(" ");
+        }
+    }
+    story = Istampa_stampe_ex(alb->dx, story, liv + 1, mute);
     return story;
 }
 

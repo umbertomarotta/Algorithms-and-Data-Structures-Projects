@@ -22,6 +22,10 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="heap.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="heap.h" />
 		<Unit filename="infrastruttura.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -32,6 +36,7 @@
 		<Unit filename="job.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
+			<Option weight="100" />
 		</Unit>
 		<Unit filename="pc.c">
 			<Option compilerVar="CC" />

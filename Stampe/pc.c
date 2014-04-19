@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
-#include "stampe.h"
 #include "job.h"
+#include "stampe.h"
 #include "pc.h"
 
 struct spc{
@@ -24,9 +24,9 @@ int get_id_pc(pc car){
     else return -1;
 }
 
-pc get_priority_pc(pc car){
+int get_priority_pc(pc car){
     if (car) return car->priority;
-    return NULL;
+    return INT_MAX;
 }
 
 int set_id_pc(pc car, int id){
@@ -55,6 +55,28 @@ int stampa_pc(pc brum){
         printf("\n\n");
         return 1;
     }
-    else {
+    else
         return printf("NO PC\n\n");
+}
+
+stampa stampa_pc_ex(pc brum, stampa story, int mute){
+    if (brum != NULL) {
+        if (!mute) printf("ID PC: %02d\nPRIORITA': %02d\nCODA STAMPA: ", (brum->id)%100, (brum->priority)%100);
+        story = stampa_stampe_ex(brum->coda, story, mute);
+        if (!mute) printf("\n\n");
+        return story;
+    }
+    printf("NO PC\n\n");
+    return story;
+}
+
+void set_coda_pc(pc curr, stampa abr){
+    if(curr!=NULL)
+        curr->coda = abr;
+}
+
+stampa get_coda(pc curr){
+    if(curr)
+        return curr->coda;
+    return NULL;
 }

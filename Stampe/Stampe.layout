@@ -1,13 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Release" />
-	<File name="job.c" open="1" top="0" tabpos="1">
-		<Cursor position="0" topLine="0" />
+	<File name="heap.c" open="1" top="0" tabpos="5">
+		<Cursor position="1639" topLine="24" />
 	</File>
-	<File name="main.c" open="1" top="0" tabpos="2">
-		<Cursor position="0" topLine="0" />
+	<File name="heap.h" open="0" top="0" tabpos="2">
+		<Cursor position="121" topLine="0" />
 	</File>
-	<File name="stampe.h" open="1" top="1" tabpos="3">
-		<Cursor position="0" topLine="0" />
+	<File name="infrastruttura.c" open="1" top="1" tabpos="2">
+		<Cursor position="243" topLine="3" />
+	</File>
+	<File name="job.c" open="0" top="0" tabpos="2">
+		<Cursor position="57" topLine="0" />
+	</File>
+	<File name="job.h" open="0" top="0" tabpos="4">
+		<Cursor position="1" topLine="0" />
+	</File>
+	<File name="main.c" open="1" top="0" tabpos="1">
+		<Cursor position="333" topLine="0" />
+	</File>
+	<File name="pc.c" open="1" top="0" tabpos="4">
+		<Cursor position="1229" topLine="12" />
+	</File>
+	<File name="pc.h" open="1" top="0" tabpos="6">
+		<Cursor position="304" topLine="0" />
+	</File>
+	<File name="stampe.c" open="1" top="0" tabpos="3">
+		<Cursor position="540" topLine="21" />
+	</File>
+	<File name="stampe.h" open="0" top="0" tabpos="0">
+		<Cursor position="670" topLine="0" />
+	</File>
+	<File name="utils.c" open="0" top="0" tabpos="0">
+		<Cursor position="331" topLine="0" />
 	</File>
 </CodeBlocks_layout_file>
