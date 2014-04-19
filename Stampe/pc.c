@@ -59,6 +59,7 @@ int stampa_pc(pc brum){
         return printf("NO PC\n\n");
 }
 
+<<<<<<< HEAD
 stampa stampa_pc_ex(pc brum, stampa story, int mute){
     if (brum != NULL) {
         if (!mute) printf("ID PC: %02d\nPRIORITA': %02d\nCODA STAMPA: ", (brum->id)%100, (brum->priority)%100);
@@ -79,4 +80,14 @@ stampa get_coda(pc curr){
     if(curr)
         return curr->coda;
     return NULL;
+=======
+void set_coda_pc(pc curr,stampa abr){
+    if(curr!=NULL)
+        curr->coda=abr;
+}
+
+stampa get_coda(pc curr){
+    if(curr!=NULL)
+        return curr->coda;
+>>>>>>> 7cbdc228d3de5c716c6f6928d51215cd2cc37968
 }

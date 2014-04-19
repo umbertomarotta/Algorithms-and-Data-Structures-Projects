@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+#include "pc.h"
+>>>>>>> 7cbdc228d3de5c716c6f6928d51215cd2cc37968
 
 typedef struct s_heap* Heap;
 

@@ -71,6 +71,7 @@
 	<stdlib.h>
 	<time.h>
 
+<<<<<<< HEAD
 1397875104 source:c:\users\umberto\desktop\stampe\pc.c
 	<stdio.h>
 	<stdlib.h>
@@ -95,11 +96,72 @@
 	"heap.h"
 
 1397872094 source:c:\users\umberto\desktop\stampe\main.c
+=======
+1397856518 source:/home/garrett/server_stampa/ProgettiLASD/Stampe/heap.c
+	<string.h>
+	<stdlib.h>
+	"pc.h"
+	"heap.h"
+
+1397856783 /home/garrett/server_stampa/ProgettiLASD/Stampe/pc.h
+	"stampe.h"
+
+1397856818 /home/garrett/server_stampa/ProgettiLASD/Stampe/stampe.h
+	"job.h"
+
+1397855618 /home/garrett/server_stampa/ProgettiLASD/Stampe/job.h
+
+1397856518 /home/garrett/server_stampa/ProgettiLASD/Stampe/heap.h
+	"pc.h"
+
+1397857560 source:/home/garrett/server_stampa/ProgettiLASD/Stampe/infrastruttura.c
+	<stdio.h>
+	<math.h>
+	<stdlib.h>
+	<time.h>
+	"heap.h"
+	"infrastruttura.h"
+	"pc.h"
+	"stampe.h"
+
+1397855618 source:/home/garrett/server_stampa/ProgettiLASD/Stampe/job.c
+	<stdio.h>
+	<stdlib.h>
+	"job.h"
+
+1397857869 source:/home/garrett/server_stampa/ProgettiLASD/Stampe/main.c
+>>>>>>> 7cbdc228d3de5c716c6f6928d51215cd2cc37968
 	<stdio.h>
 	<stdlib.h>
 	<time.h>
 	"infrastruttura.h"
 	"utils.h"
 
+<<<<<<< HEAD
 1397840548 c:\users\umberto\desktop\stampe\utils.h
+=======
+1397856795 source:/home/garrett/server_stampa/ProgettiLASD/Stampe/pc.c
+	<stdio.h>
+	<stdlib.h>
+	<limits.h>
+	"stampe.h"
+	"job.h"
+	"pc.h"
+
+1397855619 source:/home/garrett/server_stampa/ProgettiLASD/Stampe/stampe.c
+	<stdio.h>
+	<stdlib.h>
+	<limits.h>
+	"job.h"
+	"stampe.h"
+
+1397840547 source:/home/garrett/server_stampa/ProgettiLASD/Stampe/utils.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+
+1397857126 /home/garrett/server_stampa/ProgettiLASD/Stampe/infrastruttura.h
+
+1397840547 /home/garrett/server_stampa/ProgettiLASD/Stampe/utils.h
+>>>>>>> 7cbdc228d3de5c716c6f6928d51215cd2cc37968
 

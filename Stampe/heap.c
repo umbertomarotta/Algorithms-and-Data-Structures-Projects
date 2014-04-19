@@ -1,7 +1,10 @@
 #include <string.h>
 #include <stdlib.h>
+<<<<<<< HEAD
 #include "job.h"
 #include "stampe.h"
+=======
+>>>>>>> 7cbdc228d3de5c716c6f6928d51215cd2cc37968
 #include "pc.h"
 #include "heap.h"
 #define max 32
@@ -11,6 +14,7 @@ struct s_heap {
         int heapsize;
 };
 
+<<<<<<< HEAD
 Heap initHeap(){
     int i;
     Heap coda = (Heap)malloc(sizeof(struct s_heap));
@@ -32,11 +36,42 @@ int parent(int curr){
 }
 
 void swap(Heap coda, int i, int j){
+=======
+
+Heap initHeap()
+{
+    int i;
+    Heap coda=(Heap)malloc(sizeof(struct s_heap));
+    coda->heapsize=-1;
+    for(i=0;i<max;i++) coda->pc[i]=NULL;
+    return coda;
+}
+
+
+int left(int curr)
+{
+        return 2*curr+1;
+}
+
+int right(int curr)
+{
+        return 2*curr+2;
+}
+
+int parent(int curr)
+{
+        return (curr-1)/2;
+}
+
+void swap(Heap coda, int i, int j)
+{
+>>>>>>> 7cbdc228d3de5c716c6f6928d51215cd2cc37968
         pc tmp = coda->pc[i];
         coda->pc[i] = coda->pc[j];
         coda->pc[j] = tmp;
 }
 
+<<<<<<< HEAD
 void insert_heap(Heap coda, pc new_pc){
     int curr,father;
     if(coda->heapsize < max)
@@ -55,6 +90,27 @@ void insert_heap(Heap coda, pc new_pc){
 }
 
 void Heapify(Heap coda, int i){
+=======
+void insert_heap(Heap coda, pc new_pc)
+{
+        int curr,father;
+        if(coda->heapsize<max)
+        {
+                coda->pc[++coda->heapsize] = new_pc;
+                curr=coda->heapsize;
+                father=parent(curr);
+                while(get_priority_pc(coda->pc[curr]) < get_priority_pc(coda->pc[father]))
+                {
+                        swap(coda, curr, father);
+                        curr=father;
+                        father=parent(curr);
+                }
+        }
+}
+
+void Heapify(Heap coda, int i)
+{
+>>>>>>> 7cbdc228d3de5c716c6f6928d51215cd2cc37968
         int l,r,smallest;
         l = left(i);
         r = right(i);
@@ -70,7 +126,13 @@ void Heapify(Heap coda, int i){
         }
 }
 
+<<<<<<< HEAD
 void deleteNode(Heap coda, int node){
+=======
+
+void deleteNode(Heap coda, int node)
+{
+>>>>>>> 7cbdc228d3de5c716c6f6928d51215cd2cc37968
         int father, curr;
         if(node<coda->heapsize)
         {
@@ -94,6 +156,10 @@ void deleteNode(Heap coda, int node){
 
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7cbdc228d3de5c716c6f6928d51215cd2cc37968
 int get_heapsize(Heap coda){
     return coda->heapsize;
 }
@@ -110,7 +176,11 @@ void set_heapsize(Heap coda, int n){
 }
 
 pc get_pc(Heap coda, int n){
+<<<<<<< HEAD
     if(n < coda->heapsize)
+=======
+    if(n<coda->heapsize)
+>>>>>>> 7cbdc228d3de5c716c6f6928d51215cd2cc37968
         return coda->pc[n];
     else return NULL;
 }
