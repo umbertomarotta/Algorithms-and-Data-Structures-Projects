@@ -4,7 +4,7 @@
 #include "stampe.h"
 #include "pc.h"
 #include "heap.h"
-#define max 32
+#define max 16
 
 struct s_heap {
         pc pc[max];
@@ -14,7 +14,7 @@ struct s_heap {
 Heap initHeap(){
     int i;
     Heap coda = (Heap)malloc(sizeof(struct s_heap));
-    coda->heapsize = 0;
+    coda->heapsize = -1;
     for (i=0; i<max; i++) coda->pc[i] = NULL;
     return coda;
 }
@@ -41,8 +41,7 @@ void insert_heap(Heap coda, pc new_pc){
     int curr,father;
     if(coda->heapsize < max)
     {
-        coda->pc[coda->heapsize] = new_pc;
-        coda->heapsize += 1;
+        coda->pc[++coda->heapsize] = new_pc;
         curr = coda->heapsize;
         father = parent(curr);
         while(1 && get_priority_pc(coda->pc[curr]) < get_priority_pc(coda->pc[father]))
@@ -72,9 +71,10 @@ void Heapify(Heap coda, int i){
 
 void deleteNode(Heap coda, int node){
         int father, curr;
-        if(node<coda->heapsize)
+        if(node<=coda->heapsize)
         {
-                swap(coda, node, --coda->heapsize);
+                swap(coda, node, coda->heapsize);
+                coda->heapsize--;
                 if(get_priority_pc(coda->pc[node]) < get_priority_pc(coda->pc[parent(node)]))
                 {
                     curr=node;
@@ -109,7 +109,7 @@ void set_heapsize(Heap coda, int n){
 }
 
 pc get_pc(Heap coda, int n){
-    if(n < coda->heapsize)
+    if(n <= coda->heapsize)
         return coda->pc[n];
     else return NULL;
 }

@@ -10,7 +10,7 @@
 #include "utils.h"
 #define MAX 17
 #define MIN 16
-#define MUTE 1
+#define MUTE 0
 
 struct sinfrastruttura{
     long n_job;
@@ -24,7 +24,7 @@ void simulate(infrastruttura system)
     printf("PROCESSING...\n\n");
     /* ------ */
     stampa story = NULL;
-    while(get_heapsize(system->coda) > 0){
+    while(get_heapsize(system->coda) >= 0){
         story = stampa_pc_ex(get_top_priority_pc(system->coda), story, MUTE);
     }
     /* DEBUG */
