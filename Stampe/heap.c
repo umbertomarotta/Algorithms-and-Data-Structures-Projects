@@ -54,18 +54,18 @@ void insert_heap(Heap coda, pc new_pc){
 }
 
 void Heapify(Heap coda, int i){
-        int l,r,smallest;
+        int l,r,lesser;
         l = left(i);
         r = right(i);
         if (l < coda->heapsize && get_priority_pc(coda->pc[l]) < get_priority_pc(coda->pc[i]))
-                smallest = l;
-        else smallest = i;
-        if (r < coda->heapsize && get_priority_pc(coda->pc[r]) < get_priority_pc(coda->pc[smallest]))
-                smallest = r;
+                lesser = l;
+        else lesser = i;
+        if (r < coda->heapsize && get_priority_pc(coda->pc[r]) < get_priority_pc(coda->pc[lesser]))
+                lesser = r;
 
-        if (smallest != i) {
-                swap(coda, i, smallest);
-                Heapify(coda, smallest);
+        if (lesser != i) {
+                swap(coda, i, lesser);
+                Heapify(coda, lesser);
         }
 }
 
@@ -73,6 +73,11 @@ void deleteNode(Heap coda, int node){
         int father, curr;
         if(node<=coda->heapsize)
         {
+
+                /*
+                dealloca_pc(coda->pc[node]);
+                coda->pc[node]=NULL;
+                */
                 swap(coda, node, coda->heapsize);
                 coda->heapsize--;
                 if(get_priority_pc(coda->pc[node]) < get_priority_pc(coda->pc[parent(node)]))
@@ -114,25 +119,32 @@ pc get_pc(Heap coda, int n){
     else return NULL;
 }
 
-void update_priority(Heap coda, int nodo, int new_priority)
+void update_priority(Heap coda, pc brum, int new_priority)
 {
-    if(new_priority>0 && nodo <= get_heapsize(coda))
+    int curr=0,padre;
+    if(set_priority_job(brum,new_priority))
     {
-        int curr=nodo, father;
-        if(set_priority_job(coda->pc[nodo], new_priority))
+        while(coda->pc[curr]!=brum && curr <=get_heapsize(coda))
+            curr++;
+        if(get_priority_pc(coda->pc[curr]) < get_priority_pc(coda->pc[parent(curr)]))
         {
-            if(get_priority_pc(coda->pc[curr]) < get_priority_pc(coda->pc[parent(curr)]))
+            padre=parent(curr);
+            while(get_priority_pc(coda->pc[curr])<get_priority_pc(coda->pc[padre]))
             {
-                father=parent(curr);
-                while(get_priority_pc(coda->pc[curr]) < get_priority_pc(coda->pc[father]))
-                {
-                    swap(coda, curr, father);
-                    curr=father;
-                    father=parent(curr);
-                }
+                swap(coda,curr,padre);
+                curr=padre;
+                padre=parent(curr);
             }
-            else Heapify(coda,curr);
         }
+        else Heapify(coda,curr);
     }
 }
 
+pc get_pc_by_id(Heap coda,int id){
+    int i;
+    if(coda->heapsize>=0)
+        for(i=0;i<=get_heapsize(coda);i++)
+            if(get_id_pc(coda->pc[i])==id)
+                return coda->pc[i];
+    return NULL;
+}

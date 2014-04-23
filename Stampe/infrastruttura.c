@@ -109,3 +109,19 @@ void stampa_coda(infrastruttura system)
     else printf("coda vuota!\n");
 }
 
+
+void update_priority_I(infrastruttura system){
+    int id, npriority;
+    pc brum;
+    clear_screen();
+    printf("Immetti l'ID del pc che vuoi modificare\n");
+    scanf("%d",&id);
+    if(brum=get_pc_by_id(system->coda, id))
+    {
+        printf("quale priorità vuoi assegnargli?");
+        scanf("%d",&npriority);
+        update_priority(system->coda,brum,npriority);
+    }
+    else printf("pc selezionato inesistente\n");
+}
+

@@ -17,6 +17,7 @@ int main(){
         printf("\n [1] Genera scenario random (n pc, 2^n jobs)\n");
         printf("\n [2] Simula\n");
         printf("\n [3] Stampa scenario corrente\n");
+        printf("\n [4] Modifica priorità di un pc\n");
         printf("\n [0] Esci\n\n");
         printf("Scegli: ");
         scanf("%d",&scelta);
@@ -39,10 +40,13 @@ int main(){
             }
             else printf("devi prima avere uno scenario iniziale!\n");
             break;
-        /*case 4:
-            menu_simula_10_step(rot);
+        case 4:
+            if(system!=NULL)
+            {
+                update_priority_I(system);
+            }
             break;
-        case 5:
+        /*case 5:
             menu_simula_N_step(rot);
             break;
         case 6:
