@@ -9,7 +9,7 @@
 #include "infrastruttura.h"
 #include "utils.h"
 #define MAX 17
-#define MIN 16
+#define MIN 8
 #define MUTE 0
 
 struct sinfrastruttura{
