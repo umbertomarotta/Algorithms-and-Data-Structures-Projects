@@ -16,6 +16,7 @@ int main(){
         clear_screen();
         printf("\n [1] Genera scenario random (n pc, 2^n jobs)\n");
         printf("\n [2] Simula\n");
+        printf("\n [3] Stampa scenario corrente\n");
         printf("\n [0] Esci\n\n");
         printf("Scegli: ");
         scanf("%d",&scelta);
@@ -31,10 +32,14 @@ int main(){
             }
             else printf("devi prima avere uno scenario iniziale!\n");
             break;
-        /*case 3:
-            menu_stampa_rotonda(rot);
+        case 3:
+            if(system!=NULL){
+                stampa_coda(system);
+                press_enter();
+            }
+            else printf("devi prima avere uno scenario iniziale!\n");
             break;
-        case 4:
+        /*case 4:
             menu_simula_10_step(rot);
             break;
         case 5:
