@@ -228,6 +228,39 @@ stampa Istampa_stampe_ex(stampa alb, stampa story, int liv, int mute){
     return story;
 }
 
+stampa stampa_stampe_lim(stampa alb, stampa story, int lim){
+    return Istampa_stampe_lim(alb, story, 1, 0, get_num_stampe(story), lim);
+}
+
+stampa Istampa_stampe_lim(stampa alb, stampa story, int dd, int visite, int start, int lim){
+    //printf("1");
+    if (!alb){
+        return story;
+    }
+    story = Istampa_stampe_lim(alb->sx, story, dd*0, visite, start, lim);
+    if (alb->sx) visite += alb->sx->n_nodi;
+    if(alb->cont && !cerca_inserisci_job_stampa(&story, get_id_job(alb->cont))){
+        if(visite < lim){
+            stampa_job(alb->cont);
+            printf(" ");
+        }
+    }
+    else{
+        if(visite < lim){
+            printf("!");
+            stampa_job(alb->cont);
+            printf(" ");
+        }
+    }
+    visite += 1;
+    story = Istampa_stampe_lim(alb->dx, story, dd, visite, start, lim);
+    if (alb->dx) visite += alb->dx->n_nodi;
+    if(!alb->dx && dd && visite >= lim){
+        printf("\n  [Altri %d Jobs di cui %d Stampati]", visite - lim, story->n_nodi - start);
+    }
+    return story;
+}
+
 int is_abr(stampa alb){
     return I_is_abr(alb, INT_MAX, INT_MIN);
 }

@@ -1,3 +1,4 @@
+#define JOB_MAX 10
 
 typedef struct sstampa* stampa;
 
@@ -14,6 +15,8 @@ int cancella_stampa(stampa nodo);
 int stampa_stampe(stampa alb);
 stampa stampa_stampe_ex(stampa alb, stampa story, int mute);
 stampa Istampa_stampe_ex(stampa alb, stampa story, int liv, int mute);
+stampa stampa_stampe_lim(stampa alb, stampa story, int lim);
+stampa Istampa_stampe_lim(stampa alb, stampa story, int dd, int visite, int start, int lim);
 int is_abr(stampa alb);
 int I_is_abr(stampa alb, int maxx, int minn);
 int Istampa_stampe(stampa alb, int liv);

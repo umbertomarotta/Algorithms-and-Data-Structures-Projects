@@ -62,7 +62,8 @@ int stampa_pc(pc brum){
 stampa stampa_pc_ex(pc brum, stampa story, int mute){
     if (brum != NULL) {
         if (!mute) printf("ID PC: %02d\nPRIORITA': %02d\nCODA STAMPA: ", (brum->id)%100, (brum->priority)%100);
-        story = stampa_stampe_ex(brum->coda, story, mute);
+        //story = stampa_stampe_ex(brum->coda, story, mute);
+        story = stampa_stampe_lim(brum->coda, story, 10);
         if (!mute) printf("\n\n");
         return story;
     }
