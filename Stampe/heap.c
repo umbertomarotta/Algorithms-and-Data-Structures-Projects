@@ -73,11 +73,6 @@ void deleteNode(Heap coda, int node){
         int father, curr;
         if(node<=coda->heapsize)
         {
-
-                /*
-                dealloca_pc(coda->pc[node]);
-                coda->pc[node]=NULL;
-                */
                 swap(coda, node, coda->heapsize);
                 coda->heapsize--;
                 if(get_priority_pc(coda->pc[node]) < get_priority_pc(coda->pc[parent(node)]))
@@ -91,8 +86,8 @@ void deleteNode(Heap coda, int node){
                         father=parent(curr);
                     }
                 }
-                else
-                    Heapify(coda,node);
+                else Heapify(coda,node);
+
 
         }
 
@@ -147,4 +142,15 @@ pc get_pc_by_id(Heap coda,int id){
             if(get_id_pc(coda->pc[i])==id)
                 return coda->pc[i];
     return NULL;
+}
+
+void deallocaHeap(Heap coda)
+{
+    int i=0;
+    while(cancella_pc(coda->pc[i])&&i<max){
+        i++;
+        coda->pc[i]=NULL;
+    }
+    free(coda);
+    coda=NULL;
 }

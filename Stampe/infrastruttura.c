@@ -8,8 +8,8 @@
 #include "heap.h"
 #include "infrastruttura.h"
 #include "utils.h"
-#define MAX 21
-#define MIN 20
+#define MAX 17
+#define MIN 12
 #define MUTE 0
 
 struct sinfrastruttura{
@@ -24,12 +24,18 @@ void simulate(infrastruttura system)
     printf("PROCESSING...\n\n");
     /* ------ */
     stampa story = NULL;
-    while(get_heapsize(system->coda) >= 0){
-        story = stampa_pc_ex(get_top_priority_pc(system->coda), story, MUTE);
+    if(system->coda!=NULL)
+    {
+        while(get_heapsize(system->coda) >= 0){
+            story = stampa_pc_ex(get_top_priority_pc(system->coda), story, MUTE);
+        }
+        /* DEBUG */
+        printf("LAVORI STAMPATI: %d\n", get_num_stampe(story));
+        /* ------ */
+        deallocaHeap(system->coda);
+        system->coda=NULL;
     }
-    /* DEBUG */
-    printf("LAVORI STAMPATI: %d\n", get_num_stampe(story));
-    /* ------ */
+    else printf("Niente da simulare!\n");
 }
 
 infrastruttura initSystem(){
@@ -112,11 +118,12 @@ void stampa_coda(infrastruttura system)
 
 void update_priority_I(infrastruttura system){
     int id, npriority;
-    pc brum;
+    pc brum=NULL;
     clear_screen();
     printf("Immetti l'ID del pc che vuoi modificare\n");
     scanf("%d",&id);
-    if(brum=get_pc_by_id(system->coda, id))
+    brum = get_pc_by_id(system->coda, id);
+    if(brum)
     {
         printf("quale priorità vuoi assegnargli?");
         scanf("%d",&npriority);

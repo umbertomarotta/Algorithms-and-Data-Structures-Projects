@@ -14,5 +14,6 @@ pc get_pc(Heap,int);
 pc get_top_priority_pc(Heap);
 void set_heapsize(Heap, int);
 void update_priority(Heap, pc, int);
-
+pc get_pc_by_id(Heap,int);
+void deallocaHeap(Heap);
 
