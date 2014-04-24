@@ -107,7 +107,7 @@ infrastruttura get_random_system()
 void stampa_coda(infrastruttura system)
 {
     int i;
-    if(get_heapsize(system->coda)>=0)
+    if(system->coda!=NULL && get_heapsize(system->coda)>=0)
     {
         for(i=0;i<=get_heapsize(system->coda);i++)
             stampa_pc(get_pc(system->coda,i));
