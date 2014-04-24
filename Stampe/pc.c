@@ -51,7 +51,7 @@ int cancella_pc(pc car){
 int stampa_pc(pc brum){
     if (brum != NULL) {
         printf("ID PC: %02d\nPRIORITA': %02d\nCODA STAMPA: ", (brum->id)%100, (brum->priority)%100);
-        stampa_stampe(brum->coda);
+        stampa_stampe_totlim(brum->coda, JOB_MAX);
         printf("\n\n");
         return 1;
     }
