@@ -20,3 +20,5 @@ int is_abr(stampa alb);
 int I_is_abr(stampa alb, int maxx, int minn);
 int Istampa_stampe(stampa alb, int liv);
 int get_num_stampe(stampa curr);
+int stampa_stampe_totlim(stampa alb, int lim);
+int Istampa_stampe_totlim(stampa alb, stampa rad, int dd, int visite, int lim);

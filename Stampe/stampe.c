@@ -269,6 +269,39 @@ stampa Istampa_stampe_lim(stampa alb, stampa story, int dd, int visite, int star
     return story;
 }
 
+int stampa_stampe_totlim(stampa alb, int lim){
+    return Istampa_stampe_totlim(alb, alb, 1, 0, lim);
+}
+
+int Istampa_stampe_totlim(stampa alb, stampa rad, int dd, int visite, int lim){
+    if (!alb){
+        return 0;
+    }
+    if(visite < lim) Istampa_stampe_totlim(alb->sx, rad, dd*0, visite, lim);
+    if (alb->sx) visite += alb->sx->n_nodi;
+    if(alb->cont){
+        if(visite < lim){
+            stampa_job(alb->cont);
+            printf(" ");
+        }
+    }
+    else{
+        if(visite < lim){
+            printf("!");
+            stampa_job(alb->cont);
+            printf(" ");
+        }
+    }
+    visite += 1;
+    if(visite < lim || dd) Istampa_stampe_totlim(alb->dx, rad, dd, visite, lim);
+    //if (alb->dx) visite += alb->dx->n_nodi;
+    if(!alb->dx && dd){
+        if(visite > lim) printf("[Altre %d]", rad->n_nodi - lim);
+        else printf("[Fine Coda]");
+    }
+    return 1;
+}
+
 int is_abr(stampa alb){
     return I_is_abr(alb, INT_MAX, INT_MIN);
 }
