@@ -6,3 +6,4 @@ infrastruttura get_random_system();
 void simulate(infrastruttura);
 void stampa_coda(infrastruttura);
 void update_priority_I(infrastruttura);
+int dealloca_infr(infrastruttura system);

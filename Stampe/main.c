@@ -24,6 +24,7 @@ int main(){
         press_enter();
         switch (scelta) {
         case 1:
+            dealloca_infr(system);
             system = get_random_system();
             break;
         case 2:

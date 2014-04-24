@@ -8,8 +8,8 @@
 #include "heap.h"
 #include "infrastruttura.h"
 #include "utils.h"
-#define MAX 17
-#define MIN 12
+#define MAX 21
+#define MIN 20
 #define MUTE 0
 
 struct sinfrastruttura{
@@ -130,5 +130,14 @@ void update_priority_I(infrastruttura system){
         update_priority(system->coda,brum,npriority);
     }
     else printf("pc selezionato inesistente\n");
+}
+
+int dealloca_infr(infrastruttura system){
+    if (system == NULL) {
+        return 0;
+    }
+    deallocaHeap(system->coda);
+    system->coda = NULL;
+    return 1;
 }
 
