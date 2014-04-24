@@ -4,7 +4,7 @@
 #include "stampe.h"
 #include "pc.h"
 #include "heap.h"
-#define max 16
+#define max 32
 
 struct s_heap {
         pc pc[max];

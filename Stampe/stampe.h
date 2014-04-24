@@ -1,4 +1,3 @@
-#define JOB_MAX 10
 
 typedef struct sstampa* stampa;
 

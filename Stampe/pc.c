@@ -63,7 +63,7 @@ stampa stampa_pc_ex(pc brum, stampa story, int mute){
     if (brum != NULL) {
         if (!mute) printf("ID PC: %02d\nPRIORITA': %02d\nCODA STAMPA: ", (brum->id)%100, (brum->priority)%100);
         //story = stampa_stampe_ex(brum->coda, story, mute);
-        story = stampa_stampe_lim(brum->coda, story, 10);
+        story = stampa_stampe_lim(brum->coda, story, JOB_MAX);
         if (!mute) printf("\n\n");
         return story;
     }
@@ -80,4 +80,11 @@ stampa get_coda(pc curr){
     if(curr)
         return curr->coda;
     return NULL;
+}
+
+int accoda_stampa_pc(pc curr, int jobid){
+    if(!curr) return 0;
+    //curr->coda = inserisci_stampa(curr->coda, nuova_stampa(nuovo_job(jobid)));
+    curr->coda = nuova_stampa_random(curr->coda, 1, jobid);
+    return 1;
 }

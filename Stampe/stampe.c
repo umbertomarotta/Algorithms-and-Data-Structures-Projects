@@ -21,7 +21,7 @@ stampa nuova_stampa(job cont){
 }
 
 stampa nuova_stampa_random(stampa alb, int num, int max){
-    if (!max) return alb;
+    if (max <= 0) return alb;
     while(num){
         alb = inserisci_stampa(alb, nuova_stampa(nuovo_job(rand()%max)));
         //alb = inserisci_stampa_testa(alb, nuova_stampa(nuovo_job(rand()%max)));
@@ -243,6 +243,7 @@ stampa Istampa_stampe_lim(stampa alb, stampa story, int dd, int visite, int star
         if(visite < lim){
             stampa_job(alb->cont);
             printf(" ");
+            story->n_nodi -= 1;
         }
     }
     else{
@@ -255,8 +256,15 @@ stampa Istampa_stampe_lim(stampa alb, stampa story, int dd, int visite, int star
     visite += 1;
     story = Istampa_stampe_lim(alb->dx, story, dd, visite, start, lim);
     if (alb->dx) visite += alb->dx->n_nodi;
-    if(!alb->dx && dd && visite >= lim){
-        printf("\n  [Altri %d Jobs di cui %d Stampati]", visite - lim, story->n_nodi - start);
+    if(!alb->dx && dd){
+        if(visite > lim){
+            printf("[Altre %d di cui %d Ok]", visite - lim, story->n_nodi - start);
+            story->n_nodi += lim;
+        }
+        else{
+            printf("[Fine Coda]");
+            story->n_nodi += visite;
+        }
     }
     return story;
 }

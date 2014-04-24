@@ -1,3 +1,4 @@
+#define JOB_MAX 5
 
 typedef struct spc* pc;
 
@@ -11,4 +12,5 @@ int stampa_pc(pc brum);
 stampa stampa_pc_ex(pc brum, stampa story, int mute);
 void set_coda_pc(pc curr,stampa abr);
 stampa get_coda(pc curr);
+int accoda_stampa_pc(pc curr, int jobid);
 

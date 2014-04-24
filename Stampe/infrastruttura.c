@@ -8,8 +8,8 @@
 #include "heap.h"
 #include "infrastruttura.h"
 #include "utils.h"
-#define MAX 17
-#define MIN 8
+#define MAX 21
+#define MIN 20
 #define MUTE 0
 
 struct sinfrastruttura{
@@ -62,7 +62,6 @@ infrastruttura get_random_system()
     time_t tim = time(NULL), tim1 = time(NULL);
     printf("CARICAMENTO: ../%d\n", debug2);
     /* ------ */
-
     while(n_job)
     {
         /* DEBUG */
@@ -75,11 +74,12 @@ infrastruttura get_random_system()
 //        }
 //        clear_screen();
         /* ------ */
-
         r_pc = get_pc(system->coda, rand()%(system->n_pc));
         if(r_pc)
         {
-            set_coda_pc(r_pc, nuova_stampa_random(get_coda(r_pc), 1, n_job));
+            //set_coda_pc(r_pc, nuova_stampa_random(get_coda(r_pc), 1, (system->n_job)));
+            //set_coda_pc(r_pc, inserisci_stampa(get_coda(r_pc), nuova_stampa(nuovo_job(n_job))));
+            accoda_stampa_pc(r_pc, n_job);
             n_job--;
 
             /* DEBUG */
