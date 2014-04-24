@@ -57,10 +57,10 @@ void Heapify(Heap coda, int i){
         int l,r,lesser;
         l = left(i);
         r = right(i);
-        if (l < coda->heapsize && get_priority_pc(coda->pc[l]) < get_priority_pc(coda->pc[i]))
+        if (l <= coda->heapsize && get_priority_pc(coda->pc[l]) < get_priority_pc(coda->pc[i]))
                 lesser = l;
         else lesser = i;
-        if (r < coda->heapsize && get_priority_pc(coda->pc[r]) < get_priority_pc(coda->pc[lesser]))
+        if (r <= coda->heapsize && get_priority_pc(coda->pc[r]) < get_priority_pc(coda->pc[lesser]))
                 lesser = r;
 
         if (lesser != i) {
