@@ -18,6 +18,8 @@ int main(){
         printf("\n [2] Simula\n");
         printf("\n [3] Stampa scenario corrente\n");
         printf("\n [4] Modifica priorità di un pc\n");
+        printf("\n [5] Inserisci job in un pc\n");
+        printf("\n [6] Cancella job da un pc\n");
         printf("\n [0] Esci\n\n");
         printf("Scegli: ");
         scanf("%d",&scelta);
@@ -43,17 +45,17 @@ int main(){
             break;
         case 4:
             if(system!=NULL)
-            {
                 update_priority_I(system);
-            }
             break;
-        /*case 5:
-            menu_simula_N_step(rot);
+        case 5:
+            if(system!=NULL)
+                insert_job_pc_I(system);
             break;
         case 6:
-            rot = menu_carica_rotonda(rot);
+            if(system!=NULL)
+                delete_job_I(system);
             break;
-        case 7:
+        /*case 7:
             menu_salva_rotonda(rot);
             break;
         case 8:

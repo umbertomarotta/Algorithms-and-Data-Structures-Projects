@@ -9,8 +9,8 @@
 #include "heap.h"
 #include "infrastruttura.h"
 #include "utils.h"
-#define MAX 22
-#define MIN 21
+#define MAX 16
+#define MIN 10
 #define MUTE 0
 
 struct sinfrastruttura{
@@ -132,7 +132,7 @@ void update_priority_I(infrastruttura system){
     brum = get_pc_by_id(system->coda, id);
     if(brum)
     {
-        printf("quale priorità vuoi assegnargli?");
+        printf("quale priorità vuoi assegnargli?\n");
         scanf("%d",&npriority);
         update_priority(system->coda,brum,npriority);
     }
@@ -148,3 +148,43 @@ int dealloca_infr(infrastruttura system){
     return 1;
 }
 
+void insert_job_pc_I(infrastruttura system){
+    int id;
+    int jobID;
+    pc brum=NULL;
+    clear_screen();
+    printf("Inserisci l'ID del pc\n");
+    scanf("%d",&id);
+    brum = get_pc_by_id(system->coda, id);
+    if(brum)
+    {
+        printf("Inserisci l'ID del job\n");
+        scanf("%d",&jobID);
+        inserisci_stampa_fast(get_coda(brum),nuova_stampa(nuovo_job(jobID)));
+    }
+    else printf("pc selezionato inesistente\n");
+
+}
+
+
+void delete_job_I(infrastruttura system){
+    int id, jobID;
+    stampa car=NULL;
+    pc brum=NULL;
+    clear_screen();
+    printf("Immetti l'ID del pc che vuoi modificare\n");
+    scanf("%d",&id);
+    brum = get_pc_by_id(system->coda, id);
+    if(brum)
+    {
+        printf("quale Job vuoi cancellare?\n");
+        scanf("%d",&jobID);
+        car=cerca_job_stampa(get_coda(brum),jobID);
+        if(car){
+            cancella_job_stampa(get_coda(brum),jobID);
+            printf("Cancellazone avvenuta con successo");
+        }
+        else printf("Job non trovato\n");
+    }
+    else printf("pc selezionato inesistente\n");
+}

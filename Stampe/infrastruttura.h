@@ -7,3 +7,5 @@ void simulate(infrastruttura);
 void stampa_coda(infrastruttura);
 void update_priority_I(infrastruttura);
 int dealloca_infr(infrastruttura system);
+void insert_job_pc_I(infrastruttura);
+void delete_job_I(infrastruttura);

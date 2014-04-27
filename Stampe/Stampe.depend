@@ -231,3 +231,68 @@
 	"infrastruttura.h"
 	"utils.h"
 
+1398591833 source:/home/garrett/prog_stampa/progettiLASD/Stampe/heap.c
+	<string.h>
+	<stdlib.h>
+	"job.h"
+	"stampe.h"
+	"pc.h"
+	"heap.h"
+
+1398591833 /home/garrett/prog_stampa/progettiLASD/Stampe/job.h
+
+1398593324 /home/garrett/prog_stampa/progettiLASD/Stampe/stampe.h
+
+1398591833 /home/garrett/prog_stampa/progettiLASD/Stampe/pc.h
+
+1398591833 /home/garrett/prog_stampa/progettiLASD/Stampe/heap.h
+
+1398604832 source:/home/garrett/prog_stampa/progettiLASD/Stampe/infrastruttura.c
+	<stdio.h>
+	<math.h>
+	<stdlib.h>
+	<time.h>
+	<inttypes.h>
+	"job.h"
+	"stampe.h"
+	"pc.h"
+	"heap.h"
+	"infrastruttura.h"
+	"utils.h"
+
+1398603867 /home/garrett/prog_stampa/progettiLASD/Stampe/infrastruttura.h
+
+1398591833 /home/garrett/prog_stampa/progettiLASD/Stampe/utils.h
+
+1398591833 source:/home/garrett/prog_stampa/progettiLASD/Stampe/job.c
+	<stdio.h>
+	<stdlib.h>
+	"job.h"
+
+1398591833 source:/home/garrett/prog_stampa/progettiLASD/Stampe/pc.c
+	<stdio.h>
+	<stdlib.h>
+	<limits.h>
+	"job.h"
+	"stampe.h"
+	"pc.h"
+
+1398593324 source:/home/garrett/prog_stampa/progettiLASD/Stampe/stampe.c
+	<stdio.h>
+	<stdlib.h>
+	<limits.h>
+	"job.h"
+	"stampe.h"
+
+1398591833 source:/home/garrett/prog_stampa/progettiLASD/Stampe/utils.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+
+1398603867 source:/home/garrett/prog_stampa/progettiLASD/Stampe/main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	"infrastruttura.h"
+	"utils.h"
+
