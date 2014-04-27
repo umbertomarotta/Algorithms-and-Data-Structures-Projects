@@ -24,7 +24,7 @@ stampa nuova_stampa_random(stampa alb, int num, int max){
     if (max <= 0) return alb;
     while(num){
         //alb = inserisci_stampa(alb, nuova_stampa(nuovo_job(rand()%max)));
-        alb = inserisci_stampa(alb, nuova_stampa(nuovo_job( (((rand() << 32) | rand() )%max) )));
+        alb = inserisci_stampa(alb, nuova_stampa(nuovo_job( (int)((((long long)rand() << 32) | ((long long)rand()))%max) )));
         //alb = inserisci_stampa_testa(alb, nuova_stampa(nuovo_job(rand()%max)));
         num--;
     }

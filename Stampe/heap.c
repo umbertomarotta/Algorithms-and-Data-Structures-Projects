@@ -146,6 +146,7 @@ pc get_pc_by_id(Heap coda,int id){
 
 void deallocaHeap(Heap coda)
 {
+    if(!coda) return;
     int i;
     for(i = 0 ; i<max; i++){
     //while(cancella_pc(coda->pc[i])&&i<max){
