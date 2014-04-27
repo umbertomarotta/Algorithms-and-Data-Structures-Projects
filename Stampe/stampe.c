@@ -128,27 +128,61 @@ stampa inserisci_stampa(stampa albero, stampa nodo){
         //printf("(null)");
         return nodo;
     }
-    if(!nodo || !nodo->cont){
-        //printf("(azz)");
+    else{
+        inserisci_stampa_fast(albero, nodo);
         return albero;
     }
-    if(albero->cont && get_id_job(albero->cont) >= get_id_job(nodo->cont)){
-        //printf("(sx)");
-        albero->sx = inserisci_stampa(albero->sx, nodo);
-    }
-    if(albero->cont && get_id_job(albero->cont) < get_id_job(nodo->cont)){
-        //printf("(dx)");
-        albero->dx = inserisci_stampa(albero->dx, nodo);
-    }
-    if (!albero->cont){
-        //printf("(id)");
-        albero->sx = inserisci_stampa(albero->sx, nodo);
-    }
-    albero->n_nodi++;
-    return albero;
+//    if(!nodo || !nodo->cont){
+//        //printf("(azz)");
+//        return albero;
+//    }
+//    if(albero->cont && get_id_job(albero->cont) >= get_id_job(nodo->cont)){
+//        //printf("(sx)");
+//        albero->sx = inserisci_stampa(albero->sx, nodo);
+//    }
+//    if(albero->cont && get_id_job(albero->cont) < get_id_job(nodo->cont)){
+//        //printf("(dx)");
+//        albero->dx = inserisci_stampa(albero->dx, nodo);
+//    }
+//    if (!albero->cont){
+//        //printf("(id)");
+//        albero->sx = inserisci_stampa(albero->sx, nodo);
+//    }
+//    albero->n_nodi++;
+//    return albero;
 }
 
-stampa cerca_inserisci_job_stampa(stampa *nodo, long jobid){
+void inserisci_stampa_fast(stampa albero, stampa nodo){
+    if(!(albero && nodo && nodo->cont)) return;
+    else if(get_id_job(albero->cont) == get_id_job(nodo->cont)) return;
+    else if(get_id_job(albero->cont) > get_id_job(nodo->cont)){
+        int tmp;
+        if(albero->sx){
+            tmp = albero->sx->n_nodi;
+            inserisci_stampa(albero->sx, nodo);
+            if (tmp != albero->sx->n_nodi) albero->n_nodi += 1;
+        }
+        else{
+            albero->sx = nodo;
+            albero->n_nodi += 1;
+        }
+    }
+    else if(get_id_job(albero->cont) < get_id_job(nodo->cont)){
+        int tmp;
+        if(albero->dx){
+            tmp = albero->dx->n_nodi;
+            inserisci_stampa(albero->dx, nodo);
+            if (tmp != albero->dx->n_nodi) albero->n_nodi += 1;
+        }
+        else{
+            albero->dx = nodo;
+            albero->n_nodi += 1;
+        }
+    }
+    return;
+}
+
+stampa cerca_inserisci_job_stampa(stampa *nodo, int jobid){
     stampa res = NULL;
     if(!(*nodo)) {
         (*nodo) = nuova_stampa(nuovo_job(jobid));
@@ -274,24 +308,22 @@ int stampa_stampe_totlim(stampa alb, int lim){
 }
 
 int Istampa_stampe_totlim(stampa alb, stampa rad, int dd, int visite, int lim){
-    if (!alb){
-        return 0;
-    }
-    if(visite < lim) Istampa_stampe_totlim(alb->sx, rad, dd*0, visite, lim);
-    if (alb->sx) visite += alb->sx->n_nodi;
-    if(alb->cont){
+    if (!alb)return 0;
+    if(visite < lim && Istampa_stampe_totlim(alb->sx, rad, dd*0, visite, lim)) visite += alb->sx->n_nodi;
+//    if(alb->cont){
         if(visite < lim){
             stampa_job(alb->cont);
+            //printf(" %d %p %p %p\n", alb->n_nodi, alb, alb->sx, alb->dx);
             printf(" ");
         }
-    }
-    else{
-        if(visite < lim){
-            printf("!");
-            stampa_job(alb->cont);
-            printf(" ");
-        }
-    }
+//    }
+//    else{
+//        if(visite < lim){
+//            printf("!");
+//            stampa_job(alb->cont);
+//            printf(" ");
+//        }
+//    }
     visite += 1;
     if(visite < lim || dd) Istampa_stampe_totlim(alb->dx, rad, dd, visite, lim);
     //if (alb->dx) visite += alb->dx->n_nodi;

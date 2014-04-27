@@ -2,14 +2,15 @@
 #include <math.h>
 #include <stdlib.h>
 #include <time.h>
+#include <inttypes.h>
 #include "job.h"
 #include "stampe.h"
 #include "pc.h"
 #include "heap.h"
 #include "infrastruttura.h"
 #include "utils.h"
-#define MAX 21
-#define MIN 20
+#define MAX 22
+#define MIN 21
 #define MUTE 0
 
 struct sinfrastruttura{
@@ -47,7 +48,7 @@ infrastruttura initSystem(){
 infrastruttura get_random_system()
 {
     pc r_pc = NULL;
-    long n_job;
+    int n_job;
     int n_pc, seq_id = 1;
     srand(time(NULL));
     infrastruttura system = initSystem();
@@ -64,27 +65,33 @@ infrastruttura get_random_system()
     }
 
     /* DEBUG */
-    int debug = 0, debug2 = n_job, secondi, debug3 = 0, debug4 = 0;
+    long long debug = 0, debug2 = n_job, secondi, debug3 = 0, debug4 = 1;
     time_t tim = time(NULL), tim1 = time(NULL);
-    printf("CARICAMENTO: ../%d\n", debug2);
+    printf("CARICAMENTO: ../%"PRId64"\n", debug2);
     /* ------ */
     while(n_job)
     {
         /* DEBUG */
-//        secondi = difftime(time(NULL),tim);
-//        printf("CARICAMENTO: %d/%d\nSECONDI: %d\nJOB AL SECONDO: %d\n", debug, debug2, secondi, debug4);
-//        if (difftime(time(NULL),tim1) >= 1) {
-//            debug4 = debug3;
-//            debug3 = 0;
-//            tim1 = time(NULL);
-//        }
-//        clear_screen();
+        secondi = difftime(time(NULL),tim);
+        if (difftime(time(NULL),tim1) >= 1) {
+            clear_screen();
+            printf("CARICAMENTO: %"PRId64"/%"PRId64" (%"PRId64"%%)\nSECONDI: %"PRId64"\nJOB AL SECONDO: %"PRId64"\nMINUTI RIMANENTI: %"PRId64"\n",
+                debug,
+                debug2,
+                (debug*100)/debug2,
+                secondi,
+                debug4,
+                (((debug2-debug)/debug4)/60)
+            );
+            debug4 = debug3;
+            debug3 = 0;
+            tim1 = time(NULL);
+        }
         /* ------ */
+
         r_pc = get_pc(system->coda, rand()%(system->n_pc));
         if(r_pc)
         {
-            //set_coda_pc(r_pc, nuova_stampa_random(get_coda(r_pc), 1, (system->n_job)));
-            //set_coda_pc(r_pc, inserisci_stampa(get_coda(r_pc), nuova_stampa(nuovo_job(n_job))));
             accoda_stampa_pc(r_pc, n_job);
             n_job--;
 
@@ -97,7 +104,7 @@ infrastruttura get_random_system()
 
     /* DEBUG */
     clear_screen();
-    printf("CARICAMENTO: %d/%d\n", debug, debug2);
+    printf("CARICAMENTO: %"PRId64"/%"PRId64"\n", debug, debug2);
     /* ------ */
 
     return system;
