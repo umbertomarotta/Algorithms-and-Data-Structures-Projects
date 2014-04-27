@@ -85,6 +85,8 @@ stampa get_coda(pc curr){
 int accoda_stampa_pc(pc curr, int jobid){
     if(!curr) return 0;
     //curr->coda = inserisci_stampa(curr->coda, nuova_stampa(nuovo_job(jobid)));
+    int tmp = get_num_stampe(curr->coda);
     curr->coda = nuova_stampa_random(curr->coda, 1, jobid);
+    if (tmp == get_num_stampe(curr->coda)) return 0;
     return 1;
 }

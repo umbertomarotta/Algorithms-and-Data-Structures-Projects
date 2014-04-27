@@ -23,7 +23,8 @@ stampa nuova_stampa(job cont){
 stampa nuova_stampa_random(stampa alb, int num, int max){
     if (max <= 0) return alb;
     while(num){
-        alb = inserisci_stampa(alb, nuova_stampa(nuovo_job(rand()%max)));
+        //alb = inserisci_stampa(alb, nuova_stampa(nuovo_job(rand()%max)));
+        alb = inserisci_stampa(alb, nuova_stampa(nuovo_job( (((rand() << 32) | rand() )%max) )));
         //alb = inserisci_stampa_testa(alb, nuova_stampa(nuovo_job(rand()%max)));
         num--;
     }
@@ -154,7 +155,10 @@ stampa inserisci_stampa(stampa albero, stampa nodo){
 
 void inserisci_stampa_fast(stampa albero, stampa nodo){
     if(!(albero && nodo && nodo->cont)) return;
-    else if(get_id_job(albero->cont) == get_id_job(nodo->cont)) return;
+    else if(get_id_job(albero->cont) == get_id_job(nodo->cont)){
+        cancella_stampa(nodo);
+        return;
+    }
     else if(get_id_job(albero->cont) > get_id_job(nodo->cont)){
         int tmp;
         if(albero->sx){

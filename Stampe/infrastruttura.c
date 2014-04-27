@@ -9,8 +9,8 @@
 #include "heap.h"
 #include "infrastruttura.h"
 #include "utils.h"
-#define MAX 16
-#define MIN 10
+#define MAX 26
+#define MIN 25
 #define MUTE 0
 
 struct sinfrastruttura{
@@ -65,39 +65,51 @@ infrastruttura get_random_system()
     }
 
     /* DEBUG */
-    long long debug = 0, debug2 = n_job, secondi, debug3 = 0, debug4 = 1;
+    long long debug = 0, debug2 = n_job, secondi, debug3 = 0, debug4 = 1, debug5 = 0, debug6 = 1;
     time_t tim = time(NULL), tim1 = time(NULL);
     printf("CARICAMENTO: ../%"PRId64"\n", debug2);
     /* ------ */
+
     while(n_job)
     {
         /* DEBUG */
         secondi = difftime(time(NULL),tim);
         if (difftime(time(NULL),tim1) >= 1) {
             clear_screen();
-            printf("CARICAMENTO: %"PRId64"/%"PRId64" (%"PRId64"%%)\nSECONDI: %"PRId64"\nJOB AL SECONDO: %"PRId64"\nMINUTI RIMANENTI: %"PRId64"\n",
-                debug,
-                debug2,
-                (debug*100)/debug2,
-                secondi,
-                debug4,
-                (((debug2-debug)/debug4)/60)
+            printf("CARICAMENTO: %"PRId64"/%"PRId64" (%1.2f%%)\nSECONDI: %"PRId64"\nJOB AL SECONDO: %"PRId64"/%"PRId64" (%1.2f%%)\nMINUTI RIMANENTI: %"PRId64"\n",
+                debug, //Totali Fatti
+                debug2, //Totali da Fare
+                (float)(debug*100)/debug2, //Percentuale Totale
+                secondi, //Secondi Trascorsi
+                debug4, //Nodi veramente inseriti al secondo
+                debug4+debug6, //Nodi processati al secondo
+                (float)(debug4*100)/(debug4+debug6), //Percentuale al secondo
+                (((debug2-debug)/(debug4+debug6))/60) //Tempo stimato
             );
             debug4 = debug3;
+            debug6 = debug5;
             debug3 = 0;
+            debug5 = 0;
             tim1 = time(NULL);
         }
         /* ------ */
 
         r_pc = get_pc(system->coda, rand()%(system->n_pc));
-        if(r_pc)
+        if(r_pc && accoda_stampa_pc(r_pc, n_job))
         {
-            accoda_stampa_pc(r_pc, n_job);
             n_job--;
 
             /* DEBUG */
             debug++;
             debug3++;
+            /* ------ */
+        }
+        else if(r_pc){
+            n_job--;
+
+            /* DEBUG */
+            debug++;
+            debug5++;
             /* ------ */
         }
     }
