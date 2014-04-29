@@ -1,5 +1,10 @@
 #define JOB_MAX 5
 
+struct spc{
+    int id;
+    int priority;
+    stampa coda;
+};
 typedef struct spc* pc;
 
 pc nuovo_pc(int id, int priority, stampa coda);

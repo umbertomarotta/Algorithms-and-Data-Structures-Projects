@@ -296,3 +296,73 @@
 	"infrastruttura.h"
 	"utils.h"
 
+1398811074 source:c:\users\umberto\dropbox\github\progettilasd\stampe\infrastruttura.c
+	<stdio.h>
+	<math.h>
+	<stdlib.h>
+	<time.h>
+	<inttypes.h>
+	"job.h"
+	"stampe.h"
+	"pc.h"
+	"heap.h"
+	"infrastruttura.h"
+	"utils.h"
+
+1398810006 c:\users\umberto\dropbox\github\progettilasd\stampe\job.h
+
+1398810037 c:\users\umberto\dropbox\github\progettilasd\stampe\stampe.h
+
+1398810006 c:\users\umberto\dropbox\github\progettilasd\stampe\pc.h
+
+1398302621 c:\users\umberto\dropbox\github\progettilasd\stampe\heap.h
+
+1398605621 c:\users\umberto\dropbox\github\progettilasd\stampe\infrastruttura.h
+
+1398809321 c:\users\umberto\dropbox\github\progettilasd\stampe\utils.h
+
+1398810006 source:c:\users\umberto\dropbox\github\progettilasd\stampe\job.c
+	<stdio.h>
+	<stdlib.h>
+	"job.h"
+
+1398809779 source:c:\users\umberto\dropbox\github\progettilasd\stampe\utils.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<Windows.h>
+	<unistd.h>
+	<sys/types.h>
+	<sys/param.h>
+	<sys/sysctl.h>
+
+1398810006 source:c:\users\umberto\dropbox\github\progettilasd\stampe\pc.c
+	<stdio.h>
+	<stdlib.h>
+	<limits.h>
+	"job.h"
+	"stampe.h"
+	"pc.h"
+
+1398612625 source:c:\users\umberto\dropbox\github\progettilasd\stampe\heap.c
+	<string.h>
+	<stdlib.h>
+	"job.h"
+	"stampe.h"
+	"pc.h"
+	"heap.h"
+
+1398614000 source:c:\users\umberto\dropbox\github\progettilasd\stampe\main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	"infrastruttura.h"
+	"utils.h"
+
+1398810006 source:c:\users\umberto\dropbox\github\progettilasd\stampe\stampe.c
+	<stdio.h>
+	<stdlib.h>
+	<limits.h>
+	"job.h"
+	"stampe.h"
+

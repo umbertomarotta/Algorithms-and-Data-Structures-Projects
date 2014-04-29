@@ -1,4 +1,9 @@
 
+struct sjob{
+    //pc sender;
+    //char[20] utente;
+    int id;
+};
 typedef struct sjob* job;
 
 job nuovo_job(int id);

@@ -2,14 +2,10 @@
 #include <stdlib.h>
 #include "job.h"
 
-struct sjob{
-    //pc sender;
-    //char[20] utente;
-    int id;
-};
 
 job nuovo_job(int id){
     job brum = (job)malloc(sizeof(struct sjob));
+    if(!brum) return NULL;
     //brum->sender = sender;
     brum->id = id;
     return brum;
@@ -31,11 +27,11 @@ int set_id_job(job car, int id){
     return 1;
 }
 
-int set_sender_job(job car){
+/*int set_sender_job(job car){
     if (!car) return 0;
     //car->sender = dest;
     return 1;
-}
+}*/
 
 int cancella_job(job car){
     if (car == NULL) return 0;

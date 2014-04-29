@@ -4,15 +4,39 @@
 #include "job.h"
 #include "stampe.h"
 
-struct sstampa{
-    job cont;
-    int n_nodi;
-    struct sstampa *sx;
-    struct sstampa *dx;
-};
+/*Stack*/
+steck nuovo_steck(stampa cont){
+    steck brum = (steck)malloc(sizeof(struct ssteck));
+    if(!brum) return NULL;
+    brum->cont = cont;
+    brum->next = NULL;
+    return brum;
+}
 
+steck spush_stampa(steck st, stampa nodo){
+    if(!st) return nuovo_steck(nodo);
+    if(!nodo || !nodo->cont) return st;
+    steck ret = nuovo_steck(nodo);
+    ret->next = st;
+    return ret;
+}
+
+stampa spop_stampa(steck *nodo){
+    #define pnodo (*nodo)
+    if(!pnodo) return NULL;
+    stampa ret = pnodo->cont;
+    steck tmp = pnodo;
+    pnodo = pnodo->next;
+    free(tmp);
+    return ret;
+    #undef pnodo
+}
+
+
+/*Albero*/
 stampa nuova_stampa(job cont){
     stampa brum = (stampa)malloc(sizeof(struct sstampa));
+    if(!brum) return NULL;
     brum->cont = cont;
     brum->sx = NULL;
     brum->dx = NULL;
@@ -108,6 +132,7 @@ stampa staccamin(stampa nodo, stampa padre){
     return nodo;
 }
 
+/*
 stampa pop_stampa(stampa *nodo){
     if(!(*nodo)) return NULL;
     if((*nodo)->sx) return staccamin((*nodo)->sx, (*nodo));
@@ -122,7 +147,7 @@ stampa inserisci_stampa_testa(stampa albero, stampa nodo){
     nodo->dx = albero;
     nodo->n_nodi = albero->n_nodi + 1;
     return nodo;
-}
+}*/
 
 stampa inserisci_stampa(stampa albero, stampa nodo){
     if(!albero) {
@@ -154,7 +179,7 @@ stampa inserisci_stampa(stampa albero, stampa nodo){
 }
 
 void inserisci_stampa_fast(stampa albero, stampa nodo){
-    if(!(albero && nodo && nodo->cont)) return;
+    if(!(albero && nodo && nodo->cont /*&& (nodo->sx || nodo->sx)*/)) return;
     else if(get_id_job(albero->cont) == get_id_job(nodo->cont)){
         cancella_stampa(nodo);
         return;
@@ -187,29 +212,33 @@ void inserisci_stampa_fast(stampa albero, stampa nodo){
 }
 
 stampa cerca_inserisci_job_stampa(stampa *nodo, int jobid){
+    #define pnodo (*nodo)
     stampa res = NULL;
-    if(!(*nodo)) {
-        (*nodo) = nuova_stampa(nuovo_job(jobid));
+    if(!pnodo) {
+        pnodo = nuova_stampa(nuovo_job(jobid));
         return res;
     }
-    if((*nodo)->cont && get_id_job((*nodo)->cont) > jobid){
-        res = cerca_inserisci_job_stampa(&((*nodo)->sx),jobid);
-        if (!res) (*nodo)->n_nodi += 1;
+    else if(pnodo->cont && get_id_job(pnodo->cont) > jobid){
+        res = cerca_inserisci_job_stampa(&(pnodo->sx),jobid);
+        if (!res) pnodo->n_nodi += 1;
         return res;
     }
-    if((*nodo)->cont && get_id_job((*nodo)->cont) < jobid){
-        res = cerca_inserisci_job_stampa(&((*nodo)->dx),jobid);
-        if (!res) (*nodo)->n_nodi += 1;
+    else if(pnodo->cont && get_id_job(pnodo->cont) < jobid){
+        res = cerca_inserisci_job_stampa(&(pnodo->dx),jobid);
+        if (!res) pnodo->n_nodi += 1;
         return res;
     }
-    if((*nodo)->cont && get_id_job((*nodo)->cont) == jobid) return *nodo;
-    res = cerca_job_stampa((*nodo)->sx, jobid);
-    if(!res){
-        res = cerca_inserisci_job_stampa(&((*nodo)->dx),jobid);
-        if (!res) (*nodo)->n_nodi += 1;
-        return res;
+    else if(pnodo->cont && get_id_job(pnodo->cont) == jobid) return *nodo;
+    else{
+        res = cerca_job_stampa(pnodo->sx, jobid);
+        if(!res){
+            res = cerca_inserisci_job_stampa(&(pnodo->dx),jobid);
+            if (!res) pnodo->n_nodi += 1;
+            return res;
+        }
+        else return res;
     }
-    else return res;
+    #undef pnodo
 }
 
 int cancella_stampa(stampa nodo){
@@ -221,6 +250,7 @@ int cancella_stampa(stampa nodo){
     return 1;
 }
 
+/*
 int stampa_stampe(stampa alb){
     return Istampa_stampe(alb, 0);
 }
@@ -234,6 +264,7 @@ int Istampa_stampe(stampa alb, int liv){
     Istampa_stampe(alb->dx, liv + 1);
     return 1;
 }
+
 
 stampa stampa_stampe_ex(stampa alb, stampa story, int mute){
     return Istampa_stampe_ex(alb, story, 0, mute);
@@ -265,6 +296,7 @@ stampa Istampa_stampe_ex(stampa alb, stampa story, int liv, int mute){
     story = Istampa_stampe_ex(alb->dx, story, liv + 1, mute);
     return story;
 }
+*/
 
 stampa stampa_stampe_lim(stampa alb, stampa story, int lim){
     return Istampa_stampe_lim(alb, story, 1, 0, get_num_stampe(story), lim);
@@ -281,7 +313,7 @@ stampa Istampa_stampe_lim(stampa alb, stampa story, int dd, int visite, int star
         if(visite < lim){
             stampa_job(alb->cont);
             printf(" ");
-            story->n_nodi -= 1;
+            if(story) story->n_nodi -= 1;
         }
     }
     else{
@@ -297,11 +329,11 @@ stampa Istampa_stampe_lim(stampa alb, stampa story, int dd, int visite, int star
     if(!alb->dx && dd){
         if(visite > lim){
             printf("[Altre %d di cui %d Ok]", visite - lim, story->n_nodi - start);
-            story->n_nodi += lim;
+            if(story) story->n_nodi += lim;
         }
         else{
             printf("[Fine Coda]");
-            story->n_nodi += visite;
+            if(story) story->n_nodi += visite;
         }
     }
     return story;
@@ -355,6 +387,95 @@ int get_num_stampe(stampa curr){
 }
 
 
+stampa cerca_inserisci_job_stampa_iterative(stampa *nodo, int jobid){
+    #define pnodo (*nodo)
+    if(!pnodo) {
+        pnodo = nuova_stampa(nuovo_job(jobid));
+        return NULL;
+    }
+    steck st = NULL;
+    stampa curr = pnodo;
+    stampa parent = NULL;
+    int figliosx = 0;
+    while (curr) {
+        if(curr->cont && get_id_job(curr->cont) > jobid) { /* Discesa a sinistra */
+            st = spush_stampa(st, curr);
+            parent = curr;
+            curr = curr->sx;
+            figliosx = 1;
+        }
+        else if(curr->cont && get_id_job(curr->cont) < jobid) { /* Discesa a destra */
+            st = spush_stampa(st, curr);
+            parent = curr;
+            curr = curr->dx;
+            figliosx = 0;
+        }
+        else if(curr->cont && get_id_job(curr->cont) == jobid){
+            while(st) spop_stampa(&st);
+            return curr;
+        }
+    }
+    /*FINE*/
+    if (!curr && parent){
+        if (figliosx) parent->sx = nuova_stampa(nuovo_job(jobid));
+        else parent->dx = nuova_stampa(nuovo_job(jobid));
+        while(st) (spop_stampa(&st))->n_nodi += 1;
+    }
+    else printf("err");
+    return NULL;
+    /*--------*/
+    #undef pnodo
+}
+
+stampa stampa_stampe_lim_iterative(stampa alb, stampa story, int lim){
+    return Istampa_stampe_lim_iterative(alb, story, 1, 0, get_num_stampe(story), lim);
+}
+
+stampa Istampa_stampe_lim_iterative(stampa alb, stampa story, int dd, int visite, int start, int lim) {
+    steck st = NULL;
+    stampa curr = alb;
+    while (st || curr ) {
+        if(curr) { /* Discesa a sinistra */
+            st = spush_stampa(st, curr);
+            curr = curr->sx;
+        }
+        else { /* Risalita, visita nodo in stack e discesa a destra */
+            curr = spop_stampa(&st); //st = pop(st);
+            /*Visita(curr);*/
+            if(curr){
+                if(curr->cont && !cerca_inserisci_job_stampa_iterative(&story, get_id_job(curr->cont))){
+                    if(visite < lim){
+                        stampa_job(curr->cont);
+                        printf(" ");
+                        if(story) story->n_nodi -= 1; //Usato come Appoggio
+                    }
+                }
+                else{
+                    if(visite < lim){
+                        printf("!");
+                        stampa_job(curr->cont);
+                        printf(" ");
+                    }
+                }
+                visite += 1;
+                /*----------*/
+                curr = curr->dx;
+            }
+        }
+    }
+    /*FINE*/
+    if(visite > lim && story){
+        printf("[Altre %d di cui %d Ok]", visite - lim, story->n_nodi - start);
+        story->n_nodi += lim; //Ristabilito da Appoggio
+    }
+    else if(visite > lim) printf("[Altre %d]", visite - lim);
+    else{
+        printf("[Fine Coda]");
+        if(story) story->n_nodi += visite; //Ristabilito da Appoggio
+    }
+    /*--------*/
+    return story;
+}
 
 
 

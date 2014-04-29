@@ -5,14 +5,10 @@
 #include "stampe.h"
 #include "pc.h"
 
-struct spc{
-    int id;
-    int priority;
-    stampa coda;
-};
 
 pc nuovo_pc(int id, int priority, stampa coda){
     pc brum = (pc)malloc(sizeof(struct spc));
+    if(!brum) return NULL;
     brum->id = id;
     brum->priority = priority;
     brum->coda = coda;
@@ -63,7 +59,7 @@ stampa stampa_pc_ex(pc brum, stampa story, int mute){
     if (brum != NULL) {
         if (!mute) printf("ID PC: %02d\nPRIORITA': %02d\nCODA STAMPA: ", (brum->id)%100, (brum->priority)%100);
         //story = stampa_stampe_ex(brum->coda, story, mute);
-        story = stampa_stampe_lim(brum->coda, story, JOB_MAX);
+        story = stampa_stampe_lim_iterative(brum->coda, story, JOB_MAX);
         if (!mute) printf("\n\n");
         return story;
     }
