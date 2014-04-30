@@ -32,16 +32,16 @@ int main(){
         case 2:
             if(system!=NULL){
                 simulate_fast(system);
-                press_enter();
             }
             else printf("devi prima avere uno scenario iniziale!\n");
+            press_enter();
             break;
         case 3:
             if(system!=NULL){
                 stampa_coda(system);
-                press_enter();
             }
             else printf("devi prima avere uno scenario iniziale!\n");
+            press_enter();
             break;
         case 4:
             if(system!=NULL)

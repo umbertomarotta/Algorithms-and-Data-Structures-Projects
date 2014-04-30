@@ -9,8 +9,8 @@
 #include "heap.h"
 #include "infrastruttura.h"
 #include "utils.h"
-#define MAX 22
-#define MIN 22
+//#define MAX 23
+//#define MIN 23
 #define MUTE 0
 
 struct sinfrastruttura{
@@ -77,13 +77,15 @@ infrastruttura get_random_system()
     long long n_job;
     long long n_pc, seq_id = 1;
     srand(time(NULL));
-    infrastruttura system = initSystem();
+    int MAX, MIN;
+    printf("Numero Massimo PC: ");
+    scanf("%d", &MAX);
+    if(MAX > 32) MAX = 32;
+    printf("Numero Minimo PC: ");
+    scanf("%d", &MIN);
+    if (MIN > MAX) MIN = MAX;
     n_pc = rand()%(MAX-MIN+1) + MIN;
-    system->n_pc = n_pc;
-    //n_job = n_pc*10;
     n_job = pow(2, n_pc);
-    system->n_job = n_job;
-
     if ((long long)getMemorySize()/2 < (
         ((long long)sizeof(struct spc)*(long long)n_pc) +
         ((long long)sizeof(struct sjob)*(long long)n_job*2) +
@@ -92,9 +94,12 @@ infrastruttura get_random_system()
     ){
         printf("\n\nMemoria Insufficiente\n\n");
         press_enter();
+        press_enter();
         return NULL;
     }
-
+    infrastruttura system = initSystem();
+    system->n_pc = n_pc;
+    system->n_job = n_job;
     while(n_pc)
     {
         insert_heap(system->coda, nuovo_pc(seq_id, seq_id, NULL));
