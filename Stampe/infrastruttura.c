@@ -9,8 +9,8 @@
 #include "heap.h"
 #include "infrastruttura.h"
 #include "utils.h"
-#define MAX 20
-#define MIN 20
+#define MAX 22
+#define MIN 22
 #define MUTE 0
 
 struct sinfrastruttura{
@@ -32,6 +32,31 @@ void simulate(infrastruttura system)
         }
         /* DEBUG */
         printf("LAVORI STAMPATI: %d\n", get_num_stampe(story));
+        /* ------ */
+        deallocaHeap(system->coda);
+        system->coda=NULL;
+    }
+    else printf("Niente da simulare!\n");
+}
+
+void simulate_fast(infrastruttura system)
+{
+    /* DEBUG */
+    printf("PROCESSING...\n\n");
+    /* ------ */
+    /*int story[(system->n_job)+1];
+    int i;
+    for(i = 0; i < (system->n_job)+1; i++){
+        story[i] = 0;
+    }*/
+    int *story = (int*)calloc(((system->n_job)+1), sizeof(int));
+    if(system->coda!=NULL)
+    {
+        while(get_heapsize(system->coda) >= 0){
+            stampa_pc_fast(get_top_priority_pc(system->coda), story, MUTE);
+        }
+        /* DEBUG */
+        //printf("LAVORI STAMPATI: %d\n", get_num_stampe(story));
         /* ------ */
         deallocaHeap(system->coda);
         system->coda=NULL;

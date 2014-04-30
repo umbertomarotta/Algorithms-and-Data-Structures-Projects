@@ -477,6 +477,59 @@ stampa Istampa_stampe_lim_iterative(stampa alb, stampa story, int dd, int visite
     return story;
 }
 
+void stampa_stampe_lim_fast(stampa alb,  int story[], int lim){
+    Istampa_stampe_lim_fast(alb, story, 1, 0, 0 /*get_num_stampe(story)*/, lim);
+}
+
+void Istampa_stampe_lim_fast(stampa alb, int story[], int dd, int visite, int start, int lim) {
+    steck st = NULL;
+    stampa curr = alb;
+    int ok = 0;
+    while (st || curr ) {
+        if(curr) { /* Discesa a sinistra */
+            st = spush_stampa(st, curr);
+            curr = curr->sx;
+        }
+        else { /* Risalita, visita nodo in stack e discesa a destra */
+            curr = spop_stampa(&st); //st = pop(st);
+            /*Visita(curr);*/
+            if(curr){
+                if(curr->cont && !story[get_id_job(curr->cont)]){
+                    story[get_id_job(curr->cont)] = 1;
+                    if(visite < lim){
+                        stampa_job(curr->cont);
+                        printf(" ");
+                        //if(story) story->n_nodi -= 1; //Usato come Appoggio
+                    }
+                    else ok += 1;
+                }
+                else{
+                    if(visite < lim){
+                        printf("!");
+                        stampa_job(curr->cont);
+                        printf(" ");
+                    }
+                }
+                visite += 1;
+                /*----------*/
+                curr = curr->dx;
+            }
+        }
+    }
+    /*FINE*/
+    if(visite > lim /*&& story*/){
+        printf("[Altre %d di cui %d Ok]", visite - lim, ok /*story->n_nodi - start*/);
+        //story->n_nodi += lim; //Ristabilito da Appoggio
+    }
+    else if(visite > lim) printf("[Altre %d]", visite - lim);
+    else{
+        printf("[Fine Coda]");
+        //if(story) story->n_nodi += visite; //Ristabilito da Appoggio
+    }
+    /*--------*/
+    return;// story;
+}
+
 
 
 

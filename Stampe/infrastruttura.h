@@ -4,6 +4,7 @@ typedef struct sinfrastruttura* infrastruttura;
 
 infrastruttura get_random_system();
 void simulate(infrastruttura);
+void simulate_fast(infrastruttura system);
 void stampa_coda(infrastruttura);
 void update_priority_I(infrastruttura);
 int dealloca_infr(infrastruttura system);

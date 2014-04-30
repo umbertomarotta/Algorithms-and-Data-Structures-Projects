@@ -19,3 +19,5 @@ void set_coda_pc(pc curr,stampa abr);
 stampa get_coda(pc curr);
 int accoda_stampa_pc(pc curr, int jobid);
 
+void stampa_pc_fast(pc brum, int story[], int mute);
+

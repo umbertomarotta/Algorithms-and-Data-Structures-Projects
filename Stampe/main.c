@@ -31,7 +31,7 @@ int main(){
             break;
         case 2:
             if(system!=NULL){
-                simulate(system);
+                simulate_fast(system);
                 press_enter();
             }
             else printf("devi prima avere uno scenario iniziale!\n");

@@ -37,6 +37,9 @@ int Istampa_stampe_totlim(stampa alb, stampa rad, int dd, int visite, int lim);
 stampa Istampa_stampe_lim(stampa alb, stampa story, int dd, int visite, int start, int lim);
 stampa Istampa_stampe_lim_iterative(stampa alb, stampa story, int dd, int visite, int start, int lim);
 
+void stampa_stampe_lim_fast(stampa alb,  int story[], int lim);
+void Istampa_stampe_lim_fast(stampa alb, int story[], int dd, int visite, int start, int lim);
+
 /*Stack*/
 steck nuovo_steck(stampa cont);
 steck spush_stampa(steck st, stampa nodo);
