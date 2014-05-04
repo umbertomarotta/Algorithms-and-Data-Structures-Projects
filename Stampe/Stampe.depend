@@ -366,7 +366,7 @@
 	"job.h"
 	"stampe.h"
 
-1399209992 source:/home/garrett/progettiLASD/Stampe/heap.c
+1399236136 source:/home/garrett/progettiLASD/Stampe/heap.c
 	<string.h>
 	<stdlib.h>
 	"job.h"
@@ -380,7 +380,7 @@
 
 1399209992 /home/garrett/progettiLASD/Stampe/pc.h
 
-1399209992 /home/garrett/progettiLASD/Stampe/heap.h
+1399236136 /home/garrett/progettiLASD/Stampe/heap.h
 
 1399209992 source:/home/garrett/progettiLASD/Stampe/infrastruttura.c
 	<stdio.h>
@@ -429,7 +429,7 @@
 	<sys/param.h>
 	<sys/sysctl.h>
 
-1399212989 source:/home/garrett/progettiLASD/Stampe/main.c
+1399235767 source:/home/garrett/progettiLASD/Stampe/main.c
 	<stdio.h>
 	<stdlib.h>
 	<time.h>

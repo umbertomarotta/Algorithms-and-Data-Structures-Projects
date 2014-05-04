@@ -11,6 +11,8 @@ struct s_heap {
         int heapsize;
 };
 
+
+
 Heap initHeap(){
     int i;
     Heap coda = (Heap)malloc(sizeof(struct s_heap));
@@ -149,12 +151,9 @@ void deallocaHeap(Heap coda)
     if(!coda) return;
     int i;
     for(i = 0 ; i<max; i++){
-    //while(cancella_pc(coda->pc[i])&&i<max){
-        //i++;
         cancella_pc(coda->pc[i]);
         coda->pc[i] = NULL;
     }
-    coda->heapsize=-1;
     free(coda);
     coda=NULL;
 }

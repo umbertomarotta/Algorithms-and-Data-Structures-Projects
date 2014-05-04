@@ -201,6 +201,7 @@ int dealloca_infr(infrastruttura system){
     }
     deallocaHeap(system->coda);
     system->coda = NULL;
+    free(system);
     return 1;
 }
 

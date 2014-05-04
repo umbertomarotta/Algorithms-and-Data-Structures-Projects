@@ -26,12 +26,12 @@ int main(){
         press_enter();
         switch (scelta) {
         case 1:
+            dealloca_infr(system);
             system = get_random_system();
             break;
         case 2:
             if(system!=NULL){
                 simulate_fast(system);
-                dealloca_infr(system);
             }
             else printf("devi prima avere uno scenario iniziale!\n");
             press_enter();
@@ -91,6 +91,6 @@ int main(){
             break;*/
         }
     }
-
+    if(system!=NULL) dealloca_infr(system);
     return 0;
 }
