@@ -25,7 +25,11 @@ int main(){
         scanf("%d",&scelta);
         press_enter();
         switch (scelta) {
+<<<<<<< HEAD
         case 1:
+=======
+        case 1:
+>>>>>>> 9653ec2b2db6442f2cb437e753bc125d4ca236a2
             dealloca_infr(system);
             system = get_random_system();
             break;
@@ -55,40 +59,17 @@ int main(){
             if(system!=NULL)
                 delete_job_I(system);
             break;
-        /*case 7:
-            menu_salva_rotonda(rot);
-            break;
-        case 8:
-            menu_inserisci_strade(rot);
-            break;
-        case 9:
-            menu_inserisci_strade_random(rot);
-            break;
-        case 10:
-            menu_cancella_strada(rot);
-            break;
-        case 11:
-            menu_inserisci_auto(rot);
-            break;
-        case 12:
-            menu_inserisci_auto_random(rot);
-            break;
-        case 13:
-            menu_modifica_auto(rot);
-            break;
-        case 14:
-            menu_cancella_auto(rot);
-            break;*/
         case 0:
             clear_screen();
             printf("\n[0] Esci\n\n");
             printf("Arrivederci!\n");
-            break;
-      /*  default:
-            clear_screen();
-            menu_feature_segreta();
             press_enter();
-            break;*/
+            break;
+        default:
+            clear_screen();
+            feature_segreta();
+            press_enter();
+            break;
         }
     }
     if(system!=NULL) dealloca_infr(system);

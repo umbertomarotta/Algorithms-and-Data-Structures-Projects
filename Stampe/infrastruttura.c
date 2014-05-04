@@ -44,16 +44,11 @@ void simulate_fast(infrastruttura system)
     /* DEBUG */
     printf("PROCESSING...\n\n");
     /* ------ */
-    /*int story[(system->n_job)+1];
-    int i;
-    for(i = 0; i < (system->n_job)+1; i++){
-        story[i] = 0;
-    }*/
     int *story = (int*)calloc(((system->n_job)+1), sizeof(int));
     if(system->coda!=NULL)
     {
         while(get_heapsize(system->coda) >= 0){
-            stampa_pc_fast(get_top_priority_pc(system->coda), story, MUTE);
+            stampa_pc_fast(get_top_priority_pc(system->coda), story, (system->n_job)+1, MUTE);
         }
         /* DEBUG */
         //printf("LAVORI STAMPATI: %d\n", get_num_stampe(story));
@@ -73,7 +68,6 @@ infrastruttura initSystem(){
 //
 infrastruttura get_random_system()
 {
-    //printf("[1]\n");
     pc r_pc = NULL;
     long long n_job;
     long long n_pc, seq_id = 1;
@@ -178,7 +172,6 @@ void stampa_coda(infrastruttura system)
     else printf("coda vuota!\n");
 }
 
-
 void update_priority_I(infrastruttura system){
     int id, npriority;
     pc brum=NULL;
@@ -222,7 +215,6 @@ void insert_job_pc_I(infrastruttura system){
     else printf("pc selezionato inesistente\n");
 
 }
-
 
 void delete_job_I(infrastruttura system){
     int id, jobID;

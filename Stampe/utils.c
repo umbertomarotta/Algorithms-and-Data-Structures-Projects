@@ -115,3 +115,29 @@ size_t getMemorySize( )
 #endif
 }
 
+void feature_segreta(){
+    printf("\nKING IL CAVALIERE IMPEDISCE\nOGNI INPUT ILLEGALE\n\n");
+    printf("                  {}\n");
+    printf("  ,   A           {}\n");
+    printf(" / \\, | ,        .--.\n");
+    printf("|  =|= >        /.--.\\\n");
+    printf(" \\ /` | `       |====|\n");
+    printf("  `   |         |`::`|\n");
+    printf("      |     .-;`\\..../`;_.-^-._\n");
+    printf("     /\\\\/  /  |...::..|`   :   `|\n");
+    printf("     |:'\\ |   /'''::''|   .:.   |\n");
+    printf("      \\ /\\;-,/\\   ::  |..ASCII..|\n");
+    printf("      |\\ <` >  >._::_.| ':ART:' |\n");
+    printf("      | `""`_/   ^^/>/>  |   ':'   |\n");
+    printf("      |       |       \\    :   /\n");
+    printf("      |       |        \\   :   /\n");
+    printf("      |       |___/\\___|`-.:.-`\n");
+    printf("      |        \\_ || _/    `\n");
+    printf("      |        <_ >< _>\n");
+    printf("      |        |  ||  |\n");
+    printf("      |        |  ||  |\n");
+    printf("      |       _\\.:||:./_\n");
+    printf("      |      /____/\\____\\\n");
+    printf("\n");
+}
+

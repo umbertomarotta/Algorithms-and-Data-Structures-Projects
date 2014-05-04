@@ -26,8 +26,9 @@ int stampa_stampe_totlim(stampa alb, int lim);
 int cancella_stampa(stampa nodo);
 int is_abr(stampa alb);
 int get_num_stampe(stampa curr);
-stampa stampa_stampe_lim_iterative(stampa alb, stampa story, int lim);
 stampa cerca_inserisci_job_stampa_iterative(stampa *nodo, int jobid);
+stampa stampa_stampe_lim_iterative(stampa alb, stampa story, int lim);
+void stampa_stampe_lim_fast(stampa alb, int story[], long long dimstory, int lim);
 
 /*Funzioni Accessorie*/
 void inserisci_stampa_fast(stampa albero, stampa nodo);
@@ -36,9 +37,7 @@ int I_is_abr(stampa alb, int maxx, int minn);
 int Istampa_stampe_totlim(stampa alb, stampa rad, int dd, int visite, int lim);
 stampa Istampa_stampe_lim(stampa alb, stampa story, int dd, int visite, int start, int lim);
 stampa Istampa_stampe_lim_iterative(stampa alb, stampa story, int dd, int visite, int start, int lim);
-
-void stampa_stampe_lim_fast(stampa alb,  int story[], int lim);
-void Istampa_stampe_lim_fast(stampa alb, int story[], int dd, int visite, int start, int lim);
+void Istampa_stampe_lim_fast(stampa alb, int story[], long long dimstory, int dd, int visite, int start, int lim);
 
 /*Stack*/
 steck nuovo_steck(stampa cont);
