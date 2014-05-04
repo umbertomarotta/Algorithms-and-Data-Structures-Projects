@@ -58,6 +58,7 @@ void simulate_fast(infrastruttura system)
         /* DEBUG */
         //printf("LAVORI STAMPATI: %d\n", get_num_stampe(story));
         /* ------ */
+        free(story);
         deallocaHeap(system->coda);
         system->coda=NULL;
     }
