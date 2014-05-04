@@ -366,3 +366,73 @@
 	"job.h"
 	"stampe.h"
 
+1399209992 source:/home/garrett/progettiLASD/Stampe/heap.c
+	<string.h>
+	<stdlib.h>
+	"job.h"
+	"stampe.h"
+	"pc.h"
+	"heap.h"
+
+1399209992 /home/garrett/progettiLASD/Stampe/job.h
+
+1399209992 /home/garrett/progettiLASD/Stampe/stampe.h
+
+1399209992 /home/garrett/progettiLASD/Stampe/pc.h
+
+1399209992 /home/garrett/progettiLASD/Stampe/heap.h
+
+1399209992 source:/home/garrett/progettiLASD/Stampe/infrastruttura.c
+	<stdio.h>
+	<math.h>
+	<stdlib.h>
+	<time.h>
+	<inttypes.h>
+	"job.h"
+	"stampe.h"
+	"pc.h"
+	"heap.h"
+	"infrastruttura.h"
+	"utils.h"
+
+1399209992 /home/garrett/progettiLASD/Stampe/infrastruttura.h
+
+1399209992 /home/garrett/progettiLASD/Stampe/utils.h
+
+1399209992 source:/home/garrett/progettiLASD/Stampe/job.c
+	<stdio.h>
+	<stdlib.h>
+	"job.h"
+
+1399209992 source:/home/garrett/progettiLASD/Stampe/pc.c
+	<stdio.h>
+	<stdlib.h>
+	<limits.h>
+	"job.h"
+	"stampe.h"
+	"pc.h"
+
+1399209992 source:/home/garrett/progettiLASD/Stampe/stampe.c
+	<stdio.h>
+	<stdlib.h>
+	<limits.h>
+	"job.h"
+	"stampe.h"
+
+1399209992 source:/home/garrett/progettiLASD/Stampe/utils.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<Windows.h>
+	<unistd.h>
+	<sys/types.h>
+	<sys/param.h>
+	<sys/sysctl.h>
+
+1399212989 source:/home/garrett/progettiLASD/Stampe/main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	"infrastruttura.h"
+	"utils.h"
+

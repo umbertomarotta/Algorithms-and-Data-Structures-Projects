@@ -137,7 +137,7 @@ void update_priority(Heap coda, pc brum, int new_priority)
 
 pc get_pc_by_id(Heap coda,int id){
     int i;
-    if(coda->heapsize>=0)
+    if(coda != NULL && coda->heapsize>=0)
         for(i=0;i<=get_heapsize(coda);i++)
             if(get_id_pc(coda->pc[i])==id)
                 return coda->pc[i];
@@ -154,6 +154,7 @@ void deallocaHeap(Heap coda)
         cancella_pc(coda->pc[i]);
         coda->pc[i] = NULL;
     }
+    coda->heapsize=-1;
     free(coda);
     coda=NULL;
 }
