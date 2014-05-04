@@ -366,7 +366,7 @@
 	"job.h"
 	"stampe.h"
 
-1399236136 source:/home/garrett/progettiLASD/Stampe/heap.c
+1399236894 source:/home/garrett/progettiLASD/Stampe/heap.c
 	<string.h>
 	<stdlib.h>
 	"job.h"
@@ -376,13 +376,13 @@
 
 1399209992 /home/garrett/progettiLASD/Stampe/job.h
 
-1399209992 /home/garrett/progettiLASD/Stampe/stampe.h
+1399236894 /home/garrett/progettiLASD/Stampe/stampe.h
 
-1399209992 /home/garrett/progettiLASD/Stampe/pc.h
+1399236894 /home/garrett/progettiLASD/Stampe/pc.h
 
-1399236136 /home/garrett/progettiLASD/Stampe/heap.h
+1399236729 /home/garrett/progettiLASD/Stampe/heap.h
 
-1399209992 source:/home/garrett/progettiLASD/Stampe/infrastruttura.c
+1399236894 source:/home/garrett/progettiLASD/Stampe/infrastruttura.c
 	<stdio.h>
 	<math.h>
 	<stdlib.h>
@@ -397,14 +397,14 @@
 
 1399209992 /home/garrett/progettiLASD/Stampe/infrastruttura.h
 
-1399209992 /home/garrett/progettiLASD/Stampe/utils.h
+1399236894 /home/garrett/progettiLASD/Stampe/utils.h
 
 1399209992 source:/home/garrett/progettiLASD/Stampe/job.c
 	<stdio.h>
 	<stdlib.h>
 	"job.h"
 
-1399209992 source:/home/garrett/progettiLASD/Stampe/pc.c
+1399236894 source:/home/garrett/progettiLASD/Stampe/pc.c
 	<stdio.h>
 	<stdlib.h>
 	<limits.h>
@@ -412,14 +412,14 @@
 	"stampe.h"
 	"pc.h"
 
-1399209992 source:/home/garrett/progettiLASD/Stampe/stampe.c
+1399236894 source:/home/garrett/progettiLASD/Stampe/stampe.c
 	<stdio.h>
 	<stdlib.h>
 	<limits.h>
 	"job.h"
 	"stampe.h"
 
-1399209992 source:/home/garrett/progettiLASD/Stampe/utils.c
+1399236894 source:/home/garrett/progettiLASD/Stampe/utils.c
 	<stdio.h>
 	<stdlib.h>
 	<time.h>

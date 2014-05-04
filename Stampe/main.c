@@ -25,11 +25,7 @@ int main(){
         scanf("%d",&scelta);
         press_enter();
         switch (scelta) {
-<<<<<<< HEAD
-        case 1:
-=======
-        case 1:
->>>>>>> 9653ec2b2db6442f2cb437e753bc125d4ca236a2
+            case 1:
             dealloca_infr(system);
             system = get_random_system();
             break;
