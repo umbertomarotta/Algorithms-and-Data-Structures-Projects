@@ -87,11 +87,11 @@ int accoda_stampa_pc(pc curr, int jobid){
     return 1;
 }
 
-void stampa_pc_fast(pc brum, int story[], int mute){
+void stampa_pc_fast(pc brum, int story[], long long dimstory, int mute){
     if (brum != NULL) {
         if (!mute) printf("ID PC: %02d\nPRIORITA': %02d\nCODA STAMPA: ", (brum->id)%100, (brum->priority)%100);
         //story = stampa_stampe_ex(brum->coda, story, mute);
-        stampa_stampe_lim_fast(brum->coda, story, JOB_MAX);
+        stampa_stampe_lim_fast(brum->coda, story, dimstory, JOB_MAX);
         if (!mute) printf("\n\n");
         return; //story;
     }

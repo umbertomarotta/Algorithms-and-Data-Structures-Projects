@@ -154,7 +154,6 @@ void deallocaHeap(Heap coda)
         cancella_pc(coda->pc[i]);
         coda->pc[i] = NULL;
     }
-    coda->heapsize=-1;
     free(coda);
     coda=NULL;
 }

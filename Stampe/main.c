@@ -26,12 +26,12 @@ int main(){
         press_enter();
         switch (scelta) {
         case 1:
+            dealloca_infr(system);
             system = get_random_system();
             break;
         case 2:
             if(system!=NULL){
                 simulate_fast(system);
-                dealloca_infr(system);
             }
             else printf("devi prima avere uno scenario iniziale!\n");
             press_enter();
@@ -55,40 +55,17 @@ int main(){
             if(system!=NULL)
                 delete_job_I(system);
             break;
-        /*case 7:
-            menu_salva_rotonda(rot);
-            break;
-        case 8:
-            menu_inserisci_strade(rot);
-            break;
-        case 9:
-            menu_inserisci_strade_random(rot);
-            break;
-        case 10:
-            menu_cancella_strada(rot);
-            break;
-        case 11:
-            menu_inserisci_auto(rot);
-            break;
-        case 12:
-            menu_inserisci_auto_random(rot);
-            break;
-        case 13:
-            menu_modifica_auto(rot);
-            break;
-        case 14:
-            menu_cancella_auto(rot);
-            break;*/
         case 0:
             clear_screen();
             printf("\n[0] Esci\n\n");
             printf("Arrivederci!\n");
-            break;
-      /*  default:
-            clear_screen();
-            menu_feature_segreta();
             press_enter();
-            break;*/
+            break;
+        default:
+            clear_screen();
+            feature_segreta();
+            press_enter();
+            break;
         }
     }
 
