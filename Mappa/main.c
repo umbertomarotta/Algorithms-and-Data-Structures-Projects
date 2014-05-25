@@ -3,8 +3,8 @@
 #include "grafo.h"
 
 int main(){
-    grafo gra = grafo_Nuovo(5);
-    grafo_StampaMatrice(gra);
+    grafo gra = grafo_Nuovo(11);
+    grafo_Stampa(gra);
     printf("\n\n");
     grafo_BFS(gra, 0, NULL, NULL);
     printf("\n\n");

@@ -92,11 +92,33 @@ void list_head(list *list, void *element, bool removeFromList)
     }
 }
 
+/*
 void list_tail(list *list, void *element)
 {
   assert(list->tail != NULL);
   listNode *node = list->tail;
   memcpy(element, node->data, list->elementSize);
+}*/
+
+void list_tail(list *list, void *element, bool removeFromList)
+{
+    assert(list->tail != NULL);
+    listNode *node = list->tail;
+    memcpy(element, node->data, list->elementSize);
+
+    if(removeFromList) {
+        assert(list->head != NULL);
+        listNode *current = list->head;
+        if (current != list->tail)
+            while(current->next != list->tail)
+                current = current->next;
+        current->next = NULL;
+        list->tail = current;
+        list->logicalLength--;
+
+        free(node->data);
+        free(node);
+    }
 }
 
 int list_size(list *list)
