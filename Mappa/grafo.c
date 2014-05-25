@@ -9,7 +9,7 @@
 #include "list.h"
 
 #define DIM 1000
-#define MATR 0
+#define MATR 1
 
 struct sgrafo{
     /*  BASSO LIVELLO   */
@@ -21,7 +21,9 @@ struct sgrafo{
     char* colore;
     int* pred;
     int* dist;
-    int* temp;
+    int* f;
+    int* d;
+    int tempo;
 };
 
 struct sarco{
@@ -94,13 +96,15 @@ list* grafo_NuovoArrayListeRandom(int num, int conness, int max){
 grafo grafo_Nuovo(int nv){
     grafo gra = (grafo)malloc(sizeof(struct sgrafo));
     //gra->matr = calloc(nv*nv, sizeof(int));
-    if(MATR) gra->matr = grafo_NuovaMatriceRandom(nv, 10, 1);
-    else gra->adj = grafo_NuovoArrayListeRandom(nv, 10, 2);
+    if(MATR) gra->matr = grafo_NuovaMatriceRandom(nv, 20, 1);
+    else gra->adj = grafo_NuovoArrayListeRandom(nv, 20, 2);
     gra->nv = nv;
     gra->colore = NULL;
     gra->pred = NULL;
     gra->dist = NULL;
-    gra->temp = NULL;
+    gra->f = NULL;
+    gra->d = NULL;
+    gra->tempo = 0;
     return gra;
 }
 
@@ -227,16 +231,25 @@ int grafo_Init(grafo G){
     if (!G->colore) G->colore = (char*)malloc(sizeof(char)*num);
     if (!G->pred) G->pred = (int*)malloc(sizeof(int)*num);
     if (!G->dist) G->dist = (int*)malloc(sizeof(int)*num);
-    if (!G->temp) G->temp = (int*)malloc(sizeof(int)*num);
+    if (!G->f) G->f = (int*)malloc(sizeof(int)*num);
+    if (!G->d) G->d = (int*)malloc(sizeof(int)*num);
     int i;
     //printf("asfiajfsiu\n");
     for(i=0; i<(G->nv); i++){
         G->pred[i] = -1;
         G->colore[i] = 'b';
         G->dist[i] = INT_MAX;
-        G->temp[i] = 0;
+        G->f[i] = 0;
+        G->d[i] = 0;
     }
+    G->tempo = 0;
     return 0;
+}
+
+visita grafo_visit(grafo G, int v){
+    if(!G || v >= G->nv) return NULL;
+    printf("[%d] ", v);
+    return NULL;
 }
 
 int grafo_Deinit(grafo G){
@@ -244,11 +257,13 @@ int grafo_Deinit(grafo G){
     free(G->pred);
     free(G->colore);
     free(G->dist);
-    free(G->temp);
+    free(G->d);
+    free(G->f);
     G->pred = NULL;
     G->colore = NULL;
     G->dist = NULL;
-    G->temp = NULL;
+    G->d = NULL;
+    G->f = NULL;
     return 0;
 }
 
@@ -281,34 +296,18 @@ iteratore grafo_BFSiter(grafo G, int u, int v, list* coda){
     return NULL;
 }
 
-visita grafo_BFSvisit(grafo G, int v){
-    if(!G || v >= G->nv) return NULL;
-    printf("[%d] ", v);
-    return NULL;
-}
-
 int grafo_BFS(grafo G, int s, iteratore iter, visita visit){
-
-//int grafo_BFS(grafo G, int s, int num, ... ){
-    /*
-    va_list listPointer;
-    va_start( listPointer, num);
-    visita visit = va_arg( listPointer, visita );
-    iteratore iter = va_arg( listPointer, iteratore );
-    va_end( listPointer );
-    */
-
-    //printf("BFS:\n");
     if(!G || s >= G->nv) return 1;
     if(!iter) iter = (iteratore)grafo_BFSiter;
-    if(!visit) visit = (visita)grafo_BFSvisit;
+    if(!visit) visit = (visita)grafo_visit;
+
     grafo_Init(G);
     G->colore[s] = 'g';
     G->pred[s] = -1;
     G->dist[s] = 0;
     list coda;
     list_new(&coda, sizeof(int), NULL);
-    list_prepend(&coda, &s);
+    list_append(&coda, &s);
     int u;
     while(list_size(&coda)){
         list_head(&coda, &u, TRUE);
@@ -316,6 +315,49 @@ int grafo_BFS(grafo G, int s, iteratore iter, visita visit){
         visit(G, u);
         G->colore[u] = 'n';
     }
+    return 0;
+}
+
+iteratore grafo_DFSiter(grafo G, int u, int v, list* coda){
+    if(!G || u >= G->nv || v >= G->nv) return NULL;
+    if(G->colore[v] == 'b'){
+        G->pred[v] = u;
+        grafo_DFSvisit(G, v, coda[0], coda[1]);
+    }
+    return NULL;
+}
+
+int grafo_DFSvisit(grafo G, int u, iteratore iter, visita visit){
+    if(!G || u >= G->nv) return 1;
+
+    if (!G->colore) grafo_Init(G);
+    if(!iter) iter = (iteratore)grafo_DFSiter;
+    if(!visit) visit = (visita)grafo_visit;
+    void* argv[2] = {iter, visit};
+
+    G->colore[u] = 'g';
+    G->tempo = 0;
+    G->tempo += 1;
+    grafo_for_each(G, u, iter, (list*)argv);
+    visit(G, u);
+    G->colore[u] = 'n';
+    G->f[u] = G->tempo;
+    G->tempo += 1;
+
+    //list_destroy(&funz);
+    return 0;
+}
+
+int grafo_DFS(grafo G, iteratore iter, visita visit){
+    if(!G) return 1;
+    if(!iter) iter = (iteratore)grafo_DFSiter;
+    if(!visit) visit = (visita)grafo_visit;
+
+    grafo_Init(G);
+    int u;
+    for(u=0; u < G->nv; u++)
+        if(G->colore[u] == 'b')
+            grafo_DFSvisit(G, u, iter, visit);
     return 0;
 }
 

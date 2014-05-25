@@ -3,10 +3,10 @@
 #include "grafo.h"
 
 int main(){
-    grafo gra = grafo_Nuovo(11);
+    grafo gra = grafo_Nuovo(30);
     grafo_Stampa(gra);
     printf("\n\n");
-    grafo_BFS(gra, 0, NULL, NULL);
+    grafo_BFS(gra,0 ,NULL, NULL);
     printf("\n\n");
 
     /*
