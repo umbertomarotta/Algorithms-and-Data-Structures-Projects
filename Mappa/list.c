@@ -15,19 +15,21 @@ void list_new(list *list, int elementSize, freeFunction freeFn)
 
 void list_destroy(list *list)
 {
-  listNode *current;
-  while(list->head != NULL) {
-    current = list->head;
-    list->head = current->next;
+    listNode *current;
+    while(list->head != NULL) {
+        current = list->head;
+        list->head = current->next;
 
-    if(list->freeFn) {
-      list->freeFn(current->data);
+        if(list->freeFn) {
+            list->freeFn(current->data);
+        }
+
+        free(current->data);
+        free(current);
     }
-
-    free(current->data);
-    free(current);
-  }
-}
+    list->head = list->tail = NULL;
+    list->logicalLength = 0;
+    }
 
 void list_prepend(list *list, void *element)
 {
@@ -125,3 +127,13 @@ int list_size(list *list)
 {
   return list->logicalLength;
 }
+
+/*
+void list_print_int(list *list)
+{
+    listNode *node = list->head;
+    while(node != NULL) {
+        result = iterator(node->data);
+        node = node->next;
+    }
+}*/

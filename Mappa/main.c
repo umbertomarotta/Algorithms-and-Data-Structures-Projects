@@ -3,10 +3,17 @@
 #include "grafo.h"
 
 int main(){
-    grafo gra = grafo_Nuovo(30);
+    grafo gra = grafo_Nuovo(10);
     grafo_Stampa(gra);
     printf("\n\n");
-    grafo_BFS(gra,0 ,NULL, NULL);
+    //grafo_BFS(gra,0 ,NULL, NULL);
+    list* ord = grafo_OrdTop(gra);
+    int num;
+    while(list_size(ord)){
+        list_head(ord, &num, TRUE);
+        if (list_size(ord)) printf("%d >> ", num);
+        else  printf("%d ", num);
+    }
     printf("\n\n");
 
     /*

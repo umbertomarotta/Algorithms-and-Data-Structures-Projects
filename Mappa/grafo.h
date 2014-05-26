@@ -3,7 +3,7 @@
 
 typedef struct sgrafo* grafo;
 
-typedef int (*iteratore)(grafo, int, int, list*);
+typedef int (*iteratore)(grafo, int, int, int, list*);
 typedef int (*visita)(grafo, int);
 
 int** grafo_NuovaMatrice(int num);

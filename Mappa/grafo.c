@@ -9,7 +9,7 @@
 #include "list.h"
 
 #define DIM 1000
-#define MATR 1
+#define MATR 0
 
 struct sgrafo{
     /*  BASSO LIVELLO   */
@@ -24,6 +24,9 @@ struct sgrafo{
     int* f;
     int* d;
     int tempo;
+
+    int ciclico;
+    void* res;
 };
 
 struct sarco{
@@ -67,7 +70,7 @@ int** grafo_NuovaMatriceRandom(int num, int conness, int max){
     for(i=0; i<num; i++){
         matr[i] = (int*)malloc(sizeof(int)*num);
         for(y=0; y<num; y++){
-            if (rand()%conness == 0) matr[i][y] = rand()%(max)+1;
+            if (rand()%conness == 0 && i!=y) matr[i][y] = rand()%(max)+1;
             else matr[i][y] = 0;
         }
     }
@@ -83,7 +86,7 @@ list* grafo_NuovoArrayListeRandom(int num, int conness, int max){
     for(i=0; i<num; i++){
         list_new(&array[i], sizeof(struct sarco), NULL);
         for(y=0; y<num; y++){
-            if (rand()%conness == 0){
+            if (rand()%conness == 0 && i!=y){
                 ed = arco_Nuovo(i, y, rand()%(max)+1);
                 list_append(&array[i], ed); //matr[i][y] = rand()%(max)+1;
                 free(ed);
@@ -96,8 +99,8 @@ list* grafo_NuovoArrayListeRandom(int num, int conness, int max){
 grafo grafo_Nuovo(int nv){
     grafo gra = (grafo)malloc(sizeof(struct sgrafo));
     //gra->matr = calloc(nv*nv, sizeof(int));
-    if(MATR) gra->matr = grafo_NuovaMatriceRandom(nv, 20, 1);
-    else gra->adj = grafo_NuovoArrayListeRandom(nv, 20, 2);
+    if(MATR) gra->matr = grafo_NuovaMatriceRandom(nv, 10, 1);
+    else gra->adj = grafo_NuovoArrayListeRandom(nv, 10, 2);
     gra->nv = nv;
     gra->colore = NULL;
     gra->pred = NULL;
@@ -105,6 +108,7 @@ grafo grafo_Nuovo(int nv){
     gra->f = NULL;
     gra->d = NULL;
     gra->tempo = 0;
+    gra->ciclico = 0;
     return gra;
 }
 
@@ -190,7 +194,7 @@ int grafo_for_each(grafo G, int u, iteratore iterator, list* coda){
         for(i=0; i<G->nv; i++){
             v = G->matr[u][i];
             if (v>0) {
-                iterator(G, u, i, coda);
+                iterator(G, u, i, v, coda);
             }
         }
     }
@@ -201,7 +205,7 @@ int grafo_for_each(grafo G, int u, iteratore iterator, list* coda){
         listNode *node = list->head;
         while(node != NULL) {
             edge = (arco)node->data;
-            iterator(G, edge->start, edge->end, coda);
+            iterator(G, edge->start, edge->end, edge->peso, coda);
             node = node->next;
         }
     }
@@ -247,6 +251,10 @@ int grafo_Init(grafo G){
 }
 
 visita grafo_visit(grafo G, int v){
+    return NULL;
+}
+
+visita grafo_visit_print(grafo G, int v){
     if(!G || v >= G->nv) return NULL;
     printf("[%d] ", v);
     return NULL;
@@ -267,9 +275,9 @@ int grafo_Deinit(grafo G){
     return 0;
 }
 
-iteratore _grafo_Stampa(grafo G, int u, int v, list* coda){
+iteratore _grafo_Stampa(grafo G, int u, int v, int peso, list* coda){
     if(!G || u >= G->nv || v >= G->nv) return NULL;
-    int peso = grafo_getPeso(G, u, v);
+    //int peso = grafo_getPeso(G, u, v);
     if (u!=v && peso) printf("%d(%d) ", v, peso);
     return NULL;
 }
@@ -285,7 +293,7 @@ int grafo_Stampa(grafo G){
     return 0;
 }
 
-iteratore grafo_BFSiter(grafo G, int u, int v, list* coda){
+iteratore grafo_BFSiter(grafo G, int u, int v, int peso, list* coda){
     if(!G || u >= G->nv || v >= G->nv) return NULL;
     if(G->colore[v] == 'b'){
         G->colore[v] = 'g';
@@ -318,9 +326,24 @@ int grafo_BFS(grafo G, int s, iteratore iter, visita visit){
     return 0;
 }
 
-iteratore grafo_DFSiter(grafo G, int u, int v, list* coda){
+iteratore grafo_DFSiter(grafo G, int u, int v, int peso, list* coda){
     if(!G || u >= G->nv || v >= G->nv) return NULL;
+    //if(G->colore[v] == 'g' && !G->ciclico) G->ciclico = 1;
     if(G->colore[v] == 'b'){
+        G->pred[v] = u;
+        grafo_DFSvisit(G, v, coda[0], coda[1]);
+    }
+    return NULL;
+}
+
+iteratore grafo_DFSciclico(grafo G, int u, int v, int peso, list* coda){
+    if(!G || G->ciclico || u >= G->nv || v >= G->nv) return NULL;
+
+    if(G->colore[v] == 'g' && !G->ciclico){
+        printf("CICILCO!\n");
+        G->ciclico = 1;
+    }
+    else if(G->colore[v] == 'b'){
         G->pred[v] = u;
         grafo_DFSvisit(G, v, coda[0], coda[1]);
     }
@@ -360,4 +383,26 @@ int grafo_DFS(grafo G, iteratore iter, visita visit){
             grafo_DFSvisit(G, u, iter, visit);
     return 0;
 }
+
+visita grafo_visit_OrdTop(grafo G, int v){
+    if(!G || v >= G->nv) return NULL;
+    list_prepend(G->res, &v);
+    return NULL;
+}
+
+list* grafo_OrdTop(grafo G){
+    if(!G){
+        list* vuota = (list*)malloc(sizeof(list));
+        list_new(vuota, sizeof(int), NULL);
+        return vuota;
+    }
+    G->res = (list*)malloc(sizeof(list));
+    list_new(G->res, sizeof(int), NULL);
+    G->ciclico = 0;
+    grafo_DFS(G, (iteratore)grafo_DFSciclico, (visita)grafo_visit_OrdTop);
+    if (G->ciclico) list_destroy(G->res);
+    return G->res;
+}
+
+
 
