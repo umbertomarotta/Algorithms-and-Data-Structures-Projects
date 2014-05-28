@@ -16,6 +16,10 @@ struct smappa{
     int Costo_Treno;
     int Costo_Pedaggio;
     int Costo_Benzina;
+    int Vel_Aereo;
+    int Vel_Treno;
+    int Vel_Autostrade;
+    int Vel_Strade;
     grafo Voli;
     grafo Ferrovie;
     grafo Autostrade;

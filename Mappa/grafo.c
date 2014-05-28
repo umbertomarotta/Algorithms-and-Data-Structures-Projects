@@ -9,7 +9,7 @@
 #include "list.h"
 
 #define DIM 1000
-#define MATR 0
+#define MATR 1
 
 struct sgrafo{
     /*  BASSO LIVELLO   */
@@ -34,7 +34,6 @@ struct sarco{
     int end;
     int peso;
 };
-typedef struct sarco* arco;
 
 /*  BASSO LIVELLO   */ //dipende dall'implementazione
 
@@ -81,7 +80,8 @@ list* grafo_NuovoArrayListeRandom(int num, int conness, int max){
     if (!conness) conness = INT_MAX;
     if (!max) max = INT_MAX;
     list* array = (list*)malloc(sizeof(list)*num);
-    int i, y; arco ed;
+    int i, y;
+    arco ed;
     srand(time(NULL));
     for(i=0; i<num; i++){
         list_new(&array[i], sizeof(struct sarco), NULL);
@@ -96,11 +96,58 @@ list* grafo_NuovoArrayListeRandom(int num, int conness, int max){
     return array;
 }
 
+list* grafo_NuovoArrayListe(int num){
+    list* array = (list*)malloc(sizeof(list)*num);
+    int i;
+    for(i=0; i<num; i++) list_new(&array[i], sizeof(struct sarco), NULL);
+    return array;
+}
+
 grafo grafo_Nuovo(int nv){
     grafo gra = (grafo)malloc(sizeof(struct sgrafo));
     //gra->matr = calloc(nv*nv, sizeof(int));
-    if(MATR) gra->matr = grafo_NuovaMatriceRandom(nv, 10, 1);
-    else gra->adj = grafo_NuovoArrayListeRandom(nv, 10, 2);
+    gra->matr = NULL;
+    gra->adj = NULL;
+    if(MATR) gra->matr = grafo_NuovaMatrice(nv);
+    else gra->adj = grafo_NuovoArrayListe(nv);
+    gra->nv = nv;
+    gra->colore = NULL;
+    gra->pred = NULL;
+    gra->dist = NULL;
+    gra->f = NULL;
+    gra->d = NULL;
+    gra->tempo = 0;
+    gra->ciclico = 0;
+    gra->res = NULL;
+    return gra;
+}
+
+int grafo_Cancella(grafo *G){
+    #define gra (*G)
+    if(!G || !gra) return 1;
+    int i;
+    for (i=0; i<gra->nv; i++){
+        if (MATR && gra->matr) free(gra->matr[i]);
+        else if(gra->adj) list_destroy(&gra->adj[i]);
+    }
+    if(gra->matr) free(gra->matr);
+    if(gra->adj) free(gra->adj);
+    if(gra->colore) free(gra->colore);
+    if(gra->pred) free(gra->pred);
+    if(gra->dist) free(gra->dist);
+    if(gra->f) free(gra->f);
+    if(gra->d) free(gra->d);
+    if(gra->res) free(gra->res);
+    free(gra);
+    gra = NULL;
+    return 0;
+    #undef gra
+}
+
+grafo grafo_Random(int nv, int conness, int max){
+    grafo gra = (grafo)malloc(sizeof(struct sgrafo));
+    if(MATR) gra->matr = grafo_NuovaMatriceRandom(nv, conness, max);
+    else gra->adj = grafo_NuovoArrayListeRandom(nv, conness, max);
     gra->nv = nv;
     gra->colore = NULL;
     gra->pred = NULL;
@@ -247,6 +294,7 @@ int grafo_Init(grafo G){
         G->d[i] = 0;
     }
     G->tempo = 0;
+    G->ciclico = 0;
     return 0;
 }
 
@@ -275,7 +323,7 @@ int grafo_Deinit(grafo G){
     return 0;
 }
 
-iteratore _grafo_Stampa(grafo G, int u, int v, int peso, list* coda){
+iteratore _grafo_Stampa(grafo G, int u, int v, int peso, lista coda){
     if(!G || u >= G->nv || v >= G->nv) return NULL;
     //int peso = grafo_getPeso(G, u, v);
     if (u!=v && peso) printf("%d(%d) ", v, peso);
@@ -293,7 +341,7 @@ int grafo_Stampa(grafo G){
     return 0;
 }
 
-iteratore grafo_BFSiter(grafo G, int u, int v, int peso, list* coda){
+iteratore grafo_BFSiter(grafo G, int u, int v, int peso, lista coda){
     if(!G || u >= G->nv || v >= G->nv) return NULL;
     if(G->colore[v] == 'b'){
         G->colore[v] = 'g';
@@ -313,39 +361,27 @@ int grafo_BFS(grafo G, int s, iteratore iter, visita visit){
     G->colore[s] = 'g';
     G->pred[s] = -1;
     G->dist[s] = 0;
-    list coda;
-    list_new(&coda, sizeof(int), NULL);
-    list_append(&coda, &s);
+    lista coda = lista_interi();
+    list_append(coda, &s);
     int u;
-    while(list_size(&coda)){
-        list_head(&coda, &u, TRUE);
-        grafo_for_each(G, u, iter, &coda);
+    while(list_size(coda)){
+        list_head(coda, &u, TRUE);
+        grafo_for_each(G, u, iter, coda);
         visit(G, u);
         G->colore[u] = 'n';
     }
+    lista_cancella(&coda);
     return 0;
 }
 
-iteratore grafo_DFSiter(grafo G, int u, int v, int peso, list* coda){
+iteratore grafo_DFSiter(grafo G, int u, int v, int peso, lista coda){
     if(!G || u >= G->nv || v >= G->nv) return NULL;
-    //if(G->colore[v] == 'g' && !G->ciclico) G->ciclico = 1;
+    void** argv = (void**)coda;
+    if(G->colore[v] == 'g') G->ciclico = 1;
+
     if(G->colore[v] == 'b'){
         G->pred[v] = u;
-        grafo_DFSvisit(G, v, coda[0], coda[1]);
-    }
-    return NULL;
-}
-
-iteratore grafo_DFSciclico(grafo G, int u, int v, int peso, list* coda){
-    if(!G || G->ciclico || u >= G->nv || v >= G->nv) return NULL;
-
-    if(G->colore[v] == 'g' && !G->ciclico){
-        printf("CICILCO!\n");
-        G->ciclico = 1;
-    }
-    else if(G->colore[v] == 'b'){
-        G->pred[v] = u;
-        grafo_DFSvisit(G, v, coda[0], coda[1]);
+        grafo_DFSvisit(G, v, argv[0], argv[1]);
     }
     return NULL;
 }
@@ -356,18 +392,16 @@ int grafo_DFSvisit(grafo G, int u, iteratore iter, visita visit){
     if (!G->colore) grafo_Init(G);
     if(!iter) iter = (iteratore)grafo_DFSiter;
     if(!visit) visit = (visita)grafo_visit;
-    void* argv[2] = {iter, visit};
+    void* argv[2] = {*iter, *visit};
 
     G->colore[u] = 'g';
-    G->tempo = 0;
+    G->d[u] = G->tempo;
     G->tempo += 1;
-    grafo_for_each(G, u, iter, (list*)argv);
+    grafo_for_each(G, u, iter, (lista)argv);
     visit(G, u);
     G->colore[u] = 'n';
     G->f[u] = G->tempo;
     G->tempo += 1;
-
-    //list_destroy(&funz);
     return 0;
 }
 
@@ -384,25 +418,55 @@ int grafo_DFS(grafo G, iteratore iter, visita visit){
     return 0;
 }
 
+iteratore grafo_DFSciclico(grafo G, int u, int v, int peso, lista coda){
+    if(!G || G->ciclico || u >= G->nv || v >= G->nv) return NULL;
+    void** argv = (void**)coda;
+
+    if(G->colore[v] == 'g' && !G->ciclico){
+        //printf("CICILCO!\n");
+        G->ciclico = 1;
+    }
+    else if(G->colore[v] == 'b' && !G->ciclico){
+        G->pred[v] = u;
+        grafo_DFSvisit(G, v, argv[0], argv[1]);
+    }
+    return NULL;
+}
+
 visita grafo_visit_OrdTop(grafo G, int v){
     if(!G || v >= G->nv) return NULL;
     list_prepend(G->res, &v);
     return NULL;
 }
 
-list* grafo_OrdTop(grafo G){
-    if(!G){
-        list* vuota = (list*)malloc(sizeof(list));
-        list_new(vuota, sizeof(int), NULL);
-        return vuota;
-    }
-    G->res = (list*)malloc(sizeof(list));
-    list_new(G->res, sizeof(int), NULL);
-    G->ciclico = 0;
+int grafo_OrdTop(grafo G, lista ord){
+    if(!G || !ord) return 1;
+    //if(G->ciclico) return 2;
+    G->res = lista_interi();
     grafo_DFS(G, (iteratore)grafo_DFSciclico, (visita)grafo_visit_OrdTop);
-    if (G->ciclico) list_destroy(G->res);
-    return G->res;
+    if (G->ciclico) return 2;
+    else lista_catsx(ord, G->res);
+    free(G->res);
+    G->res = NULL;
+    return 0;
 }
 
+int grafo_Ciclico(grafo G){
+    if(!G) return 0;
+    //if(G->ciclico) return 1;
+    //else
+    grafo_DFS(G, (iteratore)grafo_DFSciclico, NULL);
+    return G->ciclico;
+}
+
+/*
+int grafo_OrdTop1(grafo G, lista ord){
+    if(!G) return 1;
+    grafo_DFS(G, NULL, NULL);
+    if(G->ciclico) return 2;
+    G->res = ord;
+    grafo_DFS(G, NULL, (visita)grafo_visit_OrdTop);
+    return 0;
+}*/
 
 

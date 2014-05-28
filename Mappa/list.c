@@ -1,8 +1,56 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include <assert.h>
 
 #include "list.h"
+
+lista lista_interi(){
+    /*
+    lista brum = (lista)malloc(sizeof(struct slista));
+    if(!brum) return NULL;
+    list_new(&brum->lis, sizeof(int), NULL);
+    return brum;*/
+    lista brum = (lista)malloc(sizeof(list));
+    list_new(brum, sizeof(int), NULL);
+    return brum;
+}
+
+void lista_cancella(lista* brum){
+    if(!brum) return;
+    #define ord (*brum)
+    list_destroy(ord);
+    free(ord);
+    ord = NULL;
+    #undef ord
+}
+
+
+bool _lista_StampaInteri(void *data) {
+  printf("%d >> ", *(int*)data);
+  return TRUE;
+}
+
+void lista_StampaInteri(lista lis){
+        assert(lis->elementSize == sizeof(int));
+        if(!lis) return;
+        list_for_each(lis, (listIterator)_lista_StampaInteri);
+        /*
+        int num;
+        while(list_size(lis)){
+            list_head(lis, &num, TRUE);
+            if (list_size(lis)) printf("%d >> ", num);
+            else  printf("%d ", num);
+        }*/
+}
+
+void lista_catsx(lista list, lista l2){
+    assert( list->elementSize == l2->elementSize && list->freeFn == l2->freeFn);
+    if(!list->head) list->head = l2->head;
+    if(list->tail) list->tail->next = l2->head;
+    list->tail = l2->tail;
+    list->logicalLength += l2->logicalLength;
+}
 
 void list_new(list *list, int elementSize, freeFunction freeFn)
 {

@@ -21,7 +21,14 @@ typedef struct {
   freeFunction freeFn;
 } list;
 
-typedef list* plist;
+typedef list* lista;
+
+lista lista_interi();
+void lista_cancella(lista* brum);
+void lista_catsx(lista list, lista l2);
+
+bool _lista_StampaInteri(void *data);
+void lista_StampaInteri(lista lis);
 
 void list_new(list *list, int elementSize, freeFunction freeFn);
 void list_destroy(list *list);
