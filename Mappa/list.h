@@ -10,6 +10,7 @@ typedef bool (*listIterator)(void *);
 
 typedef struct _listNode {
   void *data;
+  int prior;
   struct _listNode *next;
 } listNode;
 
@@ -22,6 +23,7 @@ typedef struct {
 } list;
 
 typedef list* lista;
+typedef listNode* nodo;
 
 lista lista_interi();
 void lista_cancella(lista* brum);
@@ -29,6 +31,14 @@ void lista_catsx(lista list, lista l2);
 
 bool _lista_StampaInteri(void *data);
 void lista_StampaInteri(lista lis);
+
+nodo _nodo_insert_prior(nodo hed, nodo nu);
+nodo _nodo_destroy(nodo hed, void *element, lista list);
+void list_insert_prior(list* list, void *element, int prior);
+void list_update_prior(list* list, void *element, int prior);
+void list_updateall_prior(list *list, void *element, int prior);
+void list_sort_prior(list *list);
+void list_sort_interi(list *list);
 
 void list_new(list *list, int elementSize, freeFunction freeFn);
 void list_destroy(list *list);
@@ -40,6 +50,7 @@ int list_size(list *list);
 void list_for_each(list *list, listIterator iterator);
 void list_head(list *list, void *element, bool removeFromList);
 void list_tail(list *list, void *element, bool removeFromList);
+void list_head_prior(list *list, void *element, int* prior, bool removeFromList);
 //void list_tail(list *list, void *element);
 
 #endif

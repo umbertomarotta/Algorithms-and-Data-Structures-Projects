@@ -59,7 +59,7 @@ int citta_Cancella(citta* city){
 int citta_Distanza(citta c1, citta c2){
     if(!c1 || !c2) return -1;
     int dist = sqrt(pow(c2->posX-c1->posX,2)+pow(c2->posY-c1->posY,2));
-    if (dist > WORLD_DIST) dist = WORLD_SIZE - dist;
+    //if (dist > WORLD_DIST) dist = WORLD_SIZE - dist;
     assert(dist >= 0);
     return dist;
 }

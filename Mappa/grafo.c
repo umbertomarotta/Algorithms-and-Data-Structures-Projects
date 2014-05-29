@@ -159,7 +159,7 @@ grafo grafo_Random(int nv, int conness, int max){
     return gra;
 }
 
-int grafo_AggiungiArco(grafo G, int u, int v, int peso){
+int grafo_AggiungiArcoEx(grafo G, int u, int v, int peso){
     if(!G) return 1;
     if (u >= G->nv || v >= G->nv || peso < 1) return 1;
     if (MATR) G->matr[u][v] = peso;
@@ -169,8 +169,10 @@ int grafo_AggiungiArco(grafo G, int u, int v, int peso){
         listNode *node = list->head;
         while(node != NULL) {
             edge = (arco)node->data;
-            if (edge->start == u && edge->end == v)
+            if (edge->start == u && edge->end == v){
+                edge->peso = peso;
                 return 1;
+                }
             node = node->next;
         }
         edge = arco_Nuovo(u, v, peso);
@@ -352,6 +354,7 @@ iteratore grafo_BFSiter(grafo G, int u, int v, int peso, lista coda){
     return NULL;
 }
 
+
 int grafo_BFS(grafo G, int s, iteratore iter, visita visit){
     if(!G || s >= G->nv) return 1;
     if(!iter) iter = (iteratore)grafo_BFSiter;
@@ -458,6 +461,85 @@ int grafo_Ciclico(grafo G){
     grafo_DFS(G, (iteratore)grafo_DFSciclico, NULL);
     return G->ciclico;
 }
+
+iteratore grafo_iterDijkstra(grafo G, int u, int v, int peso, lista coda){
+    if(!G || u >= G->nv || v >= G->nv) return NULL;
+    int alt = G->dist[u] + peso;
+    if(alt < G->dist[v] && G->dist[u] != INT_MAX){
+        G->dist[v] = G->dist[u] + alt;
+        G->pred[v] = u;
+        list_update_prior(coda, &v, alt);
+    }
+    return NULL;
+}
+
+int grafo_Dijkstra(grafo G, int s){
+    if(!G || s >= G->nv) return 1;
+
+    grafo_Init(G);
+    G->pred[s] = -1;
+    G->dist[s] = 0;
+    lista coda = lista_interi();
+    int i;
+    for(i=0; i<G->nv; i++) list_insert_prior(coda, &i, G->dist[i]);
+    int u;
+    while(list_size(coda)){
+        list_head(coda, &u, TRUE);
+        grafo_for_each(G, u, (iteratore)grafo_iterDijkstra, coda);
+    }
+    lista_cancella(&coda);
+    return 0;
+}
+
+lista grafo_getPath(grafo G, int s, int t){
+    lista lis = lista_interi();
+    if(!G || s >= G->nv || t >= G->nv) return lis;
+    grafo_Dijkstra(G, s);
+    int curr = t;
+    list_prepend(lis, &curr);
+    int num = G->nv +1;
+    while(curr != s && curr >= 0 && num){
+        curr = G->pred[curr];
+        list_prepend(lis, &curr);
+        //printf("azz: %d\n", list_size(lis));
+        num--;
+    }
+    if(curr < 0) list_destroy(lis);
+    return lis;
+}
+
+/*
+iteratore grafo_BFSiterDijkstraM(grafo G, int u, int v, int peso, lista args){
+    if(!G || u >= G->nv || v >= G->nv) return NULL;
+    int alt = G->dist[u] + peso;
+    if(alt < G->dist[v]){
+        G->dist[v] = G->dist[u] + alt;
+        G->pred[v] = u;
+        list_update_prior(&args[0], &v, alt);
+    }
+    return NULL;
+}
+
+int grafo_DijkstraM(lista grafi, int s){
+    if(!grafi) return 1;
+    grafo G;
+    list_head(grafi, &G, TRUE);
+    if(!G || s >= G->nv) return 1;
+    grafo_Init(G);
+    G->pred[s] = -1;
+    G->dist[s] = 0;
+    lista coda = lista_interi();
+    lista args[2] = {coda, grafi};
+    int i;
+    for(i=0; i<G->nv; i++) list_insert_prior(coda, &i, G->dist[i]);
+    int u;
+    while(list_size(coda)){
+        list_head(coda, &u, TRUE);
+        grafo_for_each(G, u, (iteratore)grafo_BFSiterDijkstra, (lista)args);
+    }
+    lista_cancella(&coda);
+    return 0;
+}*/
 
 /*
 int grafo_OrdTop1(grafo G, lista ord){

@@ -20,7 +20,7 @@ int** grafo_NuovaMatriceRandom(int num, int conness, int max);
 list* grafo_NuovoArrayListe(int num);
 list* grafo_NuovoArrayListeRandom(int num, int conness, int max);
 
-int grafo_AggiungiArco(grafo G, int u, int v, int peso);
+int grafo_AggiungiArcoEx(grafo G, int u, int v, int peso);
 int grafo_AggiungiNodi(grafo gra, int num);
 int grafo_EliminaNodo(grafo gra, int id); //SOLO MATR
 int grafo_getPeso(grafo G, int u, int v);
@@ -37,6 +37,7 @@ iteratore _grafo_Stampa(grafo G, int u, int v, int peso, lista coda);
 iteratore grafo_BFSiter(grafo G, int u, int v, int peso, lista coda);
 iteratore grafo_DFSiter(grafo G, int u, int v, int peso, lista coda);
 iteratore grafo_DFSciclico(grafo G, int u, int v, int peso, lista coda);
+iteratore grafo_iterDijkstra(grafo G, int u, int v, int peso, lista coda);
 
 int grafo_Init(grafo G);
 int grafo_Deinit(grafo G);
@@ -46,4 +47,8 @@ int grafo_DFSvisit(grafo G, int u, iteratore iter, visita visit);
 int grafo_DFS(grafo G, iteratore iter, visita visit);
 int grafo_OrdTop(grafo G, lista ord);
 int grafo_Ciclico(grafo G);
+int grafo_Dijkstra(grafo G, int s);
+
+lista grafo_getPath(grafo G, int s, int t);
+
 
