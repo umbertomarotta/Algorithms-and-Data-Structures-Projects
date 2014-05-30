@@ -8,8 +8,13 @@
 #include "utils.h"
 
 int main(){
-
     srand(time(NULL));
+
+//    grafo gra = grafo_Nuovo(10, 0);
+//    grafo_AggiungiArcoEx(gra, 1, 9, 0);
+//    grafo_AggiungiArcoEx(gra, 1, 8, 0);
+//    grafo_Stampa(gra);
+
 
 //    citta c1 = citta_Random();
 //    citta c2 = citta_Random();
@@ -17,10 +22,13 @@ int main(){
 //    printf("\n\n");
     //printf("[azz]");
     lista ord;
-    grafo gra = grafo_Random(20, 10, 10);
-    grafo gra1 = grafo_Random(20, 10, 10);
+    grafo gra = grafo_Random(20, 1, 10, 10);
+    grafo_Rinomina(gra, "gra");
+    grafo gra1 = grafo_Random(20, 1, 10, 10);
+    grafo_Rinomina(gra1, "gra1");
     //srand(time(NULL));
-    grafo gra2 = grafo_Random(20, 10, 10);
+    grafo gra2 = grafo_Random(20, 1, 10, 10);
+    grafo_Rinomina(gra2, "gra2");
 
     ord = grafo_getPath(gra2, 9, 1);
     lista_StampaInteri(ord);
@@ -48,9 +56,13 @@ int main(){
     grafo_Stampa(gra);
     printf("\n\n");
 
-    ord = grafo_getPathM(grafi, 9, 1);
+    ord = lista_interi();
+    lista mez = lista_stringhe();
+    grafo_getPathM(grafi, 9, 1, 0, &ord, &mez);
     printf("Path: %d\n\n", list_size(ord));
     lista_StampaInteri(ord);
+    printf("\n\n");
+    lista_StampaStringhe(mez);
     printf("\n\n");
 
 

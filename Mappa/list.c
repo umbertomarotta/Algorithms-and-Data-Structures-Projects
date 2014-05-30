@@ -7,13 +7,14 @@
 #include "grafo.h"
 
 lista lista_interi(){
-    /*
-    lista brum = (lista)malloc(sizeof(struct slista));
-    if(!brum) return NULL;
-    list_new(&brum->lis, sizeof(int), NULL);
-    return brum;*/
     lista brum = (lista)malloc(sizeof(list));
     list_new(brum, sizeof(int), NULL);
+    return brum;
+}
+
+lista lista_stringhe(){
+    lista brum = (lista)malloc(sizeof(list));
+    list_new(brum, sizeof(char*), NULL);
     return brum;
 }
 
@@ -42,6 +43,18 @@ void lista_StampaInteri(lista lis){
         assert(lis->elementSize == sizeof(int));
         if(!lis) return;
         list_for_each(lis, (listIterator)_lista_StampaInteri);
+        printf("N");
+}
+
+bool _lista_StampaStringhe(void *data) {
+    printf("%s >> ", (char*)data);
+    return TRUE;
+}
+
+void lista_StampaStringhe(lista lis){
+        assert(lis->elementSize == sizeof(char*));
+        if(!lis) return;
+        list_for_each(lis, (listIterator)_lista_StampaStringhe);
         printf("N");
 }
 

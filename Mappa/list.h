@@ -26,11 +26,16 @@ typedef list* lista;
 typedef listNode* nodo;
 
 lista lista_interi();
+lista lista_stringhe();
+lista lista_grafi();
 void lista_cancella(lista* brum);
 void lista_catsx(lista list, lista l2);
 
 bool _lista_StampaInteri(void *data);
 void lista_StampaInteri(lista lis);
+
+bool _lista_StampaStringhe(void *data);
+void lista_StampaStringhe(lista lis);
 
 nodo _nodo_insert_prior(nodo hed, nodo nu);
 nodo _nodo_destroy(nodo hed, void *element, lista list);
