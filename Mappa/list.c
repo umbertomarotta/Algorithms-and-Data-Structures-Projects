@@ -4,6 +4,7 @@
 #include <assert.h>
 
 #include "list.h"
+#include "grafo.h"
 
 lista lista_interi(){
     /*
@@ -13,6 +14,12 @@ lista lista_interi(){
     return brum;*/
     lista brum = (lista)malloc(sizeof(list));
     list_new(brum, sizeof(int), NULL);
+    return brum;
+}
+
+lista lista_grafi(){
+    lista brum = (lista)malloc(sizeof(list));
+    list_new(brum, sizeof(grafo), NULL);
     return brum;
 }
 

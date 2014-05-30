@@ -1,0 +1,15 @@
+Si progetti ed implementi in luinguagio C
+sistema navigazione satellitare
+
+funzini:
+1 - creazione cartina digitale in cui sono riportati i nomi delle citta', i collegamenti possibili tra le stesse (aereo, treno, autostrada, altrastrada), il costo chilometrico medio per ogni collegamento (ad es. in autostrada potrebbe essere 10 cent al chilometro, mentre in aereo potrebbe essere 1 euro a chilometro) e il tempo di percorrenza
+
+2 - possibilita' di aggiungere, modificare ed eliminare qualsiasi dato
+
+3 - il calcolo del percorso ottimo tra una sorgente e destinazione rispetto a tempo e il costo con l'opzione di evitare una citta' intermedia o un certo collegamento, oppure (facoltativo) il piu' economico entro un num di ore, oppure rispetto ad un particolare mezzo
+
+4 - il cacolo delle citta' non raggiungibili
+
+N.B. la scelta delle strutture dati da utilizzare dev essere motivata e finalizzata ad una maggiore efficienza computazionale
+
+e' opportuno che allo stato finale tute le citta' siano raggiungibili

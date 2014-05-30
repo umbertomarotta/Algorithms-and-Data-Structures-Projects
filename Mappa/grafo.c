@@ -9,7 +9,7 @@
 #include "list.h"
 
 #define DIM 1000
-#define MATR 1
+#define MATR 0
 
 struct sgrafo{
     /*  BASSO LIVELLO   */
@@ -65,7 +65,6 @@ int** grafo_NuovaMatriceRandom(int num, int conness, int max){
     if (!max) max = INT_MAX;
     int** matr = (int**)malloc(sizeof(int*)*num);
     int i, y;
-    srand(time(NULL));
     for(i=0; i<num; i++){
         matr[i] = (int*)malloc(sizeof(int)*num);
         for(y=0; y<num; y++){
@@ -82,7 +81,7 @@ list* grafo_NuovoArrayListeRandom(int num, int conness, int max){
     list* array = (list*)malloc(sizeof(list)*num);
     int i, y;
     arco ed;
-    srand(time(NULL));
+    //srand(time(NULL));
     for(i=0; i<num; i++){
         list_new(&array[i], sizeof(struct sarco), NULL);
         for(y=0; y<num; y++){
@@ -466,7 +465,7 @@ iteratore grafo_iterDijkstra(grafo G, int u, int v, int peso, lista coda){
     if(!G || u >= G->nv || v >= G->nv) return NULL;
     int alt = G->dist[u] + peso;
     if(alt < G->dist[v] && G->dist[u] != INT_MAX){
-        G->dist[v] = G->dist[u] + alt;
+        G->dist[v] = alt; //G->dist[u] +
         G->pred[v] = u;
         list_update_prior(coda, &v, alt);
     }
@@ -496,6 +495,7 @@ lista grafo_getPath(grafo G, int s, int t){
     if(!G || s >= G->nv || t >= G->nv) return lis;
     grafo_Dijkstra(G, s);
     int curr = t;
+    printf("[%d]\n",G->dist[curr]);
     list_prepend(lis, &curr);
     int num = G->nv +1;
     while(curr != s && curr >= 0 && num){
@@ -505,6 +505,61 @@ lista grafo_getPath(grafo G, int s, int t){
         num--;
     }
     if(curr < 0) list_destroy(lis);
+    return lis;
+}
+
+int grafo_DijkstraM(lista grafi, int s){
+    if(!grafi) return 1;
+    grafo G, G1, G2;
+    list_head(grafi, &G, TRUE);
+    if(!G || s >= G->nv) return 1;
+    grafo_Init(G);
+    G->pred[s] = -1;
+    G->dist[s] = 0;
+    lista coda = lista_interi();
+    int i;
+    for(i=0; i<G->nv; i++) list_insert_prior(coda, &i, G->dist[i]);
+    int u;
+    int num = list_size(grafi);
+    while(list_size(coda)){
+        list_head(coda, &u, TRUE);
+        grafo_for_each(G, u, (iteratore)grafo_iterDijkstra, coda);
+        G1 = G;
+        for(i=0; i<num; i++){
+            list_head(grafi, &G2, TRUE);
+            G2->pred = G1->pred; //memcpy(G1->pred, G->pred, sizeof(int)*G->nv);
+            G2->dist = G1->dist; //memcpy(G1->dist, G->dist, sizeof(int)*G->nv);
+            //printf("[azz]\n");
+            grafo_for_each(G2, u, (iteratore)grafo_iterDijkstra, coda);
+            list_append(grafi, &G2);
+            G1 = G2;
+        }
+    }
+    list_prepend(grafi, &G);
+    lista_cancella(&coda);
+    return 0;
+}
+
+lista grafo_getPathM(lista grafi, int s, int t){
+    lista lis = lista_interi();
+    if(!grafi) return lis;
+    grafo G;
+    list_head(grafi, &G, FALSE);
+    if(!G || s >= G->nv || t >= G->nv) return lis;
+    grafo_DijkstraM(grafi, s);
+    int curr = t;
+    list_prepend(lis, &curr);
+    int num = G->nv +1;
+    while(curr != s && curr >= 0 && num){
+        printf("[%d]",G->dist[curr]);
+        curr = G->pred[curr];
+        list_prepend(lis, &curr);
+        //printf("azz: %d\n", list_size(lis));
+        num--;
+    }
+    printf("[%d]",G->dist[curr]);
+    if(curr < 0) list_destroy(lis);
+    printf("\n\n");
     return lis;
 }
 
