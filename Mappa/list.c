@@ -14,7 +14,7 @@ lista lista_interi(){
 
 lista lista_stringhe(){
     lista brum = (lista)malloc(sizeof(list));
-    list_new(brum, sizeof(char*), NULL);
+    list_new(brum, sizeof(char)*50, NULL);
     return brum;
 }
 
@@ -52,7 +52,7 @@ bool _lista_StampaStringhe(void *data) {
 }
 
 void lista_StampaStringhe(lista lis){
-        assert(lis->elementSize == sizeof(char*));
+        //assert(lis->elementSize == sizeof(char*));
         if(!lis) return;
         list_for_each(lis, (listIterator)_lista_StampaStringhe);
         printf("N");
