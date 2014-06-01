@@ -10,7 +10,7 @@
 #include "list.h"
 
 #define DIM 1000
-#define MATR 1
+#define MATR 0
 
 struct sgrafo{
     /*  BASSO LIVELLO   */

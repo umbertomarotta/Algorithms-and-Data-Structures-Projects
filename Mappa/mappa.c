@@ -27,3 +27,7 @@ struct smappa{
     int NumCitta;
     citta lista[DIM];
 };
+
+int get_costo_mezzo(int vel_media, int tempo, int costo_mezzo){
+    return (vel_media*tempo)*costo_mezzo;
+}

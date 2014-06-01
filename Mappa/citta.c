@@ -63,3 +63,4 @@ int citta_Distanza(citta c1, citta c2){
     assert(dist >= 0);
     return dist;
 }
+
