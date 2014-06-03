@@ -12,6 +12,12 @@ lista lista_interi(){
     return brum;
 }
 
+lista lista_double(){
+    lista brum = (lista)malloc(sizeof(list));
+    list_new(brum, sizeof(double), NULL);
+    return brum;
+}
+
 lista lista_stringhe(){
     lista brum = (lista)malloc(sizeof(list));
     list_new(brum, sizeof(char)*50, NULL);
@@ -78,7 +84,7 @@ nodo _nodo_insert_prior(nodo hed, nodo nu){
 
 nodo _nodo_destroy(nodo hed, void *element, lista list){
     if(!hed || !list) return hed;
-    if(*((int*)hed->data) == *(int*)element){
+    if(*((double*)hed->data) == *(double*)element){
         nodo ret = hed->next;
         if(list->freeFn) {
             list->freeFn(hed->data);
@@ -93,7 +99,7 @@ nodo _nodo_destroy(nodo hed, void *element, lista list){
     return hed;
 }
 
-void list_insert_prior(list *list, void *element, int prior){
+void list_insert_prior(list *list, void *element, double prior){
     listNode *node = malloc(sizeof(listNode));
     node->data = malloc(list->elementSize);
     node->next = NULL;
@@ -112,7 +118,7 @@ void list_insert_prior(list *list, void *element, int prior){
     list->logicalLength++;
 }
 
-void list_update_prior(list *list, void *element, int prior){
+void list_update_prior(list *list, void *element, double prior){
     if(!list) return;
     int old = list->logicalLength;
     list->head = _nodo_destroy(list->head, element, list);
@@ -120,7 +126,7 @@ void list_update_prior(list *list, void *element, int prior){
     if(old != neu) list_insert_prior(list, element, prior);
 }
 
-void list_updateall_prior(list *list, void *element, int prior){
+void list_updateall_prior(list *list, void *element, double prior){
     if(!list) return;
     int num=0, old=0, neu=1;
     while(old != neu){

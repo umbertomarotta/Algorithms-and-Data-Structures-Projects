@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <stdarg.h>
 #include <string.h>
+#include <float.h>
 
 #include "grafo.h"
 #include "list.h"
@@ -14,16 +15,16 @@
 
 struct sgrafo{
     /*  BASSO LIVELLO   */
-    int*** matr;
+    double*** matr;
     list* adj;
     int nv;
     int npesi;
 
     /*  ALTO LIVELLO   */
+    double* dist;
     char nome[50];
     char* colore;
     int* pred;
-    int* dist;
     int* f;
     int* d;
     int* ignore;
@@ -37,7 +38,7 @@ struct sgrafo{
 struct sarco{
     int start;
     int end;
-    int* peso;
+    double* peso;
 };
 
 /*  BASSO LIVELLO   */ //dipende dall'implementazione
@@ -56,9 +57,9 @@ arco arco_Nuovo(int start, int end, int npesi, ... ){
     if(npesi){
         va_list listPointer;
         va_start( listPointer, npesi );
-        ed->peso = (int*)malloc(sizeof(int)*npesi);
+        ed->peso = (double*)malloc(sizeof(double)*npesi);
         int i;
-        for(i=0; i<npesi; i++) ed->peso[i] =  (unsigned int)va_arg( listPointer, int );
+        for(i=0; i<npesi; i++) ed->peso[i] =  (double)va_arg( listPointer, int );
         va_end( listPointer );
     }
     else ed->peso = NULL;
@@ -75,15 +76,15 @@ int arco_Cancella(arco* ed){ //INUSATA
     #undef edg
 }
 
-int*** grafo_NuovaMatrice(int num, int npesi){
+double*** grafo_NuovaMatrice(int num, int npesi){
     if(npesi <= 0) npesi = 1;
-    int*** matr = (int***)malloc(sizeof(int**)*num);
+    double*** matr = (double***)malloc(sizeof(double**)*num);
     int i, y, j;
     for(i=0; i<num; i++){
         //matr[i] = (int*)calloc(num, sizeof(int));
-        matr[i] = (int**)malloc(sizeof(int*)*num);
+        matr[i] = (double**)malloc(sizeof(double*)*num);
         for(y=0; y<num; y++){
-            matr[i][y] = (int*)malloc(sizeof(int)*npesi);
+            matr[i][y] = (double*)malloc(sizeof(double)*npesi);
             for(j=0; j<npesi; j++) matr[i][y][j] = 0;
             //printf("%d ", matr[i][y]);
         }
@@ -92,7 +93,7 @@ int*** grafo_NuovaMatrice(int num, int npesi){
     return matr;
 }
 
-int grafo_CancellaMatrice(int*** matr, int num){
+int grafo_CancellaMatrice(double*** matr, int num){
     if(!matr) return 1;
     int i, y;
     for(i=0; i<num; i++){
@@ -105,16 +106,16 @@ int grafo_CancellaMatrice(int*** matr, int num){
     return 0;
 }
 
-int*** grafo_NuovaMatriceRandom(int num, int npesi, int conness, int max){
+double*** grafo_NuovaMatriceRandom(int num, int npesi, int conness, int max){
     if(npesi <= 0) npesi = 1;
     if (!conness) conness = INT_MAX;
     if (!max) max = INT_MAX;
-    int*** matr = (int***)malloc(sizeof(int**)*num);
+    double*** matr = (double***)malloc(sizeof(double**)*num);
     int i, y, j;
     for(i=0; i<num; i++){
-        matr[i] = (int**)malloc(sizeof(int*)*num);
+        matr[i] = (double**)malloc(sizeof(double*)*num);
         for(y=0; y<num; y++){
-            matr[i][y] = (int*)malloc(sizeof(int)*npesi);
+            matr[i][y] = (double*)malloc(sizeof(double)*npesi);
             if (rand()%conness == 0 && i!=y){
                 for(j=0; j<npesi; j++) matr[i][y][j] = rand()%(max)+1;
             }
@@ -232,7 +233,8 @@ grafo grafo_fromString(char* stringa){
     sscanf(stringa, "%d %d %n", &nv, &np, &inc);
     fd += inc;
     grafo res = grafo_Nuovo(nv, np);
-    int i, j, k, peso = 0;
+    int i, j, k;
+    int peso = 0;
     list* array = res->adj;
     arco ed;
     for(i=0; i<nv; i++){
@@ -256,7 +258,7 @@ grafo grafo_fromString(char* stringa){
     return res;
 }
 
-int grafo_AggiungiArcoEx(grafo G, int u, int v, int npesi, ... ){
+int grafo_AggiungiArco(grafo G, int u, int v, int npesi, ... ){
     va_list listPointer;
     va_start( listPointer, npesi );
     if(!G) return 1;
@@ -264,7 +266,7 @@ int grafo_AggiungiArcoEx(grafo G, int u, int v, int npesi, ... ){
     int i;
     if (MATR){
         if(npesi == 0) G->matr[u][v][0] = 1;
-        else for(i=0;i<npesi;i++) G->matr[u][v][i] = (unsigned int)va_arg( listPointer, int );
+        else for(i=0;i<npesi;i++) G->matr[u][v][i] = va_arg( listPointer, double );
     }
     else{
         arco edge;
@@ -274,7 +276,7 @@ int grafo_AggiungiArcoEx(grafo G, int u, int v, int npesi, ... ){
             edge = (arco)node->data;
             if (edge->start == u && edge->end == v){
                 if(npesi == 0) edge->peso[0] = 1;
-                else for(i=0;i<npesi;i++) edge->peso[i] = (unsigned int)va_arg( listPointer, int );
+                else for(i=0;i<npesi;i++) edge->peso[i] = va_arg( listPointer, double );
                 return 1;
                 }
             node = node->next;
@@ -292,14 +294,14 @@ int grafo_AggiungiNodi(grafo gra, int num){ //LEAK MATR!
     if(!gra) return 1;
     if(MATR){
         //int** nmatr = calloc(((gra->nv)+num)*((gra->nv)+num), sizeof(int));
-        int*** nmatr = grafo_NuovaMatrice( gra->nv + num, gra->npesi);
+        double*** nmatr = grafo_NuovaMatrice( gra->nv + num, gra->npesi);
         int i, y, j;
         for(i = 0; i < gra->nv; i++){
             for(y = 0; y < gra->nv; y++){
                 for(j = 0; j < gra->npesi; j++) nmatr[i][y][j] = gra->matr[i][y][j];
             }
         }
-        int*** del = gra->matr;
+        double*** del = gra->matr;
         gra->matr = nmatr;
         gra->nv += num;
         free(del);
@@ -320,7 +322,7 @@ int grafo_EliminaNodo(grafo gra, int id){
     if(!gra) return 1;
     if (id >= gra->nv) return 1;
     //int** nmatr = calloc(((gra->nv)-1)*((gra->nv)-1), sizeof(int));
-    int*** nmatr = grafo_NuovaMatrice(gra->nv - 1, gra->npesi);
+    double*** nmatr = grafo_NuovaMatrice(gra->nv - 1, gra->npesi);
     int i, y, m, k;
     m = 0;
     for(i = 0; i < (gra->nv - 1) ; i++){
@@ -333,7 +335,7 @@ int grafo_EliminaNodo(grafo gra, int id){
         }
         m++;
     }
-    int*** del = gra->matr;
+    double*** del = gra->matr;
     gra->matr = nmatr;
     gra->nv -= 1;
     free(del);
@@ -345,7 +347,8 @@ int grafo_for_each(grafo G, int u, iteratore iterator, list* coda){
     assert(iterator != NULL);
     if(!G || u >= G->nv) return 1;
     if (MATR){
-        int i, v;
+        int i;
+        double v;
         for(i=0; i<G->nv; i++){
             v = G->matr[u][i][0];
             if (v>0) {
@@ -371,7 +374,8 @@ int grafo_for_each_peso(grafo G, int u, int ipeso, iteratore iterator, list* cod
     assert(iterator != NULL);
     if(!G || u >= G->nv || ipeso >= G->npesi) return 1;
     if (MATR){
-        int i, v;
+        int i;
+        double v;
         for(i=0; i<G->nv; i++){
             v = G->matr[u][i][ipeso];
             if (v>0) {
@@ -415,7 +419,7 @@ int grafo_Init(grafo G){
     int num = G->nv;
     if (!G->colore) G->colore = (char*)malloc(sizeof(char)*num);
     if (!G->pred) G->pred = (int*)malloc(sizeof(int)*num);
-    if (!G->dist) G->dist = (int*)malloc(sizeof(int)*num);
+    if (!G->dist) G->dist = (double*)malloc(sizeof(double)*num);
     if (!G->f) G->f = (int*)malloc(sizeof(int)*num);
     if (!G->d) G->d = (int*)malloc(sizeof(int)*num);
     if (!G->predG) G->predG = (grafo*)malloc(sizeof(grafo)*num);
@@ -425,7 +429,7 @@ int grafo_Init(grafo G){
         G->pred[i] = -1;
         G->predG[i] = NULL;
         G->colore[i] = 'b';
-        G->dist[i] = INT_MAX;
+        G->dist[i] = DBL_MAX;
         G->f[i] = 0;
         G->d[i] = 0;
     }
@@ -460,10 +464,10 @@ int grafo_Deinit(grafo G){
     return 0;
 }
 
-iteratore _grafo_Stampa(grafo G, int u, int v, int peso, lista coda){
+iteratore _grafo_Stampa(grafo G, int u, int v, double peso, lista coda){
     if(!G || u >= G->nv || v >= G->nv) return NULL;
     //int peso = grafo_getPeso(G, u, v);
-    if (u!=v && peso) printf("%d(%d) ", v, peso);
+    if (u!=v && peso) printf("%d(%.1f) ", v, peso);
     return NULL;
 }
 
@@ -484,7 +488,7 @@ int grafo_Stampa(grafo G){
     return 0;
 }
 
-iteratore grafo_BFSiter(grafo G, int u, int v, int peso, lista coda){
+iteratore grafo_BFSiter(grafo G, int u, int v, double peso, lista coda){
     if(!G || u >= G->nv || v >= G->nv) return NULL;
     if(G->colore[v] == 'b'){
         G->colore[v] = 'g';
@@ -517,7 +521,7 @@ int grafo_BFS(grafo G, int s, iteratore iter, visita visit){
     return 0;
 }
 
-iteratore grafo_DFSiter(grafo G, int u, int v, int peso, lista coda){
+iteratore grafo_DFSiter(grafo G, int u, int v, double peso, lista coda){
     if(!G || u >= G->nv || v >= G->nv) return NULL;
     void** argv = (void**)coda;
     if(G->colore[v] == 'g') G->ciclico = 1;
@@ -561,7 +565,7 @@ int grafo_DFS(grafo G, iteratore iter, visita visit){
     return 0;
 }
 
-iteratore grafo_DFSciclico(grafo G, int u, int v, int peso, lista coda){
+iteratore grafo_DFSciclico(grafo G, int u, int v, double peso, lista coda){
     if(!G || G->ciclico || u >= G->nv || v >= G->nv) return NULL;
     void** argv = (void**)coda;
 
@@ -602,7 +606,7 @@ int grafo_Ciclico(grafo G){
     return G->ciclico;
 }
 
-iteratore grafo_iterDijkstra(grafo G, int u, int v, int peso, lista coda){
+iteratore grafo_iterDijkstra(grafo G, int u, int v, double peso, lista coda){
     if(!G || u >= G->nv || v >= G->nv) return NULL;
     int alt = G->dist[u] + peso;
     if(alt < G->dist[v] && G->dist[u] != INT_MAX){
@@ -620,7 +624,7 @@ int grafo_Dijkstra(grafo G, int s){
     grafo_Init(G);
     G->pred[s] = -1;
     G->dist[s] = 0;
-    lista coda = lista_interi();
+    lista coda = lista_double();
     int i;
     for(i=0; i<G->nv; i++) list_insert_prior(coda, &i, G->dist[i]);
     int u;
@@ -632,22 +636,42 @@ int grafo_Dijkstra(grafo G, int s){
     return 0;
 }
 
-lista grafo_getPath(grafo G, int s, int t){
-    lista lis = lista_interi();
-    if(!G || s >= G->nv || t >= G->nv) return lis;
+int grafo_DijkstraT(grafo G, int s, int t){
+    if(!G || s >= G->nv) return 1;
+
+    grafo_Init(G);
+    G->pred[s] = -1;
+    G->dist[s] = 0;
+    lista coda = lista_double();
+    int i;
+    for(i=0; i<G->nv; i++) list_insert_prior(coda, &i, G->dist[i]);
+    int u;
+    while(list_size(coda)){
+        list_head(coda, &u, TRUE);
+        if (u == t) break;
+        grafo_for_each(G, u, (iteratore)grafo_iterDijkstra, coda);
+    }
+    lista_cancella(&coda);
+    return 0;
+}
+
+int grafo_getPath(grafo G, int s, int t, lista* path){
+    #define lis (*path)
+    //lista lis = lista_interi();
+    if(!G || !path || !lis || s >= G->nv || t >= G->nv) return 1;
+    assert(lis->elementSize == sizeof(int));
     grafo_Dijkstra(G, s);
     int curr = t;
-    //printf("[%d]\n",G->dist[curr]);
     list_prepend(lis, &curr);
-    int num = G->nv +1;
-    while(curr != s && curr >= 0 && num){
+    //int num = G->nv +1;
+    while(curr != s && curr >= 0){
         curr = G->pred[curr];
         list_prepend(lis, &curr);
-        //printf("azz: %d\n", list_size(lis));
-        num--;
+        //num--;
     }
     if(curr < 0) list_destroy(lis);
-    return lis;
+    return 1;
+    #undef lis
 }
 
 int grafo_DijkstraM(lista grafi, int s, int ipeso){
@@ -659,7 +683,7 @@ int grafo_DijkstraM(lista grafi, int s, int ipeso){
     G->pred[s] = -1;
     G->predG[s] = NULL;
     G->dist[s] = 0;
-    lista coda = lista_interi();
+    lista coda = lista_double();
     int i;
     for(i=0; i<G->nv; i++) list_insert_prior(coda, &i, G->dist[i]);
     int u;
@@ -685,21 +709,26 @@ int grafo_DijkstraM(lista grafi, int s, int ipeso){
 }
 
 int grafo_getPathM(lista grafi, int s, int t, int ipeso, lista* path, lista* mezzi){
-    if(!grafi || !path || !mezzi) return 1;
+    #define lis (*path)
+    #define way (*mezzi)
+    if(!grafi || !path || !lis || !mezzi || !way) return 1;
+    assert(lis->elementSize == sizeof(int));
     grafo G;
     list_head(grafi, &G, FALSE);
     if(!G || s >= G->nv || t >= G->nv) return 1;
     grafo_DijkstraM(grafi, s, ipeso);
     int curr = t;
-    list_prepend(*path, &curr);
+    list_prepend(lis, &curr);
     if (G->predG[curr]) list_prepend(*mezzi, &((G->predG[curr])->nome));
     while(curr != s && curr >= 0 && curr != s){
         curr = G->pred[curr];
-        list_prepend(*path, &curr);
+        list_prepend(lis, &curr);
         if (G->predG[curr] && curr >= 0) list_prepend(*mezzi, &((G->predG[curr])->nome));
     }
-    if(curr < 0) list_destroy(*path);
+    if(curr < 0) list_destroy(lis);
     return 0;
+    #undef way
+    #undef lis
 }
 
 int grafo_Rinomina(grafo G, char* nome){
@@ -714,7 +743,7 @@ int grafo_Ignore(grafo G, int v){
     return 0;
 }
 
-iteratore _grafo_toString(grafo G, int u, int v, int peso, lista coda){
+iteratore _grafo_toString(grafo G, int u, int v, double peso, lista coda){
     if(!G || u >= G->nv || v >= G->nv) return NULL;
     int i = *((int*)coda);
     if(G->matr) G->matr[u][v][i] = peso;
@@ -726,7 +755,7 @@ char* grafo_toString(grafo G){
     if(!G) return NULL;
     int nv = G->nv;
     int np = G->npesi;
-    char* res = calloc((nv*nv*np)*6, sizeof(char));
+    char* res = calloc((nv*nv*np)*10, sizeof(char));
     int fd=0;
     fd += sprintf(res, "%d %d ", nv, np);
 
@@ -742,7 +771,7 @@ char* grafo_toString(grafo G){
     for(i=0; i<nv; i++){
         for(j=0; j<nv; j++){
             for(k=0; k<np; k++){
-                fd += sprintf(res+fd, "%d ", G->matr[i][j][k]);
+                fd += sprintf(res+fd, "%.0f ", G->matr[i][j][k]);
             }
         }
     }
@@ -751,6 +780,13 @@ char* grafo_toString(grafo G){
         //G->matr = NULL;
     }
     return res;
+}
+
+double grafo_raggiunge(grafo G, int u, int v){
+    if(!G || u >= G->nv || v >= G->nv) return 0;
+    grafo_DijkstraT(G, u, v);
+    //if (G->pred[v] == -1) return 0;
+    return G->dist[v];
 }
 
 

@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <stdarg.h>
 #include <math.h>
+#include <string.h>
 
 #include "citta.h"
 //#include "mappa.h"
@@ -14,7 +15,7 @@
 #define WORLD_DIST 20038
 
 //Circonferenza della terra in chilometri
-#define WORLD_SIZE 40076
+//#define WORLD_SIZE 40076
 
 #define CITY_MAXLIV 7
 /*
@@ -27,22 +28,80 @@
 6 - Megalopoli
 */
 
-struct scitta{
-    int posX;
-    int posY;
-    char* nome;
-    int livello;
-    int fazione;
-};
-
 citta citta_Random(){
+    char* caso[54] = { "Tetherow",
+        "Loachapoka",
+        "Novinger",
+        "Panorama Park",
+        "West Mayfield",
+        "Holly",
+        "Quebradillas",
+        "Weaubleau",
+        "Flemington",
+        "Wylie",
+        "Jewell Junction",
+        "St Rosa",
+        "Tropic",
+        "Curlew Lake",
+        "Shady Point",
+        "Las Cruces",
+        "Roslyn Estates",
+        "Glenmora",
+        "Millbrook",
+        "Currie",
+        "Shiloh",
+        "Webster City",
+        "Belcher",
+        "Las Animas",
+        "Potomac Mills",
+        "Short",
+        "Talco",
+        "Talty",
+        "Maplewood",
+        "Lenkerville",
+        "Yeagertown",
+        "Santa_Claus",
+        "Arctic Village",
+        "Bethany Beach",
+        "Upper Fruitland",
+        "Tinton Falls",
+        "Marblehead",
+        "La Mesilla",
+        "Cabana Colony",
+        "Roseau",
+        "Lake Benton",
+        "Dunlap",
+        "Zillah",
+        "Morland",
+        "Ridgely",
+        "Cotton Plant",
+        "South Lyon",
+        "Pattonsburg",
+        "Russiaville",
+        "Sabula",
+        "Umberto City",
+        "Muranos Reign",
+        "Francescolandia",
+        "NonNapoli",
+        };
     citta city = (citta)malloc(sizeof(struct scitta));
-    city->nome = "prova";
-    city->livello = rand()%CITY_MAXLIV;
+    //city->nome = "prova";
+    city->nome = caso[rand()%54];
     city->posX = rand()%WORLD_SIZE;
     city->posY = rand()%WORLD_SIZE;
     //printf("x: %d\n", city->posX);
     city->fazione = 0;
+    city->isola = 0;
+    int liv = rand()%100;
+    if(liv > 75) city->livello = 0;
+    else if(liv > 25) city->livello = 1;
+    else if(liv > 14) city->livello = 2;
+    else if(liv > 7) city->livello = 3;
+    else if(liv > 4) city->livello = 3;
+    else if(liv > 2) city->livello = 4;
+    else if(liv > 1) city->livello = 5;
+    else city->livello = 6;
+    //city->livello = rand()%CITY_MAXLIV;
     return city;
 }
 
@@ -63,4 +122,40 @@ int citta_Distanza(citta c1, citta c2){
     assert(dist >= 0);
     return dist;
 }
+
+int citta_livello(citta c1){
+    if(!c1) return -1;
+    else return c1->livello;
+}
+
+int citta_stampa(citta c1){
+    if(!c1) return 1;
+    char tipo[50];
+    switch ( c1->livello ) {
+    case 1:
+        strcpy(tipo, "Comune");
+        break;
+    case 2:
+        strcpy(tipo, "Provincia");
+        break;
+    case 3:
+        strcpy(tipo, "Capoluogo");
+        break;
+    case 4:
+        strcpy(tipo, "Capitale");
+        break;
+    case 5:
+        strcpy(tipo, "Metropoli");
+        break;
+    case 6:
+        strcpy(tipo, "Megalopoli");
+        break;
+    default:
+        strcpy(tipo, "Paesino");
+        break;
+    }
+    printf("%12s: %16s (%04d,%04d)", tipo, c1->nome, c1->posX, c1->posY);
+    return 0;
+}
+
 

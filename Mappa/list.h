@@ -26,6 +26,7 @@ typedef list* lista;
 typedef listNode* nodo;
 
 lista lista_interi();
+lista lista_double();
 lista lista_stringhe();
 lista lista_grafi();
 void lista_cancella(lista* brum);
@@ -39,9 +40,9 @@ void lista_StampaStringhe(lista lis);
 
 nodo _nodo_insert_prior(nodo hed, nodo nu);
 nodo _nodo_destroy(nodo hed, void *element, lista list);
-void list_insert_prior(list* list, void *element, int prior);
-void list_update_prior(list* list, void *element, int prior);
-void list_updateall_prior(list *list, void *element, int prior);
+void list_insert_prior(list* list, void *element, double prior);
+void list_update_prior(list* list, void *element, double prior);
+void list_updateall_prior(list *list, void *element, double prior);
 void list_sort_prior(list *list);
 void list_sort_interi(list *list);
 
