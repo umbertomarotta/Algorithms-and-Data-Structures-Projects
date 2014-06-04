@@ -11,6 +11,7 @@ int main(){
     srand(time(NULL));
     mappa map = mappa_nuova_hardcode(21);
     mappa_StampaCitta(map);
+    mappa_stampa(map);
     //mappa_stampa(map);
 /*
 //    grafo gra = grafo_Nuovo(10, 0);

@@ -71,9 +71,8 @@ mappa mappa_nuova_hardcode(int numcitta){
                 printf("CARICAMENTO: %d/%d (%1.2f%%)", done, work, (float)(done*100)/work);
                 tim = time(NULL);
             }
-
-            if (i==j) continue;
             //printf("azz\n");
+            if (i==j) continue;
             dist = (double)citta_Distanza(city[i], city[j]);
             li = citta_livello(city[i]);
             lj = citta_livello(city[j]);
@@ -84,15 +83,14 @@ mappa mappa_nuova_hardcode(int numcitta){
                 //printf("Vol\n");
                 costo = (dist*map->Costo_Aereo);
                 grafo_AggiungiArco(map->Voli, i, j, 2, tempo, costo);
-                grafo_AggiungiArco(map->Voli, i, j, 2, tempo, costo);
+                grafo_AggiungiArco(map->Voli, j, i, 2, tempo, costo);
                 vol++;
             }
-            dist = (int)(dist*1.5); //impedimenti Geografici
-            tempo = (dist/map->Vel_Autostrade);
+            dist = (dist*1.5); //impedimenti Geografici
+            tempo = (dist/map->Vel_Treno);
             if( FAST || tempo*2 < grafo_raggiunge(map->Ferrovie, i, j))
             if(i > j && dist > 100 && dist < 500  && li > 1 && lj > 1){
                 //printf("Fer\n");
-                tempo = (dist/map->Vel_Treno);
                 costo = (dist*map->Costo_Treno);
                 grafo_AggiungiArco(map->Ferrovie, i, j, 2, tempo, costo);
                 grafo_AggiungiArco(map->Ferrovie, j, i, 2, tempo, costo);

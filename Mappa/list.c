@@ -84,7 +84,8 @@ nodo _nodo_insert_prior(nodo hed, nodo nu){
 
 nodo _nodo_destroy(nodo hed, void *element, lista list){
     if(!hed || !list) return hed;
-    if(*((double*)hed->data) == *(double*)element){
+    if((double)*((double*)hed->data) == (double)*(double*)element){
+    //if(*(hed->data) == *element){
         nodo ret = hed->next;
         if(list->freeFn) {
             list->freeFn(hed->data);

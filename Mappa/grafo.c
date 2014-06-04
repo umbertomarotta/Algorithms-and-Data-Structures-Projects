@@ -51,6 +51,12 @@ void _arco_Free(void* arc){
 }
 
 arco arco_Nuovo(int start, int end, int npesi, ... ){
+    va_list listPointer;
+    va_start( listPointer, npesi );
+    arco ret = arco_NuovoNE(start, end, npesi, listPointer);
+    va_end( listPointer );
+    return ret;
+    /*
     arco ed = (arco)malloc(sizeof(struct sarco));
     ed->start = start;
     ed->end = end;
@@ -59,12 +65,26 @@ arco arco_Nuovo(int start, int end, int npesi, ... ){
         va_start( listPointer, npesi );
         ed->peso = (double*)malloc(sizeof(double)*npesi);
         int i;
-        for(i=0; i<npesi; i++) ed->peso[i] =  (double)va_arg( listPointer, int );
+        for(i=0; i<npesi; i++) ed->peso[i] =  va_arg( listPointer, double );
         va_end( listPointer );
+    }
+    else ed->peso = NULL;
+    return ed;*/
+}
+
+arco arco_NuovoNE(int start, int end, int npesi, va_list listPointer){
+    arco ed = (arco)malloc(sizeof(struct sarco));
+    ed->start = start;
+    ed->end = end;
+    if(npesi){
+        ed->peso = (double*)malloc(sizeof(double)*npesi);
+        int i;
+        for(i=0; i<npesi; i++) ed->peso[i] =  va_arg( listPointer, double );
     }
     else ed->peso = NULL;
     return ed;
 }
+
 
 int arco_Cancella(arco* ed){ //INUSATA
     #define edg (*ed)
@@ -259,10 +279,10 @@ grafo grafo_fromString(char* stringa){
 }
 
 int grafo_AggiungiArco(grafo G, int u, int v, int npesi, ... ){
-    va_list listPointer;
-    va_start( listPointer, npesi );
     if(!G) return 1;
     if (u >= G->nv || v >= G->nv || npesi > G->npesi) return 1;
+    va_list listPointer;
+    va_start( listPointer, npesi );
     int i;
     if (MATR){
         if(npesi == 0) G->matr[u][v][0] = 1;
@@ -275,14 +295,19 @@ int grafo_AggiungiArco(grafo G, int u, int v, int npesi, ... ){
         while(node != NULL) {
             edge = (arco)node->data;
             if (edge->start == u && edge->end == v){
+                //va_start( listPointer, npesi );
                 if(npesi == 0) edge->peso[0] = 1;
-                else for(i=0;i<npesi;i++) edge->peso[i] = va_arg( listPointer, double );
+                else for(i=0; i<npesi ;i++) edge->peso[i] = va_arg( listPointer, double );
+                va_end( listPointer );
                 return 1;
                 }
             node = node->next;
         }
         if(npesi == 0) edge = arco_Nuovo(u, v, G->npesi, 1);
-        else edge = arco_Nuovo(u, v, G->npesi, listPointer);
+        else{
+            //edge = arco_Nuovo(u, v, 2, va_arg( listPointer, double ), va_arg( listPointer, double));
+            edge = arco_NuovoNE(u, v, G->npesi, listPointer);
+        }
         list_append(list, edge);
         free (edge);
     }
@@ -643,13 +668,19 @@ int grafo_DijkstraT(grafo G, int s, int t){
     G->pred[s] = -1;
     G->dist[s] = 0;
     lista coda = lista_double();
+    lista app = coda;
+    //lista app1 = coda;
     int i;
     for(i=0; i<G->nv; i++) list_insert_prior(coda, &i, G->dist[i]);
     int u;
     while(list_size(coda)){
+        //printf("a: %p\n", coda);
         list_head(coda, &u, TRUE);
+        coda = app;
+        //printf("b: %p\n", coda);
         if (u == t) break;
         grafo_for_each(G, u, (iteratore)grafo_iterDijkstra, coda);
+        assert(coda==app);
     }
     lista_cancella(&coda);
     return 0;
