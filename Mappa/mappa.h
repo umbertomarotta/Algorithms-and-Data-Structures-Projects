@@ -1,4 +1,25 @@
+#ifndef __MAP_H
+#define __MAP_H
+
 #include "grafo.h"
+#include "citta.h"
+
+struct smappa{
+    float Costo_Aereo;
+    float Costo_Treno;
+    float Costo_Pedaggio;
+    float Costo_Benzina;
+    int Vel_Aereo;
+    int Vel_Treno;
+    int Vel_Autostrade;
+    int Vel_Strade;
+    grafo Voli;
+    grafo Ferrovie;
+    grafo Autostrade;
+    grafo Strade;
+    int NumCitta;
+    citta* cities;
+};
 
 typedef struct smappa* mappa;
 
@@ -18,3 +39,4 @@ grafo grafo_getFerrovie(mappa map);
 
 grafo grafo_getAutostrade(mappa map);
 
+#endif

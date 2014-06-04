@@ -1,18 +1,38 @@
-//typedef enum { FALSE, TRUE } bool;
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
-#include <limits.h>
-#include <assert.h>
-#include <stdarg.h>
-#include <string.h>
-#include <float.h>
+#ifndef __GRAFO_H
+#define __GRAFO_H
 
 #include "list.h"
 
+struct sgrafo{
+    /*  BASSO LIVELLO   */
+    double*** matr;
+    list* adj;
+    int nv;
+    int npesi;
+
+    /*  ALTO LIVELLO   */
+    double* dist;
+    char nome[50];
+    char* colore;
+    int* pred;
+    int* f;
+    int* d;
+    int* ignore;
+    int tempo;
+
+    struct sgrafo** predG;
+    int ciclico;
+    void* res;
+};
+
+struct sarco{
+    int start;
+    int end;
+    double* peso;
+};
+
 typedef struct sgrafo* grafo;
 typedef struct sarco* arco;
-//typedef char* String;
 
 typedef int (*iteratore)(grafo, int, int, double, lista);
 typedef int (*visita)(grafo, int);
@@ -20,7 +40,7 @@ typedef int (*visita)(grafo, int);
 /*  BASSO LIVELLO   */ //dipende dall'implementazione
 
 arco arco_Nuovo(int start, int end, int npesi, ... );
-arco arco_NuovoNE(int start, int end, int npesi, va_list listPointer);
+//arco arco_NuovoNE(int start, int end, int npesi, va_list listPointer);
 grafo grafo_Nuovo(int nv, int npesi);
 grafo grafo_Random(int nv, int npesi, int conness, int max);
 grafo grafo_fromString(char* stringa);
@@ -35,6 +55,7 @@ list* grafo_NuovoArrayListe(int num);
 list* grafo_NuovoArrayListeRandom(int num, int npesi, int conness, int max);
 
 int grafo_AggiungiArco(grafo G, int u, int v, int npesi, ... );
+int grafo_RimuoviArco(grafo G, int u, int v);
 int grafo_AggiungiNodi(grafo gra, int num);
 int grafo_EliminaNodo(grafo gra, int id); //SOLO MATR
 int grafo_getPeso(grafo G, int u, int v);
@@ -72,4 +93,4 @@ int grafo_getPathM(lista grafi, int s, int t, int ipeso, lista* path, lista* mez
 
 double grafo_raggiunge(grafo G, int u, int v);
 
-
+#endif

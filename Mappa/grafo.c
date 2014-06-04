@@ -7,47 +7,32 @@
 #include <string.h>
 #include <float.h>
 
-#include "grafo.h"
 #include "list.h"
+#include "grafo.h"
 
-#define DIM 1000
 #define MATR 0
-
-struct sgrafo{
-    /*  BASSO LIVELLO   */
-    double*** matr;
-    list* adj;
-    int nv;
-    int npesi;
-
-    /*  ALTO LIVELLO   */
-    double* dist;
-    char nome[50];
-    char* colore;
-    int* pred;
-    int* f;
-    int* d;
-    int* ignore;
-    int tempo;
-
-    grafo* predG;
-    int ciclico;
-    void* res;
-};
-
-struct sarco{
-    int start;
-    int end;
-    double* peso;
-};
 
 /*  BASSO LIVELLO   */ //dipende dall'implementazione
 
 void _arco_Free(void* arc){
+    printf("azzfree!\n");
     arco ed = (arco)arc;
     if(ed) return;
     free(ed->peso);
     return;
+}
+
+arco arco_NuovoNE(int start, int end, int npesi, va_list listPointer){
+    arco ed = (arco)malloc(sizeof(struct sarco));
+    ed->start = start;
+    ed->end = end;
+    if(npesi){
+        ed->peso = (double*)malloc(sizeof(double)*npesi);
+        int i;
+        for(i=0; i<npesi; i++) ed->peso[i] =  (double)va_arg( listPointer, double );
+    }
+    else ed->peso = NULL;
+    return ed;
 }
 
 arco arco_Nuovo(int start, int end, int npesi, ... ){
@@ -72,19 +57,19 @@ arco arco_Nuovo(int start, int end, int npesi, ... ){
     return ed;*/
 }
 
-arco arco_NuovoNE(int start, int end, int npesi, va_list listPointer){
+arco arco_NuovoRAND(int start, int end, int npesi, int max){
+
     arco ed = (arco)malloc(sizeof(struct sarco));
     ed->start = start;
     ed->end = end;
     if(npesi){
         ed->peso = (double*)malloc(sizeof(double)*npesi);
         int i;
-        for(i=0; i<npesi; i++) ed->peso[i] =  va_arg( listPointer, double );
+        for(i=0; i<npesi; i++) ed->peso[i] = (double)(rand()%(max)+1);
     }
     else ed->peso = NULL;
     return ed;
 }
-
 
 int arco_Cancella(arco* ed){ //INUSATA
     #define edg (*ed)
@@ -157,7 +142,7 @@ list* grafo_NuovoArrayListeRandom(int num, int npesi, int conness, int max){
         list_new(&array[i], sizeof(struct sarco), (freeFunction)_arco_Free);
         for(y=0; y<num; y++){
             if (rand()%conness == 0 && i!=y){
-                ed = arco_Nuovo(i, y, npesi, rand()%(max)+1);
+                ed = arco_NuovoRAND(i, y, npesi, max);
                 list_append(&array[i], ed); //matr[i][y] = rand()%(max)+1;
                 free(ed);
             }
@@ -286,7 +271,7 @@ int grafo_AggiungiArco(grafo G, int u, int v, int npesi, ... ){
     int i;
     if (MATR){
         if(npesi == 0) G->matr[u][v][0] = 1;
-        else for(i=0;i<npesi;i++) G->matr[u][v][i] = va_arg( listPointer, double );
+        else for(i=0;i<npesi;i++) G->matr[u][v][i] = (double)va_arg( listPointer, double );
     }
     else{
         arco edge;
@@ -297,7 +282,7 @@ int grafo_AggiungiArco(grafo G, int u, int v, int npesi, ... ){
             if (edge->start == u && edge->end == v){
                 //va_start( listPointer, npesi );
                 if(npesi == 0) edge->peso[0] = 1;
-                else for(i=0; i<npesi ;i++) edge->peso[i] = va_arg( listPointer, double );
+                else for(i=0; i<npesi ;i++) edge->peso[i] = (double)va_arg( listPointer, double );
                 va_end( listPointer );
                 return 1;
                 }
@@ -321,19 +306,21 @@ int grafo_RimuoviArco(grafo G, int u, int v){
     int npesi = G->npesi;
     int i;
     if (MATR){
-        if(npesi == 0) G->matr[u][v][0] = 1;
+        if(npesi == 0) G->matr[u][v][0] = 0;
         else for(i=0;i<npesi;i++) G->matr[u][v][i] = 0;
     }
     else{
-        arco edge;
+        arco edge = arco_Nuovo(0, 0, 0);
         lista adj = &(G->adj[u]);
         for(i=0; i<list_size(adj); i++){
-            list_head(adj, &edge, TRUE);
+            //printf("%p\n", adj);
+            list_head(adj, edge, TRUE);
+            //printf("%p\n", adj);
             if (edge->start == u && edge->end == v){
                 arco_Cancella(&edge);
                 return 0;
             }
-            list_append(adj, &edge);
+            list_append(adj, edge);
         }
     }
     return 1;
@@ -435,8 +422,8 @@ int grafo_for_each_peso(grafo G, int u, int ipeso, iteratore iterator, list* cod
     else{
          //list_for_each(&(G->adj[u]), listIterator iterator)
         arco edge;
-        list *list = &(G->adj[u]);
-        listNode *node = list->head;
+        list* list = &(G->adj[u]);
+        listNode* node = list->head;
         while(node != NULL) {
             edge = (arco)node->data;
             if(!G->ignore[edge->end]) iterator(G, edge->start, edge->end, edge->peso[ipeso], coda);

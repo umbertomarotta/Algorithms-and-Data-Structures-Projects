@@ -234,8 +234,8 @@ void list_head(list *list, void *element, bool removeFromList)
         list->head = node->next;
         list->logicalLength--;
 
-        //free(node->data);
-        //free(node);
+        free(node->data);
+        free(node);
     }
 }
 

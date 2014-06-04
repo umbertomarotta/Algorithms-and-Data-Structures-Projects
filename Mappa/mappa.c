@@ -13,23 +13,6 @@
 #define DIM 1000
 #define FAST 0
 
-struct smappa{
-    float Costo_Aereo;
-    float Costo_Treno;
-    float Costo_Pedaggio;
-    float Costo_Benzina;
-    int Vel_Aereo;
-    int Vel_Treno;
-    int Vel_Autostrade;
-    int Vel_Strade;
-    grafo Voli;
-    grafo Ferrovie;
-    grafo Autostrade;
-    grafo Strade;
-    int NumCitta;
-    citta* cities;
-};
-
 grafo grafo_getVoli(mappa map){
     return map->Voli;
 }

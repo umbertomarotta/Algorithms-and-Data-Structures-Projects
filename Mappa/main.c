@@ -2,14 +2,16 @@
 #include <stdio.h>
 #include <time.h>
 
+#include "list.h"
 #include "grafo.h"
-#include "mappa.h"
 #include "citta.h"
+#include "mappa.h"
 #include "utils.h"
 
 
 int main(){
     srand(time(NULL));
+
     int num_city, source, dest;
     mappa map = NULL;
     grafo voli=NULL, ferrovie=NULL, autostrade=NULL, strade=NULL;
@@ -127,7 +129,26 @@ int main(){
         }
     }
     //mappa_stampa(map);
-/*
+
+
+
+    return 0;
+}
+
+int main1(){
+    srand(time(NULL));
+
+    grafo g1 = grafo_Random(11, 2, 10, 10);
+    //grafo g1 = grafo_Nuovo(10, 3);
+    grafo_Stampa(g1);
+    grafo_AggiungiArco(g1, 9, 1, 2, 6., 66.);
+    grafo_Stampa(g1);
+    grafo_RimuoviArco(g1, 9, 1);
+    grafo_Stampa(g1);
+}
+
+int main2(){
+
 //    grafo gra = grafo_Nuovo(10, 0);
 //    grafo_AggiungiArcoEx(gra, 1, 9, 0);
 //    grafo_AggiungiArcoEx(gra, 1, 8, 0);
@@ -185,6 +206,5 @@ int main(){
     printf("\n\n");
     lista_StampaStringhe(mez);
     printf("\n\n");
-*/
-    return 0;
+
 }

@@ -1,3 +1,5 @@
+#ifndef __CITY_H
+#define __CITY_H
 #define WORLD_SIZE 300
 
 struct scitta{
@@ -20,3 +22,5 @@ int citta_Distanza(citta c1, citta c2);
 int citta_livello(citta c1);
 
 int citta_stampa(citta c1);
+
+#endif

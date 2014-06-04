@@ -11,13 +11,6 @@
 //#include "mappa.h"
 //#include "grafo.h"
 
-//Distanza massima in chilometri
-#define WORLD_DIST 20038
-
-//Circonferenza della terra in chilometri
-//#define WORLD_SIZE 40076
-
-#define CITY_MAXLIV 7
 /*
 0 - Paesino
 1 - Comune
