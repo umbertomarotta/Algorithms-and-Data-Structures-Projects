@@ -19,7 +19,7 @@ int main(){
         printf("\n [1] Genera Mappa Random\n");
         printf("\n [2] Stampa Mappa\n");
         printf("\n [3] Trova percorso ottimo in base al tempo\n");
-        printf("\n [4] Modifica priorità di un pc\n");
+        printf("\n [4] Trova percorso ottimo in base al costo\n");
         printf("\n [5] Inserisci job in un pc\n");
         printf("\n [6] Cancella job da un pc\n");
         printf("\n [0] Esci\n\n");
@@ -77,11 +77,35 @@ int main(){
             else printf("devi prima avere uno scenario iniziale!\n");
             press_enter();
             break;
-        /*case 4:
-            if(system!=NULL)
-                update_priority_I(system);
+        case 4:
+            if(map!=NULL){
+                lista grafi = lista_grafi();
+                voli=grafo_getVoli(map);
+                ferrovie=grafo_getFerrovie(map);
+                autostrade=grafo_getAutostrade(map);
+                strade=grafo_getStrade(map);
+                list_append(grafi, &(voli));
+                list_append(grafi, &(ferrovie));
+                list_append(grafi, &(autostrade));
+                list_append(grafi, &(strade));
+                lista ord = lista_interi();
+                lista mez = lista_stringhe();
+                //grafo_getPath(gra, 9, 1, &ord);
+                printf("Inserire Sorgente e Destinazione:\n");
+                scanf("%d %d",&source,&dest);
+                grafo_getPathM(grafi, source, dest, 1, &ord, &mez);
+                printf("Path: %d\n\n", list_size(ord));
+                lista_StampaInteri(ord);
+                printf("\n\n");
+                lista_StampaStringhe(mez);
+                printf("\n\n");
+                press_enter();
+            }
+            else printf("devi prima avere uno scenario iniziale!\n");
+            press_enter();
             break;
-        case 5:
+
+        /*case 5:
             if(system!=NULL)
                 insert_job_pc_I(system);
             break;
