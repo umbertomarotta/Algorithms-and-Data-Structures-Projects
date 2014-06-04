@@ -30,6 +30,22 @@ struct smappa{
     citta* cities;
 };
 
+grafo grafo_getVoli(mappa map){
+    return map->Voli;
+}
+
+grafo grafo_getFerrovie(mappa map){
+    return map->Ferrovie;
+}
+
+grafo grafo_getAutostrade(mappa map){
+    return map->Autostrade;
+}
+
+grafo grafo_getStrade(mappa map){
+    return map->Strade;
+}
+
 mappa mappa_nuova_hardcode(int numcitta){
     mappa map = (mappa)malloc(sizeof(struct smappa));
     map->Costo_Aereo = 0.20F; //Basato su costo al chilometro di un volo alitalia

@@ -7,11 +7,101 @@
 #include "citta.h"
 #include "utils.h"
 
+
 int main(){
     srand(time(NULL));
-    mappa map = mappa_nuova_hardcode(21);
-    mappa_StampaCitta(map);
-    mappa_stampa(map);
+    int num_city, source, dest;
+    mappa map = NULL;
+    grafo voli=NULL, ferrovie=NULL, autostrade=NULL, strade=NULL;
+    int scelta = -1;
+    while(scelta != 0){
+        clear_screen();
+        printf("\n [1] Genera Mappa Random\n");
+        printf("\n [2] Stampa Mappa\n");
+        printf("\n [3] Trova percorso ottimo in base al tempo\n");
+        printf("\n [4] Modifica priorità di un pc\n");
+        printf("\n [5] Inserisci job in un pc\n");
+        printf("\n [6] Cancella job da un pc\n");
+        printf("\n [0] Esci\n\n");
+        printf("Scegli: ");
+        scanf("%d",&scelta);
+        press_enter();
+        switch (scelta) {
+            case 1:
+                printf("\nInserisci numero di citta' \n");
+                scanf("%d",&num_city);
+                map = mappa_nuova_hardcode(num_city);
+            break;
+        case 2:
+            if(map!=NULL){
+                mappa_StampaCitta(map);
+                printf("\n\nLINKS\n\n");
+                printf("\n\n");
+                grafo_Stampa(grafo_getVoli(map));
+                printf("\n\n");
+                grafo_Stampa(grafo_getFerrovie(map));
+                printf("\n\n");
+                grafo_Stampa(grafo_getAutostrade(map));
+                printf("\n\n");
+                grafo_Stampa(grafo_getStrade(map));
+                printf("\n\n");
+
+            }
+            else printf("devi prima avere una mappa!\n");
+            press_enter();
+            break;
+        case 3:
+            if(map!=NULL){
+                lista grafi = lista_grafi();
+                voli=grafo_getVoli(map);
+                ferrovie=grafo_getFerrovie(map);
+                autostrade=grafo_getAutostrade(map);
+                strade=grafo_getStrade(map);
+                list_append(grafi, &(voli));
+                list_append(grafi, &(ferrovie));
+                list_append(grafi, &(autostrade));
+                list_append(grafi, &(strade));
+                lista ord = lista_interi();
+                lista mez = lista_stringhe();
+                //grafo_getPath(gra, 9, 1, &ord);
+                printf("Inserire Sorgente e Destinazione:\n");
+                scanf("%d %d",&source,&dest);
+                grafo_getPathM(grafi, source, dest, 0, &ord, &mez);
+                printf("Path: %d\n\n", list_size(ord));
+                lista_StampaInteri(ord);
+                printf("\n\n");
+                lista_StampaStringhe(mez);
+                printf("\n\n");
+                press_enter();
+            }
+            else printf("devi prima avere uno scenario iniziale!\n");
+            press_enter();
+            break;
+        /*case 4:
+            if(system!=NULL)
+                update_priority_I(system);
+            break;
+        case 5:
+            if(system!=NULL)
+                insert_job_pc_I(system);
+            break;
+        case 6:
+            if(system!=NULL)
+                delete_job_I(system);
+            break;*/
+        case 0:
+            clear_screen();
+            printf("\n[0] Esci\n\n");
+            printf("Arrivederci!\n");
+            press_enter();
+            break;
+        default:
+            clear_screen();
+            feature_segreta();
+            press_enter();
+            break;
+        }
+    }
     //mappa_stampa(map);
 /*
 //    grafo gra = grafo_Nuovo(10, 0);
