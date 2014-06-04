@@ -315,6 +315,30 @@ int grafo_AggiungiArco(grafo G, int u, int v, int npesi, ... ){
     return 0;
 }
 
+int grafo_RimuoviArco(grafo G, int u, int v){
+    if(!G) return 1;
+    if (u >= G->nv || v >= G->nv) return 1;
+    int npesi = G->npesi;
+    int i;
+    if (MATR){
+        if(npesi == 0) G->matr[u][v][0] = 1;
+        else for(i=0;i<npesi;i++) G->matr[u][v][i] = 0;
+    }
+    else{
+        arco edge;
+        lista adj = &(G->adj[u]);
+        for(i=0; i<list_size(adj); i++){
+            list_head(adj, &edge, TRUE);
+            if (edge->start == u && edge->end == v){
+                arco_Cancella(&edge);
+                return 0;
+            }
+            list_append(adj, &edge);
+        }
+    }
+    return 1;
+}
+
 int grafo_AggiungiNodi(grafo gra, int num){ //LEAK MATR!
     if(!gra) return 1;
     if(MATR){
@@ -667,20 +691,14 @@ int grafo_DijkstraT(grafo G, int s, int t){
     grafo_Init(G);
     G->pred[s] = -1;
     G->dist[s] = 0;
-    lista coda = lista_double();
-    lista app = coda;
-    //lista app1 = coda;
+    lista coda = lista_interi();
     int i;
     for(i=0; i<G->nv; i++) list_insert_prior(coda, &i, G->dist[i]);
     int u;
     while(list_size(coda)){
-        //printf("a: %p\n", coda);
         list_head(coda, &u, TRUE);
-        coda = app;
-        //printf("b: %p\n", coda);
         if (u == t) break;
         grafo_for_each(G, u, (iteratore)grafo_iterDijkstra, coda);
-        assert(coda==app);
     }
     lista_cancella(&coda);
     return 0;
@@ -714,7 +732,7 @@ int grafo_DijkstraM(lista grafi, int s, int ipeso){
     G->pred[s] = -1;
     G->predG[s] = NULL;
     G->dist[s] = 0;
-    lista coda = lista_double();
+    lista coda = lista_interi();
     int i;
     for(i=0; i<G->nv; i++) list_insert_prior(coda, &i, G->dist[i]);
     int u;
@@ -725,6 +743,7 @@ int grafo_DijkstraM(lista grafi, int s, int ipeso){
         G1 = G;
         for(i=0; i<num; i++){
             list_head(grafi, &G2, TRUE);
+             //printf("poazz: %d \ %d\n", i, num);
             G2->pred = G1->pred; //memcpy(G1->pred, G->pred, sizeof(int)*G->nv);
             G2->dist = G1->dist; //memcpy(G1->dist, G->dist, sizeof(int)*G->nv);
             G2->predG = G1->predG; //memcpy(G1->pred, G->pred, sizeof(int)*G->nv);

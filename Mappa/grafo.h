@@ -1,4 +1,13 @@
 //typedef enum { FALSE, TRUE } bool;
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+#include <limits.h>
+#include <assert.h>
+#include <stdarg.h>
+#include <string.h>
+#include <float.h>
+
 #include "list.h"
 
 typedef struct sgrafo* grafo;

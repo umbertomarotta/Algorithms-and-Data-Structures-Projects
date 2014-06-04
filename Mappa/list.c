@@ -84,7 +84,7 @@ nodo _nodo_insert_prior(nodo hed, nodo nu){
 
 nodo _nodo_destroy(nodo hed, void *element, lista list){
     if(!hed || !list) return hed;
-    if((double)*((double*)hed->data) == (double)*(double*)element){
+    if(*((int*)hed->data) == *(int*)element){
     //if(*(hed->data) == *element){
         nodo ret = hed->next;
         if(list->freeFn) {
@@ -127,6 +127,10 @@ void list_update_prior(list *list, void *element, double prior){
     if(old != neu) list_insert_prior(list, element, prior);
 }
 
+void lista_RimuoviNodo(lista lis, void *element){
+
+}
+
 void list_updateall_prior(list *list, void *element, double prior){
     if(!list) return;
     int num=0, old=0, neu=1;
@@ -141,39 +145,6 @@ void list_updateall_prior(list *list, void *element, double prior){
         num--;
     }
 }
-
-void list_sort_prior(list *lis){
-    if(!lis) return;
-    printf("azzo!\n");
-    lista ord = (lista)malloc(sizeof(list));
-    list_new(ord, lis->elementSize, lis->freeFn);
-    void* ins = NULL;
-    int prior;
-    while(list_size(lis)){
-        list_head_prior(lis, &ins, &prior, TRUE);
-        list_insert_prior(ord, &ins, prior);
-    }
-    lis->head = ord->head;
-    lis->tail = ord->tail;
-    free(ord);
-}
-
-void list_sort_interi(list *lis){
-    if(!lis) return;
-    lista ord = (lista)malloc(sizeof(list));
-    list_new(ord, lis->elementSize, lis->freeFn);
-    int ins = 0;
-    int prior;
-    while(list_size(lis)){
-        list_head_prior(lis, &ins, &prior, TRUE);
-        list_insert_prior(ord, &ins, ins);
-    }
-    lis->logicalLength = ord->logicalLength;
-    lis->head = ord->head;
-    lis->tail = ord->tail;
-    free(ord);
-}
-
 
 void list_new(list *list, int elementSize, freeFunction freeFn)
 {
@@ -263,8 +234,8 @@ void list_head(list *list, void *element, bool removeFromList)
         list->head = node->next;
         list->logicalLength--;
 
-        free(node->data);
-        free(node);
+        //free(node->data);
+        //free(node);
     }
 }
 

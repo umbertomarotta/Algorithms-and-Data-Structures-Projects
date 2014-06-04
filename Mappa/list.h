@@ -10,7 +10,7 @@ typedef bool (*listIterator)(void *);
 
 typedef struct _listNode {
   void *data;
-  int prior;
+  double prior;
   struct _listNode *next;
 } listNode;
 
@@ -43,8 +43,6 @@ nodo _nodo_destroy(nodo hed, void *element, lista list);
 void list_insert_prior(list* list, void *element, double prior);
 void list_update_prior(list* list, void *element, double prior);
 void list_updateall_prior(list *list, void *element, double prior);
-void list_sort_prior(list *list);
-void list_sort_interi(list *list);
 
 void list_new(list *list, int elementSize, freeFunction freeFn);
 void list_destroy(list *list);
