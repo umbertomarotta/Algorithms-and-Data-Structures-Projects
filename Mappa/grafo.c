@@ -361,7 +361,7 @@ int grafo_AggiungiNodi(grafo gra, int num){
 
 int grafo_RimuoviNodo(grafo gra, int id){
     if(!gra) return 1;
-    if (id<0 || (id >= gra->nv)) return 1;
+    if (id >= gra->nv || id < 0) return 1;
     int i;
     if(MATR){
         double*** nmatr = grafo_NuovaMatrice(gra->nv - 1, gra->npesi);
@@ -395,18 +395,17 @@ int grafo_RimuoviNodo(grafo gra, int id){
             siz = list_size(adj);
             for(l = 0; l < siz; l++){
                 list_head(adj, edge, TRUE);
-                if(edge->end >= id) edge->end -= 1;
-                if(edge->start >= id) edge->start -= 1;
-                if(edge->end != id-1) list_append(adj, edge);
+                if(edge->end != id){
+                    if(edge->end > id) edge->end -= 1;
+                    if(edge->start > id) edge->start -= 1;
+                    list_append(adj, edge);
+                }
                 else free(edge->peso);
             }
         }
         free(edge);
 
-        for(i = id; i < gra->nv ; i++){ 
-            if(i+1<=gra->nv)
-                gra->adj[i] = gra->adj[i+1];
-        }
+        for(i = id; i < gra->nv - 1 ; i++) gra->adj[i] = gra->adj[i+1];
         gra->adj = realloc(gra->adj, sizeof(list)*(gra->nv-1));
 
     }

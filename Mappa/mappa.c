@@ -30,8 +30,10 @@ void mappa_cittaDecr(mappa map){
 }
 
 int mappa_CancellaCitta(mappa map, int i){
+    if(!map) return 1;
     citta_CancellaCitta(map->cities, i, map->NumCitta);
     map->NumCitta--;
+    return 0;
 }
 
 void mappa_stampaListaCitta(mappa map, lista city, lista mezzi) {
@@ -41,7 +43,7 @@ void mappa_stampaListaCitta(mappa map, lista city, lista mezzi) {
     {
         list_head(city, &curr_city, 1);
 	    fprintf(stderr,"%s  >>(", mappa_getNomeCitta(map, curr_city));
-        if(list_size(mezzi)){ 
+        if(list_size(mezzi)){
             list_head(mezzi, &nomeR, 1);
             fprintf(stderr,"%s)>> ", nomeR);
         }
@@ -166,6 +168,36 @@ mappa mappa_nuova_hardcode(int numcitta){
     return map;
 }
 
+mappa mappa_nuova_hardcore(int numcitta){
+    mappa map = (mappa)malloc(sizeof(struct smappa));
+    map->Costo_Aereo = 0.20F; //Basato su costo al chilometro di un volo alitalia
+    map->Costo_Treno = 0.08F; //Basto sul costo di un treno italo
+    map->Costo_Pedaggio = 0.06F; //http://www.autostrade.it/documents/10279/25719/tariffa.gif
+    map->Costo_Benzina = 0.09F; //Basato sul consumo di una fiat panda
+    map->Vel_Aereo = 850; //Velocità massima di un aribus A320
+    map->Vel_Treno = 300; //Velocità frecciarossa
+    map->Vel_Autostrade = 120; //Autostrade italiane
+    map->Vel_Strade = 50; //strade italiane
+    map->NumCitta = numcitta;
+    map->cities = calloc(numcitta, sizeof(citta));
+    citta* city = map->cities;
+    int i;
+    //int numpesi = 2;
+    for (i=0; i<numcitta; i++) city[i] = citta_Random();
+
+    map->Voli = mappa_CoperturaMin(city, numcitta, map->Costo_Aereo, map->Vel_Aereo, 200, 1000, 3);
+    map->Ferrovie = mappa_CoperturaMin(city, numcitta, map->Costo_Treno, map->Vel_Treno, 30, 400, 2);
+    map->Autostrade =  mappa_CoperturaMin(city, numcitta, (map->Costo_Pedaggio + map->Costo_Benzina), map->Vel_Autostrade, 20, 100, 1);
+    map->Strade = mappa_CoperturaMin(city, numcitta, map->Costo_Benzina, map->Vel_Strade, 0, 100, 0);
+    grafo_Rinomina(map->Voli, "Voli");
+    grafo_Rinomina(map->Ferrovie, "Ferrovie");
+    grafo_Rinomina(map->Autostrade, "Autostrade");
+    grafo_Rinomina(map->Strade, "Strade");
+
+
+    return map;
+}
+
 int mappa_stampa(mappa map){
     if(!map) return 1;
     grafo_Stampa(map->Voli);
@@ -215,5 +247,72 @@ int mappa_StampaCitta(mappa map){
     printf("|\n");
     return 0;
 }
+
+grafo mappa_CoperturaMin(citta* cities, int numc, float cost, int vel, int distmin, int distmax, int lmin){
+    if(!cities || numc <= 0) return NULL;
+    int i, j, start = 0;
+
+    //cerco la citta' piu' grande
+    for(i = 0; i<numc; i++) if(cities[i]->livello > cities[start]->livello) start = i;
+
+    //Costruisco grafo delle distanze
+    int matr[numc][numc], w;
+    for(i = 0;  i< numc; i++){
+        for(j = 0; j < numc; j++){
+            w = citta_Distanza(cities[i], cities[j]);
+            if(i!=j && w >= distmin && w <= distmax && cities[i]->livello >= lmin && cities[j]->livello >= lmin){
+                    matr[i][j] = w;
+                    matr[j][i] = w;
+            }
+            else{
+                matr[i][j] = 0;
+                matr[j][i] = 0;
+            }
+            printf("%4d ", matr[i][j]);
+        }
+        printf("\n");
+    }
+     printf("\n\n");
+    int num = 0;
+    int pres[numc];
+    for(i = 0; i<numc; i++) pres[i] = 0;
+
+    grafo G = grafo_Nuovo(numc, 2);
+    pres[start] = 1;
+    int min[2] = {start , 0};
+    if(pres[min[1]]) min[1]++;
+
+    while (num != numc){
+        for(i = 0; i<numc; i++){
+            for(j = 0; j<numc; j++) {
+                if(matr[i][j] && pres[i] && !pres[j] && matr[i][j] < matr[min[0]][min[1]]){
+                    //printf("buon\n");
+                    min[0] = i;
+                    min[1] = j;
+                }
+            }
+        }
+        //printf("azz: %d %d\n", min[0], min[1]);
+        //for(i = 0; i<numc; i++) printf("%d ", pres[i]);
+        //printf("\n");
+        //grafo_AggiungiArco(G,  min[0], min[1], 2, (double)(matr[min[0]][min[1]]/vel), (double)(matr[min[0]][min[1]]*vel));
+        if(matr[min[0]][min[1]]){
+            grafo_AggiungiArco(G,  min[0], min[1], 2, 1., 1.);
+            grafo_AggiungiArco(G,  min[1], min[0], 2, 1., 1.);
+        }
+        pres[min[1]] = 1;
+        for(i = 0; i<numc; i++){
+            if(!pres[i]){
+                min[1] = i;
+                break;
+            }
+        }
+        num++;
+    }
+    return G;
+
+}
+
+
 
 

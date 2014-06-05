@@ -7,7 +7,6 @@
 #include "mappa.h"
 #include "utils.h"
 
-
 int main(){
     srand(time(NULL));
 
@@ -182,7 +181,6 @@ int main(){
     return 0;
 }
 
-
 int main1(){
     srand(time(NULL));
 
@@ -197,6 +195,7 @@ int main1(){
     //grafo_Stampa(g1);
     //grafo_RimuoviArco(g1, 9, 1);
     //grafo_Stampa(g1);
+    return 0;
 }
 
 int main2(){
@@ -258,5 +257,5 @@ int main2(){
     printf("\n\n");
     lista_StampaStringhe(mez);
     printf("\n\n");
-
+    return 0;
 }
