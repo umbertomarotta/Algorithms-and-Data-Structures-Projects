@@ -23,7 +23,7 @@ int main(){
         printf("\n [3] Trova percorso ottimo in base al tempo\n");
         printf("\n [4] Trova percorso ottimo in base al costo\n");
         printf("\n [5] Rimuovi Collegamento\n");
-        printf("\n [6] Cancella job da un pc\n");
+        printf("\n [6] Rimuovi citta' dalla mappa\n");
         printf("\n [0] Esci\n\n");
         printf("Scegli: ");
         scanf("%d",&scelta);
@@ -145,6 +145,26 @@ int main(){
                     grafo_RimuoviArco(graph, source, dest);
                 }
             }
+            break;
+        case 6:
+            if(map!=NULL)
+            {
+                //char* cityy;
+                mappa_StampaCitta(map);
+                printf("Inserire ID della città da eliminare\n");
+                scanf("%d", &scelta);
+                //cityy=mappa_getNomeCitta(map,scelta);
+                voli=grafo_getVoli(map);
+                ferrovie=grafo_getFerrovie(map);
+                autostrade=grafo_getAutostrade(map);
+                strade=grafo_getStrade(map);
+                grafo_RimuoviNodo(voli, scelta);
+                grafo_RimuoviNodo(ferrovie, scelta);
+                grafo_RimuoviNodo(autostrade, scelta);
+                grafo_RimuoviNodo(strade, scelta);
+                //printf("%s eliminata\n", cityy);
+            }
+            press_enter();
             break;
         case 0:
             clear_screen();
