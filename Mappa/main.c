@@ -14,7 +14,7 @@ int main(){
 
     int num_city, source, dest;
     mappa map = NULL;
-    grafo voli=NULL, ferrovie=NULL, autostrade=NULL, strade=NULL;
+    grafo graph=NULL, voli=NULL, ferrovie=NULL, autostrade=NULL, strade=NULL;
     int scelta = -1;
     while(scelta != 0){
         clear_screen();
@@ -22,7 +22,7 @@ int main(){
         printf("\n [2] Stampa Mappa\n");
         printf("\n [3] Trova percorso ottimo in base al tempo\n");
         printf("\n [4] Trova percorso ottimo in base al costo\n");
-        printf("\n [5] Inserisci job in un pc\n");
+        printf("\n [5] Rimuovi Collegamento\n");
         printf("\n [6] Cancella job da un pc\n");
         printf("\n [0] Esci\n\n");
         printf("Scegli: ");
@@ -38,15 +38,15 @@ int main(){
             if(map!=NULL){
                 mappa_StampaCitta(map);
                 printf("\n\nLINKS\n\n");
-//                printf("\n\n");
-//                grafo_Stampa(grafo_getVoli(map));
-//                printf("\n\n");
-//                grafo_Stampa(grafo_getFerrovie(map));
-//                printf("\n\n");
-//                grafo_Stampa(grafo_getAutostrade(map));
-//                printf("\n\n");
-//                grafo_Stampa(grafo_getStrade(map));
-//                printf("\n\n");
+                printf("\n\n");
+                grafo_Stampa(grafo_getVoli(map));
+                printf("\n\n");
+                grafo_Stampa(grafo_getFerrovie(map));
+                printf("\n\n");
+                grafo_Stampa(grafo_getAutostrade(map));
+                printf("\n\n");
+                grafo_Stampa(grafo_getStrade(map));
+                printf("\n\n");
 
             }
             else printf("devi prima avere una mappa!\n");
@@ -65,12 +65,15 @@ int main(){
                 list_append(grafi, &(strade));
                 lista ord = lista_interi();
                 lista mez = lista_stringhe();
-                //grafo_getPath(gra, 9, 1, &ord);
+                mappa_StampaCitta(map);
                 printf("Inserire Sorgente e Destinazione:\n");
                 scanf("%d %d",&source,&dest);
+                printf("Da %s a %s\n\n", mappa_getNomeCitta(map, source), mappa_getNomeCitta(map,dest));
                 grafo_getPathM(grafi, source, dest, 0, &ord, &mez);
                 printf("Path: %d\n\n", list_size(ord));
                 lista_StampaInteri(ord);
+		        printf("\n\n");
+		        mappa_stampaListaCitta(map, ord, mez);
                 printf("\n\n");
                 lista_StampaStringhe(mez);
                 printf("\n\n");
@@ -92,12 +95,15 @@ int main(){
                 list_append(grafi, &(strade));
                 lista ord = lista_interi();
                 lista mez = lista_stringhe();
-                //grafo_getPath(gra, 9, 1, &ord);
+                mappa_StampaCitta(map);
                 printf("Inserire Sorgente e Destinazione:\n");
                 scanf("%d %d",&source,&dest);
-                grafo_getPathM(grafi, source, dest, 1, &ord, &mez);
+                printf("Da %s a %s\n\n", mappa_getNomeCitta(map, source), mappa_getNomeCitta(map,dest));
+                grafo_getPathM(grafi, source, dest, 0, &ord, &mez);
                 printf("Path: %d\n\n", list_size(ord));
                 lista_StampaInteri(ord);
+		        printf("\n\n");
+		        mappa_stampaListaCitta(map, ord, mez);
                 printf("\n\n");
                 lista_StampaStringhe(mez);
                 printf("\n\n");
@@ -107,17 +113,42 @@ int main(){
             press_enter();
             break;
 
-        /*case 5:
-            if(system!=NULL)
-                insert_job_pc_I(system);
+        case 5:
+            if(map!=NULL)
+            {
+                printf("\nSelezionare il tipo di collegamento\n");
+                printf("\n[1] Aereo\n");
+                printf("\n[2] Ferroviario\n");
+                printf("\n[3] Autostradale\n");
+                printf("\n[4] Stradale\n");
+                scanf("%d",&scelta);
+                graph=NULL;
+                switch (scelta)
+                {
+                    case 1:
+                        graph=grafo_getVoli(map);
+                        break;
+                    case 2:
+                        graph=grafo_getFerrovie(map);
+                        break;
+                    case 3:
+                        graph=grafo_getAutostrade(map);
+                        break;
+                    case 4:
+                        graph=grafo_getStrade(map);
+                        break;
+                }
+                if(graph!=NULL)
+                {
+                    printf("Inserire Sorgente e Destinazione\n");
+                    scanf("%d %d", &source, &dest);
+                    grafo_RimuoviArco(graph, source, dest);
+                }
+            }
             break;
-        case 6:
-            if(system!=NULL)
-                delete_job_I(system);
-            break;*/
         case 0:
             clear_screen();
-            printf("\n[0] Esci\n\n");
+            printf("[0] Esci\n\n");
             printf("Arrivederci!\n");
             press_enter();
             break;
@@ -128,12 +159,9 @@ int main(){
             break;
         }
     }
-    //mappa_stampa(map);
-
-
-
     return 0;
 }
+
 
 int main1(){
     srand(time(NULL));

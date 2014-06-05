@@ -13,6 +13,31 @@
 #define DIM 1000
 #define FAST 0
 
+/*citta* mappa_getCities(mappa map){
+    return map->cities;
+}*/
+
+char* mappa_getNomeCitta(mappa map, int i){
+    return map->cities[i]->nome;
+}
+
+void mappa_stampaListaCitta(mappa map, lista city, lista mezzi) {
+    int curr_city;
+    char nomeR[50];
+    while(list_size(city))
+    {
+        list_head(city, &curr_city, 1);
+	    fprintf(stderr,"%s  >>(", mappa_getNomeCitta(map, curr_city));
+        if(list_size(mezzi)){ 
+            list_head(mezzi, &nomeR, 1);
+            fprintf(stderr,"%s)>> ", nomeR);
+        }
+        else
+            printf(")>>");
+    }
+}
+
+
 grafo grafo_getVoli(mappa map){
     return map->Voli;
 }

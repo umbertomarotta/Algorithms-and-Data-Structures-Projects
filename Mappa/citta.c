@@ -151,4 +151,3 @@ int citta_stampa(citta c1){
     return 0;
 }
 
-
