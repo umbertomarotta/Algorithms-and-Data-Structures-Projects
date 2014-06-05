@@ -13,12 +13,25 @@
 #define DIM 1000
 #define FAST 0
 
-/*citta* mappa_getCities(mappa map){
+citta* mappa_getCities(mappa map){
     return map->cities;
-}*/
+}
 
 char* mappa_getNomeCitta(mappa map, int i){
     return map->cities[i]->nome;
+}
+
+int mappa_getNumCitta(mappa map){
+    return map->NumCitta;
+}
+
+void mappa_cittaDecr(mappa map){
+    map->NumCitta--;
+}
+
+int mappa_CancellaCitta(mappa map, int i){
+    citta_CancellaCitta(map->cities, i, map->NumCitta);
+    map->NumCitta--;
 }
 
 void mappa_stampaListaCitta(mappa map, lista city, lista mezzi) {

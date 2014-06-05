@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
-
 #include "list.h"
 #include "grafo.h"
 #include "citta.h"
@@ -149,11 +148,11 @@ int main(){
         case 6:
             if(map!=NULL)
             {
-                //char* cityy;
+                citta* cityy;
                 mappa_StampaCitta(map);
                 printf("Inserire ID della città da eliminare\n");
                 scanf("%d", &scelta);
-                //cityy=mappa_getNomeCitta(map,scelta);
+                //cityy=mappa_getCities(map);
                 voli=grafo_getVoli(map);
                 ferrovie=grafo_getFerrovie(map);
                 autostrade=grafo_getAutostrade(map);
@@ -162,6 +161,7 @@ int main(){
                 grafo_RimuoviNodo(ferrovie, scelta);
                 grafo_RimuoviNodo(autostrade, scelta);
                 grafo_RimuoviNodo(strade, scelta);
+                mappa_CancellaCitta(map, scelta);
                 //printf("%s eliminata\n", cityy);
             }
             press_enter();

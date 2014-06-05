@@ -108,6 +108,20 @@ int citta_Cancella(citta* city){
     #undef tip
 }
 
+int citta_CancellaCitta(citta* cities, int i, int n_citta){
+    if(i>=0 && i<n_citta){
+        free(cities[i]);
+        i++;
+        while(i<n_citta){
+            cities[i-1]=cities[i];
+            i++;
+        }
+        cities=realloc(cities, sizeof(citta)*(n_citta -1));
+        return 1;
+    }
+    else return 0;
+}
+
 int citta_Distanza(citta c1, citta c2){
     if(!c1 || !c2) return -1;
     int dist = sqrt(pow(c2->posX-c1->posX,2)+pow(c2->posY-c1->posY,2));
