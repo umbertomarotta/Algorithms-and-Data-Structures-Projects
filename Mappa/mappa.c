@@ -67,7 +67,7 @@ mappa mappa_nuova_hardcode(int numcitta){
             done++;
             if (difftime(time(NULL),tim) >= 1) {
                 clear_screen();
-                printf("CARICAMENTO: %d/%d (%1.2f%%)", done, work, (float)(done*100)/work);
+                printf("CARICAMENTO: %d/%d (%1.2f%%)\n", done, work, (float)(done*100)/work);
                 tim = time(NULL);
             }
             //printf("azz\n");

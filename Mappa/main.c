@@ -38,15 +38,15 @@ int main(){
             if(map!=NULL){
                 mappa_StampaCitta(map);
                 printf("\n\nLINKS\n\n");
-                printf("\n\n");
-                grafo_Stampa(grafo_getVoli(map));
-                printf("\n\n");
-                grafo_Stampa(grafo_getFerrovie(map));
-                printf("\n\n");
-                grafo_Stampa(grafo_getAutostrade(map));
-                printf("\n\n");
-                grafo_Stampa(grafo_getStrade(map));
-                printf("\n\n");
+//                printf("\n\n");
+//                grafo_Stampa(grafo_getVoli(map));
+//                printf("\n\n");
+//                grafo_Stampa(grafo_getFerrovie(map));
+//                printf("\n\n");
+//                grafo_Stampa(grafo_getAutostrade(map));
+//                printf("\n\n");
+//                grafo_Stampa(grafo_getStrade(map));
+//                printf("\n\n");
 
             }
             else printf("devi prima avere una mappa!\n");
@@ -138,13 +138,17 @@ int main(){
 int main1(){
     srand(time(NULL));
 
-    grafo g1 = grafo_Random(11, 2, 10, 10);
+    grafo g1 = grafo_Random(11, 1, 5, 10);
     //grafo g1 = grafo_Nuovo(10, 3);
     grafo_Stampa(g1);
-    grafo_AggiungiArco(g1, 9, 1, 2, 6., 66.);
+    printf("\n\n");
+    grafo_RimuoviNodo(g1, 5);
     grafo_Stampa(g1);
-    grafo_RimuoviArco(g1, 9, 1);
-    grafo_Stampa(g1);
+
+    //grafo_AggiungiArco(g1, 9, 1, 2, 6., 66.);
+    //grafo_Stampa(g1);
+    //grafo_RimuoviArco(g1, 9, 1);
+    //grafo_Stampa(g1);
 }
 
 int main2(){

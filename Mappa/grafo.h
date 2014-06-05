@@ -7,6 +7,7 @@ struct sgrafo{
     /*  BASSO LIVELLO   */
     double*** matr;
     list* adj;
+    int* ignore;
     int nv;
     int npesi;
 
@@ -17,7 +18,6 @@ struct sgrafo{
     int* pred;
     int* f;
     int* d;
-    int* ignore;
     int tempo;
 
     struct sgrafo** predG;
@@ -57,7 +57,7 @@ list* grafo_NuovoArrayListeRandom(int num, int npesi, int conness, int max);
 int grafo_AggiungiArco(grafo G, int u, int v, int npesi, ... );
 int grafo_RimuoviArco(grafo G, int u, int v);
 int grafo_AggiungiNodi(grafo gra, int num);
-int grafo_EliminaNodo(grafo gra, int id); //SOLO MATR
+int grafo_RimuoviNodo(grafo gra, int id); //SOLO MATR
 int grafo_getPeso(grafo G, int u, int v);
 
 int grafo_for_each(grafo G, int u, iteratore iterator, lista coda);

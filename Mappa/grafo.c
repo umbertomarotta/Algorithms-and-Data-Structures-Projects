@@ -326,7 +326,7 @@ int grafo_RimuoviArco(grafo G, int u, int v){
     return 1;
 }
 
-int grafo_AggiungiNodi(grafo gra, int num){ //LEAK MATR!
+int grafo_AggiungiNodi(grafo gra, int num){
     if(!gra) return 1;
     if(MATR){
         //int** nmatr = calloc(((gra->nv)+num)*((gra->nv)+num), sizeof(int));
@@ -339,44 +339,80 @@ int grafo_AggiungiNodi(grafo gra, int num){ //LEAK MATR!
         }
         double*** del = gra->matr;
         gra->matr = nmatr;
+        grafo_CancellaMatrice(del, gra->nv);
         gra->nv += num;
-        free(del);
     } else {
         gra->nv += num;
+        int app = num;
         gra->adj = realloc(gra->adj, sizeof(list)*(gra->nv));
-        while(num){
+        while(app){
             list_new(&(gra->adj[gra->nv - num]), sizeof(struct sarco), NULL);
-            num--;
+            app--;
         }
     }
+    gra->ignore = realloc(gra->ignore, sizeof(int)*(gra->nv));
+    while(num){
+        gra->ignore[gra->nv - num] = 0;
+        num--;
+    }
     grafo_Deinit(gra);
-    return grafo_Init(gra);
+    return 0;
 }
 
-//SOLO MATR
-int grafo_EliminaNodo(grafo gra, int id){
+int grafo_RimuoviNodo(grafo gra, int id){
     if(!gra) return 1;
     if (id >= gra->nv) return 1;
-    //int** nmatr = calloc(((gra->nv)-1)*((gra->nv)-1), sizeof(int));
-    double*** nmatr = grafo_NuovaMatrice(gra->nv - 1, gra->npesi);
-    int i, y, m, k;
-    m = 0;
-    for(i = 0; i < (gra->nv - 1) ; i++){
-        if (m == id) m++;
-        k = 0;
-        for(y = 0; y < (gra->nv - 1); y++){
-            if (k == id) k++;
-            nmatr[i][y] = gra->matr[m][k];
-            k++;
+    int i;
+    if(MATR){
+        double*** nmatr = grafo_NuovaMatrice(gra->nv - 1, gra->npesi);
+        int y, x, m, k, j;
+        m = 0;
+        for(i = 0; i < (gra->nv - 1) ; i++){
+            if (m == id) m++;
+            k = 0;
+            for(y = 0; y < (gra->nv - 1); y++){
+                if (k == id) k++;
+                j = 0;
+                for(x = 0; x < gra->npesi; x++){
+                    nmatr[i][y][x] = gra->matr[m][k][j];
+                    j++;
+                }
+                k++;
+            }
+            m++;
         }
-        m++;
+        double*** del = gra->matr;
+        gra->matr = nmatr;
+        grafo_CancellaMatrice(del, gra->nv);
     }
-    double*** del = gra->matr;
-    gra->matr = nmatr;
+    else{
+
+        lista adj;
+        arco edge = (arco)malloc(sizeof(struct sarco));
+        int l, siz;
+        for(i = 0; i < gra->nv ; i++){ //grafo_RimuoviArco(gra, i, id);
+            adj = &(gra->adj[i]);
+            siz = list_size(adj);
+            for(l = 0; l < siz; l++){
+                list_head(adj, edge, TRUE);
+                if(edge->end >= id) edge->end -= 1;
+                if(edge->start >= id) edge->start -= 1;
+                if(edge->end != id-1) list_append(adj, edge);
+                else free(edge->peso);
+            }
+        }
+        free(edge);
+
+        for(i = id; i < gra->nv - 1 ; i++) gra->adj[i] = gra->adj[i+1];
+        gra->adj = realloc(gra->adj, sizeof(list)*(gra->nv-1));
+
+    }
+    for(i = id; i < gra->nv - 1 ; i++) gra->ignore[i] = gra->ignore[i+1];
+    gra->ignore = realloc(gra->ignore, sizeof(int)*(gra->nv-1));
+
     gra->nv -= 1;
-    free(del);
     grafo_Deinit(gra);
-    return grafo_Init(gra);
+    return 0;
 }
 
 int grafo_for_each(grafo G, int u, iteratore iterator, list* coda){
@@ -414,7 +450,7 @@ int grafo_for_each_peso(grafo G, int u, int ipeso, iteratore iterator, list* cod
         double v;
         for(i=0; i<G->nv; i++){
             v = G->matr[u][i][ipeso];
-            if (v>0) {
+            if (v > 0) {
                 if(!G->ignore[i]) iterator(G, u, i, v, coda);
             }
         }
@@ -426,6 +462,7 @@ int grafo_for_each_peso(grafo G, int u, int ipeso, iteratore iterator, list* cod
         listNode* node = list->head;
         while(node != NULL) {
             edge = (arco)node->data;
+            //printf("\n\n%d %d (%.1f)\n\n", edge->start, edge->end ,edge->peso[ipeso]);
             if(!G->ignore[edge->end]) iterator(G, edge->start, edge->end, edge->peso[ipeso], coda);
             node = node->next;
         }
@@ -503,7 +540,8 @@ int grafo_Deinit(grafo G){
 iteratore _grafo_Stampa(grafo G, int u, int v, double peso, lista coda){
     if(!G || u >= G->nv || v >= G->nv) return NULL;
     //int peso = grafo_getPeso(G, u, v);
-    if (u!=v && peso) printf("%d(%.1f) ", v, peso);
+    if (peso) printf("%d(%.1f) ", v, peso);
+    else printf("!!%d(%.1f) ", v, peso);
     return NULL;
 }
 
