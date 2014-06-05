@@ -147,7 +147,9 @@ int main(){
         case 6:
             if(map!=NULL)
             {
-                citta* cityy;
+                //citta* cityy;
+                clear_screen();
+                clear_screen();
                 mappa_StampaCitta(map);
                 printf("Inserire ID della città da eliminare\n");
                 scanf("%d", &scelta);
@@ -161,6 +163,10 @@ int main(){
                 grafo_RimuoviNodo(autostrade, scelta);
                 grafo_RimuoviNodo(strade, scelta);
                 mappa_CancellaCitta(map, scelta);
+                clear_screen();
+                mappa_StampaCitta(map);
+                printf("Fatto\n");
+                press_enter();
                 //printf("%s eliminata\n", cityy);
             }
             press_enter();
@@ -185,11 +191,15 @@ int main1(){
     srand(time(NULL));
 
     grafo g1 = grafo_Random(11, 1, 5, 10);
+    grafo_Rinomina(g1, "azz");
+    char* s = grafo_toString(g1);
+    //printf("%s\n\n", s);
+    grafo g2 = grafo_fromString(s);
     //grafo g1 = grafo_Nuovo(10, 3);
     grafo_Stampa(g1);
     printf("\n\n");
-    grafo_RimuoviNodo(g1, 5);
-    grafo_Stampa(g1);
+    //grafo_RimuoviNodo(g1, 5);
+    grafo_Stampa(g2);
 
     //grafo_AggiungiArco(g1, 9, 1, 2, 6., 66.);
     //grafo_Stampa(g1);

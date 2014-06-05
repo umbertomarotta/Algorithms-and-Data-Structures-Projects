@@ -235,26 +235,30 @@ grafo grafo_fromString(char* stringa){
     //size_t size = (sizeof(char)*nv*nv*np)*5;
     int fd=0;
     int inc;
-    sscanf(stringa, "%d %d %n", &nv, &np, &inc);
+    char nome[100];
+    sscanf(stringa, "%s %d %d %n", nome, &nv, &np, &inc);
     fd += inc;
     grafo res = grafo_Nuovo(nv, np);
-    int i, j, k;
-    int peso = 0;
+    grafo_Rinomina(res, nome);
+    int i, j, k, flag;
+    float peso = 0;
     list* array = res->adj;
     arco ed;
     for(i=0; i<nv; i++){
         for(j=0; j<nv; j++){
+            flag = 0;
             if(!MATR) ed = arco_Nuovo(i, j, np);
             for(k=0; k<np; k++){
-                sscanf(stringa+fd, "%d %n", &peso, &inc);
-                //printf("%d ", inc);
+                sscanf(stringa+fd, "%f %n", &peso, &inc);
+                //printf("%f ", peso);
                 fd += inc;
-                if(MATR) res->matr[i][j][k] = peso;
-                else ed->peso[k] = peso;
+                if(MATR) res->matr[i][j][k] = (double)peso;
+                else ed->peso[k] = (double)peso;
+                if (peso) flag = 1;
                 //printf("%d %d %d\n", i, j, k);
             }
             if(!MATR){
-                list_append(&array[i], ed); //matr[i][y] = rand()%(max)+1;
+                if(flag) list_append(&array[i], ed); //matr[i][y] = rand()%(max)+1;
                 free(ed);
             }
         }
@@ -834,7 +838,7 @@ char* grafo_toString(grafo G){
     int np = G->npesi;
     char* res = calloc((nv*nv*np)*10, sizeof(char));
     int fd=0;
-    fd += sprintf(res, "%d %d ", nv, np);
+    fd += sprintf(res, "%s\n %d %d ", G->nome, nv, np);
 
     int i, j, k;
     if(!MATR){
@@ -848,7 +852,7 @@ char* grafo_toString(grafo G){
     for(i=0; i<nv; i++){
         for(j=0; j<nv; j++){
             for(k=0; k<np; k++){
-                fd += sprintf(res+fd, "%.0f ", G->matr[i][j][k]);
+                fd += sprintf(res+fd, "%.2f ", G->matr[i][j][k]);
             }
         }
     }
