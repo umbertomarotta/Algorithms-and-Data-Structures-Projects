@@ -871,6 +871,3 @@ double grafo_raggiunge(grafo G, int u, int v){
     return G->dist[v];
 }
 
-
-
-

@@ -4,7 +4,7 @@
 #include <limits.h>
 #include <assert.h>
 #include <stdarg.h>
-
+#include <math.h>
 #include "mappa.h"
 #include "citta.h"
 #include "grafo.h"
@@ -321,5 +321,71 @@ grafo mappa_CoperturaMin(citta* cities, int numc, float cost, int vel, int distm
 }
 
 
+int mappa_mapToFile(mappa map, FILE* fp)
+{
+    int i=0;
+    if(fp!=NULL)
+    {   
+        fprintf(fp,"%d ",map->NumCitta);
+        fprintf(fp,"%.2f %.2f ",map->Costo_Aereo, map->Costo_Treno);
+        fprintf(fp,"%.2f %.2f ",map->Costo_Pedaggio, map->Costo_Benzina);
+        fprintf(fp,"%d %d ",map->Vel_Aereo, map->Vel_Treno);
+        fprintf(fp,"%d %d\n",map->Vel_Autostrade, map->Vel_Strade);
+        fprintf(fp,"%s\n",grafo_toString(map->Voli));
+        fprintf(fp,"%s\n",grafo_toString(map->Ferrovie));
+        fprintf(fp,"%s\n",grafo_toString(map->Autostrade));
+        fprintf(fp,"%s\n",grafo_toString(map->Strade));
+        while(i<map->NumCitta){
+            fprintf(fp,"%s\n",citta_toString(map->cities[i]));
+            i++;
+        }
+        return 1;
+    }
+    return 0;
+}
 
-
+mappa mappa_mapFromFile(FILE* fp)
+{
+    citta* city=NULL;
+    int i=0;
+    char* strgrafo;
+    char citta[100];
+    mappa map=NULL;
+    if(fp!=NULL)
+    {
+        map = (mappa)malloc(sizeof(struct smappa));
+        fscanf(fp,"%d ",&(map->NumCitta));
+        strgrafo=(char*)malloc(sizeof(char)*(pow(map->NumCitta,2)*2)*10);
+        fscanf(fp,"%f %f ", &(map->Costo_Aereo), &(map->Costo_Treno));
+        fscanf(fp,"%f %f ", &(map->Costo_Pedaggio), &(map->Costo_Benzina));
+        fscanf(fp,"%d %d ", &(map->Vel_Aereo), &(map->Vel_Treno));
+        fscanf(fp,"%d %d ", &(map->Vel_Autostrade), &(map->Vel_Strade));
+        fgets(strgrafo,INT_MAX,fp);
+        map->Voli=grafo_fromString(strgrafo);
+        //fscanf(fp,"%[^\n]s",strgrafo);
+        fgets(strgrafo,INT_MAX,fp);
+        map->Ferrovie=grafo_fromString(strgrafo);
+        //fscanf(fp,"%[^\n]s",strgrafo);
+        fgets(strgrafo,INT_MAX,fp);
+        map->Autostrade=grafo_fromString(strgrafo);
+        //fscanf(fp,"%[^\n]s",strgrafo);
+        fgets(strgrafo,INT_MAX,fp);
+        map->Strade=grafo_fromString(strgrafo);
+        map->cities = calloc(map->NumCitta,sizeof(citta));
+        /*while(i<map->NumCitta)
+        {
+            fscanf(fp,"%s%[^\n]\n",citta);
+            map->cities[i]=citta_fromString(citta);
+            i++;
+        }*/
+        city = map->cities;
+        for (i=0; i < map->NumCitta; i++){
+            //fscanf(fp,"%[^\n]s",citta);
+            fgets(citta,INT_MAX,fp);
+            printf("%s\n",citta);
+            city[i] = citta_fromString(citta);
+        }
+        return map;
+    }
+    return NULL;
+}

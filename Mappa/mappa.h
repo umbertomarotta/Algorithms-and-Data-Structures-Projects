@@ -49,4 +49,5 @@ grafo grafo_getFerrovie(mappa map);
 
 grafo grafo_getAutostrade(mappa map);
 
+mappa mappa_mapFromFile(FILE*);
 #endif

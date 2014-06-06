@@ -9,7 +9,8 @@
 
 int main(){
     srand(time(NULL));
-
+    char nomeF[50];
+    FILE* fp=NULL;
     int num_city, source, dest;
     mappa map = NULL;
     grafo graph=NULL, voli=NULL, ferrovie=NULL, autostrade=NULL, strade=NULL;
@@ -22,6 +23,8 @@ int main(){
         printf("\n [4] Trova percorso ottimo in base al costo\n");
         printf("\n [5] Rimuovi Collegamento\n");
         printf("\n [6] Rimuovi citta' dalla mappa\n");
+        printf("\n [7] Esporta mappa su file\n");
+        printf("\n [8] Importa mappa da file\n");
         printf("\n [0] Esci\n\n");
         printf("Scegli: ");
         scanf("%d",&scelta);
@@ -30,7 +33,7 @@ int main(){
             case 1:
                 printf("\nInserisci numero di citta' \n");
                 scanf("%d",&num_city);
-                map = mappa_nuova_hardcode(num_city);
+                map = mappa_nuova_hardcode(num_city); 
             break;
         case 2:
             if(map!=NULL){
@@ -45,7 +48,7 @@ int main(){
                 printf("\n\n");
                 grafo_Stampa(grafo_getStrade(map));
                 printf("\n\n");
-
+                //printf("%s\n", grafo_toString(grafo_getVoli(map)));
             }
             else printf("devi prima avere una mappa!\n");
             press_enter();
@@ -158,6 +161,26 @@ int main(){
                 press_enter();
             }
             press_enter();
+            break;
+        case 7:
+            if(map!=NULL)
+            {
+                printf("Inserire il nome del file\n");
+                scanf("%s",nomeF);
+                fp=fopen(nomeF,"w+");
+                if(mappa_mapToFile(map,fp))
+                    printf("Scrittura avvenuta con successo.\n");
+                else printf("Scrittura fallita.\n");
+            }
+            break;
+        case 8:
+            printf("Inserire il nome del file\n");
+            scanf("%s",nomeF);
+            fp=fopen(nomeF,"r");
+            map=mappa_mapFromFile(fp);
+            if(map)
+                printf("Import avvenuto con successo.\n");
+            else printf("Import fallito\n");
             break;
         case 0:
             clear_screen();
