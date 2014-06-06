@@ -24,7 +24,6 @@ int main(){
         printf("\n [5] Rimuovi Collegamento\n");
         printf("\n [6] Rimuovi citta' dalla mappa\n");
         printf("\n [7] Esporta mappa su file\n");
-        printf("\n [8] Importa mappa da file\n");
         printf("\n [0] Esci\n\n");
         printf("Scegli: ");
         scanf("%d",&scelta);
@@ -171,16 +170,17 @@ int main(){
                 if(mappa_mapToFile(map,fp))
                     printf("Scrittura avvenuta con successo.\n");
                 else printf("Scrittura fallita.\n");
+                fclose(fp);
+                fp=NULL;
             }
             break;
         case 8:
             printf("Inserire il nome del file\n");
             scanf("%s",nomeF);
             fp=fopen(nomeF,"r");
-            map=mappa_mapFromFile(fp);
+            map = mappa_mapFromFile(fp);
             if(map)
-                printf("Import avvenuto con successo.\n");
-            else printf("Import fallito\n");
+                printf("Export avvenuto con successo.\n");
             break;
         case 0:
             clear_screen();

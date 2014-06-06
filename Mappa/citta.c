@@ -24,7 +24,10 @@
 citta citta_Nuova(char* nome, int posx, int posy, int liv){
     citta city = (citta)malloc(sizeof(struct scitta));
     //city->nome = "prova";
-    if(nome) city->nome = nome;
+    if(nome){
+        city->nome=(char*)malloc(strlen(nome)*sizeof(char));
+        strcpy(city->nome,nome);
+    }
     else city->nome = "NoName City";
     city->posX = posx%WORLD_SIZE;
     city->posY = posy%WORLD_SIZE;
@@ -44,9 +47,16 @@ char* citta_toString(citta c1){
 }
 
 citta citta_fromString(char* s){
-    char nome[100];
+    char* nome;
     int posx, posy, liv;
-    sscanf(s, "%[^#]# %d %d %d", nome, &posx, &posy, &liv);
+    //sscanf(s, "%[^#]# %d %d %d",nome, &posx, &posy, &liv);
+    char *str;
+    nome=strtok(s,"#");
+    strcat(nome,"\0");
+    int i=strlen(nome);
+    posx=atoi(strtok(NULL," "));
+    posy=atoi(strtok(NULL," "));
+    liv=atoi(strtok(NULL,"\n"));
     return citta_Nuova(nome, posx, posy, liv);
 }
 

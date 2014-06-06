@@ -349,7 +349,7 @@ mappa mappa_mapFromFile(FILE* fp)
     citta* city=NULL;
     int i=0;
     char* strgrafo;
-    char citta[100];
+    char cityy[100];
     mappa map=NULL;
     if(fp!=NULL)
     {
@@ -371,20 +371,20 @@ mappa mappa_mapFromFile(FILE* fp)
         //fscanf(fp,"%[^\n]s",strgrafo);
         fgets(strgrafo,INT_MAX,fp);
         map->Strade=grafo_fromString(strgrafo);
-        map->cities = calloc(map->NumCitta,sizeof(citta));
+        free(strgrafo);
+        map->cities = (citta*)calloc(map->NumCitta,sizeof(citta));
         /*while(i<map->NumCitta)
         {
             fscanf(fp,"%s%[^\n]\n",citta);
             map->cities[i]=citta_fromString(citta);
             i++;
         }*/
-        city = map->cities;
+        //city = &map->cities;
         for (i=0; i < map->NumCitta; i++){
             //fscanf(fp,"%[^\n]s",citta);
-            fgets(citta,INT_MAX,fp);
-            printf("%s\n",citta);
-            city[i] = citta_fromString(citta);
-        }
+            fgets(cityy,INT_MAX,fp);
+            map->cities[i] = citta_fromString(cityy);
+        }     
         return map;
     }
     return NULL;
