@@ -690,7 +690,7 @@ int grafo_Ciclico(grafo G){
 iteratore grafo_iterDijkstra(grafo G, int u, int v, double peso, lista coda){
     if(!G || u >= G->nv || v >= G->nv) return NULL;
     int alt = G->dist[u] + peso;
-    if(alt < G->dist[v] && G->dist[u] != INT_MAX){
+    if(alt < G->dist[v] && G->dist[u] != DBL_MAX){
         G->dist[v] = alt; //G->dist[u] +
         G->pred[v] = u;
         G->predG[v] = G;
@@ -809,15 +809,17 @@ int grafo_getPathM(lista grafi, int s, int t, int ipeso, lista* path, lista* mez
     list_head(grafi, &G, FALSE);
     if(!G || s >= G->nv || t >= G->nv) return 1;
     grafo_DijkstraM(grafi, s, ipeso);
+    if(G->pred[t] == -1) return 1;
     int curr = t;
     list_prepend(lis, &curr);
     if (G->predG[curr]) list_prepend(*mezzi, &((G->predG[curr])->nome));
-    while(curr != s && curr >= 0 && curr != s){
+    while(curr != s && curr >= 0){
+        press_enter();
         curr = G->pred[curr];
         list_prepend(lis, &curr);
         if (G->predG[curr] && curr >= 0) list_prepend(*mezzi, &((G->predG[curr])->nome));
     }
-    if(curr < 0) list_destroy(lis);
+    //if(curr < 0) list_destroy(lis);
     return 0;
     #undef way
     #undef lis
