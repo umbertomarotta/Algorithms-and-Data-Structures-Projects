@@ -21,6 +21,35 @@
 6 - Megalopoli
 */
 
+citta citta_Nuova(char* nome, int posx, int posy, int liv){
+    citta city = (citta)malloc(sizeof(struct scitta));
+    //city->nome = "prova";
+    if(nome) city->nome = nome;
+    else city->nome = "NoName City";
+    city->posX = posx%WORLD_SIZE;
+    city->posY = posy%WORLD_SIZE;
+    //printf("x: %d\n", city->posX);
+    city->fazione = 0;
+    city->isola = 0;
+    city->livello = liv;
+    //city->livello = rand()%CITY_MAXLIV;
+    return city;
+}
+
+char* citta_toString(citta c1){
+    if(!c1) return NULL;
+    char* res = calloc( strlen(c1->nome) + 60, sizeof(char));
+    sprintf(res, "%s# %d %d %d", c1->nome, c1->posX, c1->posY, c1->livello);
+    return res;
+}
+
+citta citta_fromString(char* s){
+    char nome[100];
+    int posx, posy, liv;
+    sscanf(s, "%[^#]# %d %d %d", nome, &posx, &posy, &liv);
+    return citta_Nuova(nome, posx, posy, liv);
+}
+
 citta citta_Random(){
     char* caso[54] = { "Tetherow",
         "Loachapoka",

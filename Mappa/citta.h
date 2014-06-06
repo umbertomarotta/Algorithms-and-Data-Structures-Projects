@@ -13,6 +13,12 @@ struct scitta{
 
 typedef struct scitta* citta;
 
+citta citta_Nuova(char* nome, int posx, int posy, int liv);
+
+char* citta_toString(citta c1);
+
+citta citta_fromString(char* s);
+
 citta citta_Random();
 
 int citta_Cancella(citta city);
