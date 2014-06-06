@@ -27,7 +27,7 @@ char* mappa_getNomeCitta(mappa map, int i);
 
 void mappa_stampaListaCitta(mappa map, lista city, lista mezzi);
 
-int mappa_CancellaCitta(mappa map, int i);
+int mappa_CancellaCitta(mappa map, int id);
 
 mappa mappa_nuova_hardcode(int numcitta);
 

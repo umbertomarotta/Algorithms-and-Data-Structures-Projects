@@ -98,28 +98,14 @@ citta citta_Random(){
     return city;
 }
 
-int citta_Cancella(citta* city){
-    #define tip (*city)
-    if(!tip) return 1;
-    free(tip->nome);
-    free(tip);
-    tip = NULL;
+int citta_Cancella(citta city){
+    //#define tip (*city)
+    if(!city) return 1;
+    //free(city->nome);
+    free(city);
+    //tip = NULL;
     return 0;
-    #undef tip
-}
-
-int citta_CancellaCitta(citta* cities, int i, int n_citta){
-    if(i>=0 && i<n_citta){
-        free(cities[i]);
-        i++;
-        while(i<n_citta){
-            cities[i-1]=cities[i];
-            i++;
-        }
-        cities=realloc(cities, sizeof(citta)*(n_citta -1));
-        return 1;
-    }
-    else return 0;
+    //#undef tip
 }
 
 int citta_Distanza(citta c1, citta c2){

@@ -236,7 +236,7 @@ grafo grafo_fromString(char* stringa){
     int fd=0;
     int inc;
     char nome[100];
-    sscanf(stringa, "%s %d %d %n", nome, &nv, &np, &inc);
+    sscanf(stringa, "%[^#]# %d %d %n", nome, &nv, &np, &inc);
     fd += inc;
     grafo res = grafo_Nuovo(nv, np);
     grafo_Rinomina(res, nome);
@@ -529,13 +529,14 @@ visita grafo_visit_print(grafo G, int v){
 
 int grafo_Deinit(grafo G){
     if(!G) return 1;
-    free(G->pred);
-    free(G->predG);
-    free(G->colore);
-    free(G->dist);
-    free(G->d);
-    free(G->f);
+    if(G->pred) free(G->pred);
+    if(G->predG) free(G->predG);
+    if(G->colore) free(G->colore);
+    if(G->dist) free(G->dist);
+    if(G->d) free(G->d);
+    if(G->f) free(G->f);
     G->pred = NULL;
+    G->predG = NULL;
     G->colore = NULL;
     G->dist = NULL;
     G->d = NULL;
@@ -838,7 +839,7 @@ char* grafo_toString(grafo G){
     int np = G->npesi;
     char* res = calloc((nv*nv*np)*10, sizeof(char));
     int fd=0;
-    fd += sprintf(res, "%s\n %d %d ", G->nome, nv, np);
+    fd += sprintf(res, "%s# %d %d ", G->nome, nv, np);
 
     int i, j, k;
     if(!MATR){

@@ -29,10 +29,17 @@ void mappa_cittaDecr(mappa map){
     map->NumCitta--;
 }
 
-int mappa_CancellaCitta(mappa map, int i){
-    if(!map) return 1;
-    citta_CancellaCitta(map->cities, i, map->NumCitta);
-    map->NumCitta--;
+int mappa_CancellaCitta(mappa map, int id){
+    if(!map && id >= map->NumCitta) return 1;
+    int i;
+    grafo_RimuoviNodo(map->Voli, id);
+    grafo_RimuoviNodo(map->Ferrovie, id);
+    grafo_RimuoviNodo(map->Autostrade, id);
+    grafo_RimuoviNodo(map->Strade, id);
+    citta_Cancella(map->cities[id]);
+    map->NumCitta -= 1;
+    for (i = id; i < map->NumCitta; i++) map->cities[i] = map->cities[i+1];
+    map->cities = realloc(map->cities, sizeof(citta)*(map->NumCitta));
     return 0;
 }
 

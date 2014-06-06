@@ -15,7 +15,7 @@ typedef struct scitta* citta;
 
 citta citta_Random();
 
-int citta_Cancella(citta* city);
+int citta_Cancella(citta city);
 
 int citta_CancellaCitta(citta* cities, int i, int n_citta);
 

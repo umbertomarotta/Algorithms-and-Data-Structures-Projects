@@ -13,7 +13,7 @@ int main(){
     int num_city, source, dest;
     mappa map = NULL;
     grafo graph=NULL, voli=NULL, ferrovie=NULL, autostrade=NULL, strade=NULL;
-    int scelta = -1;
+    int scelta = -1, id=0;
     while(scelta != 0){
         clear_screen();
         printf("\n [1] Genera Mappa Random\n");
@@ -97,7 +97,7 @@ int main(){
                 printf("Inserire Sorgente e Destinazione:\n");
                 scanf("%d %d",&source,&dest);
                 printf("Da %s a %s\n\n", mappa_getNomeCitta(map, source), mappa_getNomeCitta(map,dest));
-                grafo_getPathM(grafi, source, dest, 0, &ord, &mez);
+                grafo_getPathM(grafi, source, dest, 1, &ord, &mez);
                 printf("Path: %d\n\n", list_size(ord));
                 lista_StampaInteri(ord);
 		        printf("\n\n");
@@ -147,27 +147,15 @@ int main(){
         case 6:
             if(map!=NULL)
             {
-                //citta* cityy;
-                clear_screen();
                 clear_screen();
                 mappa_StampaCitta(map);
-                printf("Inserire ID della città da eliminare\n");
-                scanf("%d", &scelta);
-                //cityy=mappa_getCities(map);
-                voli=grafo_getVoli(map);
-                ferrovie=grafo_getFerrovie(map);
-                autostrade=grafo_getAutostrade(map);
-                strade=grafo_getStrade(map);
-                grafo_RimuoviNodo(voli, scelta);
-                grafo_RimuoviNodo(ferrovie, scelta);
-                grafo_RimuoviNodo(autostrade, scelta);
-                grafo_RimuoviNodo(strade, scelta);
-                mappa_CancellaCitta(map, scelta);
+                printf("Inserire ID della città da eliminare %p\n", map->Voli);
+                scanf("%d", &id);
+                mappa_CancellaCitta(map, id);
                 clear_screen();
                 mappa_StampaCitta(map);
                 printf("Fatto\n");
                 press_enter();
-                //printf("%s eliminata\n", cityy);
             }
             press_enter();
             break;
@@ -190,21 +178,12 @@ int main(){
 int main1(){
     srand(time(NULL));
 
-    grafo g1 = grafo_Random(11, 1, 5, 10);
-    grafo_Rinomina(g1, "azz");
-    char* s = grafo_toString(g1);
-    //printf("%s\n\n", s);
-    grafo g2 = grafo_fromString(s);
-    //grafo g1 = grafo_Nuovo(10, 3);
+    grafo g1 = grafo_Random(10, 2, 1, 10);
+    grafo_Rinomina(g1, "azz ejfeifj efbell");
+    grafo g2 = grafo_fromString(grafo_toString(g1));
     grafo_Stampa(g1);
     printf("\n\n");
-    //grafo_RimuoviNodo(g1, 5);
     grafo_Stampa(g2);
-
-    //grafo_AggiungiArco(g1, 9, 1, 2, 6., 66.);
-    //grafo_Stampa(g1);
-    //grafo_RimuoviArco(g1, 9, 1);
-    //grafo_Stampa(g1);
     return 0;
 }
 
