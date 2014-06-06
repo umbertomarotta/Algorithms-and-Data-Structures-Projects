@@ -24,6 +24,7 @@ int main(){
         printf("\n [5] Rimuovi Collegamento\n");
         printf("\n [6] Rimuovi citta' dalla mappa\n");
         printf("\n [7] Esporta mappa su file\n");
+        printf("\n [8] Importa mappa da file\n");
         printf("\n [0] Esci\n\n");
         printf("Scegli: ");
         scanf("%d",&scelta);
