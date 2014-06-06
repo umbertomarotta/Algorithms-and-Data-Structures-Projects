@@ -769,21 +769,31 @@ int grafo_DijkstraM(lista grafi, int s, int ipeso){
     for(i=0; i<G->nv; i++) list_insert_prior(coda, &i, G->dist[i]);
     int u;
     int num = list_size(grafi);
+    for(i=0; i<num; i++){
+        list_head(grafi, &G2, TRUE);
+        grafo_Deinit(G2);
+        list_append(grafi, &G2);
+    }
     while(list_size(coda)){
         list_head(coda, &u, TRUE);
         grafo_for_each_peso(G, u, ipeso, (iteratore)grafo_iterDijkstra, coda);
         G1 = G;
         for(i=0; i<num; i++){
             list_head(grafi, &G2, TRUE);
-             //printf("poazz: %d \ %d\n", i, num);
-            G2->pred = G1->pred; //memcpy(G1->pred, G->pred, sizeof(int)*G->nv);
-            G2->dist = G1->dist; //memcpy(G1->dist, G->dist, sizeof(int)*G->nv);
-            G2->predG = G1->predG; //memcpy(G1->pred, G->pred, sizeof(int)*G->nv);
-            //printf("[azz]\n");
+            G2->pred = G1->pred;
+            G2->dist = G1->dist;
+            G2->predG = G1->predG;
             grafo_for_each(G2, u, (iteratore)grafo_iterDijkstra, coda);
-            list_append(grafi, &G2);
             G1 = G2;
+            list_append(grafi, &G2);
         }
+    }
+    for(i=0; i<num; i++){
+        list_head(grafi, &G2, TRUE);
+        G2->pred = NULL;
+        G2->dist = NULL;
+        G2->predG = NULL;
+        list_append(grafi, &G2);
     }
     list_prepend(grafi, &G);
     lista_cancella(&coda);
@@ -819,9 +829,10 @@ int grafo_Rinomina(grafo G, char* nome){
     return 1;
 }
 
-int grafo_Ignore(grafo G, int v){
+int grafo_IgnoreToggle(grafo G, int v){
     if(!G || v >= G->nv) return 1;
-    G->ignore[v] = 1;
+    if(!G->ignore[v]) G->ignore[v] = 1;
+    else G->ignore[v] = 1;
     return 0;
 }
 
@@ -870,4 +881,7 @@ double grafo_raggiunge(grafo G, int u, int v){
     //if (G->pred[v] == -1) return 0;
     return G->dist[v];
 }
+
+
+
 

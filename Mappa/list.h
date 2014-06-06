@@ -42,7 +42,6 @@ nodo _nodo_insert_prior(nodo hed, nodo nu);
 nodo _nodo_destroy(nodo hed, void *element, lista list);
 void list_insert_prior(list* list, void *element, double prior);
 void list_update_prior(list* list, void *element, double prior);
-void list_updateall_prior(list *list, void *element, double prior);
 
 void list_new(list *list, int elementSize, freeFunction freeFn);
 void list_destroy(list *list);

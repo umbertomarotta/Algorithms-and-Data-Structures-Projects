@@ -23,19 +23,14 @@
 
 citta citta_Nuova(char* nome, int posx, int posy, int liv){
     citta city = (citta)malloc(sizeof(struct scitta));
-    //city->nome = "prova";
-    if(nome){
-        city->nome=(char*)malloc(strlen(nome)*sizeof(char));
-        strcpy(city->nome,nome);
-    }
-    else city->nome = "NoName City";
+    city->nome = (char*)calloc(100, sizeof(char));
+    if(nome) strcpy(city->nome, nome);
+    else strcpy(city->nome, "NoName City");
     city->posX = posx%WORLD_SIZE;
     city->posY = posy%WORLD_SIZE;
-    //printf("x: %d\n", city->posX);
     city->fazione = 0;
     city->isola = 0;
     city->livello = liv;
-    //city->livello = rand()%CITY_MAXLIV;
     return city;
 }
 
@@ -47,16 +42,9 @@ char* citta_toString(citta c1){
 }
 
 citta citta_fromString(char* s){
-    char* nome;
+    char nome[100];
     int posx, posy, liv;
-    //sscanf(s, "%[^#]# %d %d %d",nome, &posx, &posy, &liv);
-    char *str;
-    nome=strtok(s,"#");
-    strcat(nome,"\0");
-    int i=strlen(nome);
-    posx=atoi(strtok(NULL," "));
-    posy=atoi(strtok(NULL," "));
-    liv=atoi(strtok(NULL,"\n"));
+    sscanf(s, "%[^#]# %d %d %d", nome, &posx, &posy, &liv);
     return citta_Nuova(nome, posx, posy, liv);
 }
 
@@ -138,13 +126,10 @@ citta citta_Random(){
 }
 
 int citta_Cancella(citta city){
-    //#define tip (*city)
     if(!city) return 1;
-    //free(city->nome);
+    free(city->nome);
     free(city);
-    //tip = NULL;
     return 0;
-    //#undef tip
 }
 
 int citta_Distanza(citta c1, citta c2){

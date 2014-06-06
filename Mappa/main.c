@@ -9,12 +9,11 @@
 
 int main(){
     srand(time(NULL));
-    char nomeF[50];
-    FILE* fp=NULL;
-    int num_city, source, dest;
+
+    int num_city, source, dest, scelta = -1, id=0;
+    char yes, nomeF[50];;
     mappa map = NULL;
-    grafo graph=NULL, voli=NULL, ferrovie=NULL, autostrade=NULL, strade=NULL;
-    int scelta = -1, id=0;
+    grafo graph = NULL, voli = NULL, ferrovie = NULL, autostrade = NULL, strade = NULL;
     while(scelta != 0){
         clear_screen();
         printf("\n [1] Genera Mappa Random\n");
@@ -33,82 +32,109 @@ int main(){
             case 1:
                 printf("\nInserisci numero di citta' \n");
                 scanf("%d",&num_city);
-                map = mappa_nuova_hardcode(num_city); 
+                map = mappa_nuova_hardcode(num_city);
             break;
         case 2:
             if(map!=NULL){
                 mappa_StampaCitta(map);
-                printf("\n\nLINKS\n\n");
                 printf("\n\n");
-                grafo_Stampa(grafo_getVoli(map));
-                printf("\n\n");
-                grafo_Stampa(grafo_getFerrovie(map));
-                printf("\n\n");
-                grafo_Stampa(grafo_getAutostrade(map));
-                printf("\n\n");
-                grafo_Stampa(grafo_getStrade(map));
-                printf("\n\n");
-                //printf("%s\n", grafo_toString(grafo_getVoli(map)));
+//                printf("LINKS\n\n");
+//                grafo_Stampa(grafo_getVoli(map));
+//                printf("\n\n");
+//                grafo_Stampa(grafo_getFerrovie(map));
+//                printf("\n\n");
+//                grafo_Stampa(grafo_getAutostrade(map));
+//                printf("\n\n");
+//                grafo_Stampa(grafo_getStrade(map));
+//                printf("\n\n");
+
             }
             else printf("devi prima avere una mappa!\n");
             press_enter();
             break;
         case 3:
             if(map!=NULL){
+
+                mappa_StampaCitta(map);
+                printf("\n\n");
                 lista grafi = lista_grafi();
-                voli=grafo_getVoli(map);
-                ferrovie=grafo_getFerrovie(map);
-                autostrade=grafo_getAutostrade(map);
-                strade=grafo_getStrade(map);
-                list_append(grafi, &(voli));
-                list_append(grafi, &(ferrovie));
-                list_append(grafi, &(autostrade));
+                voli = grafo_getVoli(map);
+                ferrovie = grafo_getFerrovie(map);
+                autostrade = grafo_getAutostrade(map);
+                strade = grafo_getStrade(map);
+
+                printf("Puoi prendere l'aereo? (s/n): ");
+                scanf("%c", &yes);
+                press_enter();
+                if (yes == 's' || yes == 'S')list_append(grafi, &(voli));
+                printf("Puoi prendere il treno? (s/n): ");
+                scanf("%c", &yes);
+                press_enter();
+                if (yes == 's' || yes == 'S') list_append(grafi, &(ferrovie));
+                printf("Puoi prendere strade a pedaggio? (s/n): ");
+                scanf("%c", &yes);
+                press_enter();
+                if (yes == 's' || yes == 'S') list_append(grafi, &(autostrade));
                 list_append(grafi, &(strade));
+
+                printf("Da dove parti? (ID): ");
+                scanf("%d",&source);
+                press_enter();
+                printf("Da dove vorresti arrivare? (ID): ");
+                scanf("%d",&dest);
+                press_enter();
+                printf("Da %s a %s\n\n", mappa_getNomeCitta(map, source), mappa_getNomeCitta(map,dest));
+
                 lista ord = lista_interi();
                 lista mez = lista_stringhe();
-                mappa_StampaCitta(map);
-                printf("Inserire Sorgente e Destinazione:\n");
-                scanf("%d %d",&source,&dest);
-                printf("Da %s a %s\n\n", mappa_getNomeCitta(map, source), mappa_getNomeCitta(map,dest));
                 grafo_getPathM(grafi, source, dest, 0, &ord, &mez);
-                printf("Path: %d\n\n", list_size(ord));
-                lista_StampaInteri(ord);
-		        printf("\n\n");
-		        mappa_stampaListaCitta(map, ord, mez);
-                printf("\n\n");
-                lista_StampaStringhe(mez);
-                printf("\n\n");
-                press_enter();
+		        mappa_stampaPercorso(map, ord, mez);
+		        lista_cancella(&ord);
+		        lista_cancella(&mez);
+		        lista_cancella(&grafi);
             }
             else printf("devi prima avere uno scenario iniziale!\n");
             press_enter();
             break;
         case 4:
             if(map!=NULL){
+                mappa_StampaCitta(map);
+                printf("\n\n");
                 lista grafi = lista_grafi();
-                voli=grafo_getVoli(map);
-                ferrovie=grafo_getFerrovie(map);
-                autostrade=grafo_getAutostrade(map);
-                strade=grafo_getStrade(map);
-                list_append(grafi, &(voli));
-                list_append(grafi, &(ferrovie));
-                list_append(grafi, &(autostrade));
+                voli = grafo_getVoli(map);
+                ferrovie = grafo_getFerrovie(map);
+                autostrade = grafo_getAutostrade(map);
+                strade = grafo_getStrade(map);
+
+                printf("Puoi prendere l'aereo? (s/n): ");
+                scanf("%c", &yes);
+                press_enter();
+                if (yes == 's' || yes == 'S')list_append(grafi, &(voli));
+                printf("Puoi prendere il treno? (s/n): ");
+                scanf("%c", &yes);
+                press_enter();
+                if (yes == 's' || yes == 'S') list_append(grafi, &(ferrovie));
+                printf("Puoi prendere strade a pedaggio? (s/n): ");
+                scanf("%c", &yes);
+                press_enter();
+                if (yes == 's' || yes == 'S') list_append(grafi, &(autostrade));
                 list_append(grafi, &(strade));
+
+                printf("Da dove parti? (ID): ");
+                scanf("%d",&source);
+                press_enter();
+                printf("Da dove vorresti arrivare? (ID): ");
+                scanf("%d",&dest);
+                press_enter();
+                printf("Da %s a %s\n\n", mappa_getNomeCitta(map, source), mappa_getNomeCitta(map,dest));
+
                 lista ord = lista_interi();
                 lista mez = lista_stringhe();
-                mappa_StampaCitta(map);
-                printf("Inserire Sorgente e Destinazione:\n");
-                scanf("%d %d",&source,&dest);
-                printf("Da %s a %s\n\n", mappa_getNomeCitta(map, source), mappa_getNomeCitta(map,dest));
                 grafo_getPathM(grafi, source, dest, 1, &ord, &mez);
-                printf("Path: %d\n\n", list_size(ord));
-                lista_StampaInteri(ord);
-		        printf("\n\n");
-		        mappa_stampaListaCitta(map, ord, mez);
-                printf("\n\n");
-                lista_StampaStringhe(mez);
-                printf("\n\n");
-                press_enter();
+		        mappa_stampaPercorso(map, ord, mez);
+		        lista_cancella(&ord);
+		        lista_cancella(&mez);
+		        lista_cancella(&grafi);
             }
             else printf("devi prima avere uno scenario iniziale!\n");
             press_enter();
@@ -167,21 +193,18 @@ int main(){
             {
                 printf("Inserire il nome del file\n");
                 scanf("%s",nomeF);
-                fp=fopen(nomeF,"w+");
-                if(mappa_mapToFile(map,fp))
+                if( mappa_mapToFile(map, nomeF))
                     printf("Scrittura avvenuta con successo.\n");
                 else printf("Scrittura fallita.\n");
-                fclose(fp);
-                fp=NULL;
             }
             break;
         case 8:
             printf("Inserire il nome del file\n");
             scanf("%s",nomeF);
-            fp=fopen(nomeF,"r");
-            map = mappa_mapFromFile(fp);
+            map = mappa_mapFromFile(nomeF);
             if(map)
-                printf("Export avvenuto con successo.\n");
+                printf("Import avvenuto con successo.\n");
+            else printf("Import fallito\n");
             break;
         case 0:
             clear_screen();

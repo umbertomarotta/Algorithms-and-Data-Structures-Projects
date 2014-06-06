@@ -131,20 +131,6 @@ void lista_RimuoviNodo(lista lis, void *element){
 
 }
 
-void list_updateall_prior(list *list, void *element, double prior){
-    if(!list) return;
-    int num=0, old=0, neu=1;
-    while(old != neu){
-        old = list->logicalLength;
-        list->head = _nodo_destroy(list->head, element, list);
-        neu = list->logicalLength;
-        if(old != neu) num++;
-    }
-    while(num){
-        list_insert_prior(list, element, prior);
-        num--;
-    }
-}
 
 void list_new(list *list, int elementSize, freeFunction freeFn)
 {
