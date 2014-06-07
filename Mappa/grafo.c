@@ -15,10 +15,11 @@
 /*  BASSO LIVELLO   */ //dipende dall'implementazione
 
 void _arco_Free(void* arc){
-    printf("azzfree!\n");
+    //printf("azzfree!\n");
     arco ed = (arco)arc;
-    if(ed) return;
+    if(!ed) return;
     free(ed->peso);
+    //free(ed);
     return;
 }
 
@@ -41,20 +42,6 @@ arco arco_Nuovo(int start, int end, int npesi, ... ){
     arco ret = arco_NuovoNE(start, end, npesi, listPointer);
     va_end( listPointer );
     return ret;
-    /*
-    arco ed = (arco)malloc(sizeof(struct sarco));
-    ed->start = start;
-    ed->end = end;
-    if(npesi){
-        va_list listPointer;
-        va_start( listPointer, npesi );
-        ed->peso = (double*)malloc(sizeof(double)*npesi);
-        int i;
-        for(i=0; i<npesi; i++) ed->peso[i] =  va_arg( listPointer, double );
-        va_end( listPointer );
-    }
-    else ed->peso = NULL;
-    return ed;*/
 }
 
 arco arco_NuovoRAND(int start, int end, int npesi, int max){
@@ -71,14 +58,12 @@ arco arco_NuovoRAND(int start, int end, int npesi, int max){
     return ed;
 }
 
-int arco_Cancella(arco* ed){ //INUSATA
-    #define edg (*ed)
-    if(!ed || !edg) return 1;
+int arco_Cancella(arco edg){ //INUSATA
+    if(!edg) return 1;
     free(edg->peso);
     free(edg);
     edg = NULL;
     return 1;
-    #undef edg
 }
 
 double*** grafo_NuovaMatrice(int num, int npesi){
@@ -183,15 +168,16 @@ grafo grafo_Nuovo(int nv, int npesi){
     return gra;
 }
 
-int grafo_Cancella(grafo *G){
-    #define gra (*G)
-    if(!G || !gra) return 1;
+int grafo_Cancella(grafo gra){
+    //#define gra (*G)
+    if(!gra) return 1;
     int i;
     if (MATR && gra->matr) grafo_CancellaMatrice(gra->matr, gra->nv);
     else if(gra->adj) for (i=0; i<gra->nv; i++){
         list_destroy(&gra->adj[i]);
     }
-    if(gra->matr) free(gra->matr);
+    if(gra->ignore) free(gra->ignore);
+    if(gra->nome) free(gra->nome);
     if(gra->adj) free(gra->adj);
     if(gra->colore) free(gra->colore);
     if(gra->pred) free(gra->pred);
@@ -203,12 +189,14 @@ int grafo_Cancella(grafo *G){
     free(gra);
     gra = NULL;
     return 0;
-    #undef gra
+    //#undef gra
 }
 
 grafo grafo_Random(int nv, int npesi, int conness, int max){
     if(npesi <= 0) npesi = 1;
     grafo gra = (grafo)malloc(sizeof(struct sgrafo));
+    gra->matr = NULL;
+    gra->adj = NULL;
     if(MATR) gra->matr = grafo_NuovaMatriceRandom(nv, npesi, conness, max);
     else gra->adj = grafo_NuovoArrayListeRandom(nv, npesi, conness, max);
     strcpy(gra->nome, "hello");
@@ -221,7 +209,7 @@ grafo grafo_Random(int nv, int npesi, int conness, int max){
     gra->dist = NULL;
     gra->f = NULL;
     gra->d = NULL;
-    gra->ignore = calloc(nv, sizeof(int));
+    gra->ignore = (int*)calloc(nv, sizeof(int));
     gra->tempo = 0;
     gra->ciclico = 0;
     gra->res = NULL;
@@ -258,8 +246,12 @@ grafo grafo_fromString(char* stringa){
                 //printf("%d %d %d\n", i, j, k);
             }
             if(!MATR){
-                if(flag) list_append(&array[i], ed); //matr[i][y] = rand()%(max)+1;
-                free(ed);
+                if(flag){
+                    list_append(&array[i], ed);
+                    free(ed);
+                }
+                else arco_Cancella(ed);
+                ed = NULL;
             }
         }
     }
@@ -298,6 +290,7 @@ int grafo_AggiungiArco(grafo G, int u, int v, int npesi, ... ){
             edge = arco_NuovoNE(u, v, G->npesi, listPointer);
         }
         list_append(list, edge);
+        //arco_Cancella(edge);
         free (edge);
     }
     va_end( listPointer );
@@ -314,18 +307,17 @@ int grafo_RimuoviArco(grafo G, int u, int v){
         else for(i=0;i<npesi;i++) G->matr[u][v][i] = 0;
     }
     else{
-        arco edge = arco_Nuovo(0, 0, 0);
+        arco edge = (arco)malloc(sizeof(struct sarco));
         lista adj = &(G->adj[u]);
         for(i=0; i<list_size(adj); i++){
-            //printf("%p\n", adj);
             list_head(adj, edge, TRUE);
-            //printf("%p\n", adj);
             if (edge->start == u && edge->end == v){
-                arco_Cancella(&edge);
+                arco_Cancella(edge);
                 return 0;
             }
             list_append(adj, edge);
         }
+        free(edge);
     }
     return 1;
 }
@@ -814,7 +806,6 @@ int grafo_getPathM(lista grafi, int s, int t, int ipeso, lista* path, lista* mez
     list_prepend(lis, &curr);
     if (G->predG[curr]) list_prepend(*mezzi, &((G->predG[curr])->nome));
     while(curr != s && curr >= 0){
-        press_enter();
         curr = G->pred[curr];
         list_prepend(lis, &curr);
         if (G->predG[curr] && curr >= 0) list_prepend(*mezzi, &((G->predG[curr])->nome));

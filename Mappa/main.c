@@ -32,10 +32,11 @@ int main(){
             case 1:
                 printf("\nInserisci numero di citta' \n");
                 scanf("%d",&num_city);
+                mappa_cancella(map);
                 map = mappa_nuova_hardcode(num_city);
             break;
         case 2:
-            if(map!=NULL){
+            if(map){
                 mappa_StampaCitta(map);
                 printf("\n\n");
 //                printf("LINKS\n\n");
@@ -53,7 +54,7 @@ int main(){
             press_enter();
             break;
         case 3:
-            if(map!=NULL){
+            if(map){
 
                 mappa_StampaCitta(map);
                 printf("\n\n");
@@ -97,7 +98,7 @@ int main(){
             press_enter();
             break;
         case 4:
-            if(map!=NULL){
+            if(map){
                 mappa_StampaCitta(map);
                 printf("\n\n");
                 lista grafi = lista_grafi();
@@ -139,9 +140,8 @@ int main(){
             else printf("devi prima avere uno scenario iniziale!\n");
             press_enter();
             break;
-
         case 5:
-            if(map!=NULL)
+            if(map)
             {
                 printf("\nSelezionare il tipo di collegamento\n");
                 printf("\n[1] Aereo\n");
@@ -172,9 +172,11 @@ int main(){
                     grafo_RimuoviArco(graph, source, dest);
                 }
             }
+            else printf("devi prima avere una mappa!\n");
+            press_enter();
             break;
         case 6:
-            if(map!=NULL)
+            if(map)
             {
                 clear_screen();
                 mappa_StampaCitta(map);
@@ -186,10 +188,11 @@ int main(){
                 printf("Fatto\n");
                 press_enter();
             }
+            else printf("devi prima avere una mappa!\n");
             press_enter();
             break;
         case 7:
-            if(map!=NULL)
+            if(map)
             {
                 printf("Inserire il nome del file\n");
                 scanf("%s",nomeF);
@@ -197,10 +200,13 @@ int main(){
                     printf("Scrittura avvenuta con successo.\n");
                 else printf("Scrittura fallita.\n");
             }
+            else printf("devi prima avere una mappa!\n");
+            press_enter();
             break;
         case 8:
             printf("Inserire il nome del file\n");
             scanf("%s",nomeF);
+            mappa_cancella(map);
             map = mappa_mapFromFile(nomeF);
             if(map)
                 printf("Import avvenuto con successo.\n");
@@ -224,13 +230,14 @@ int main(){
 
 int main1(){
     srand(time(NULL));
-
-    grafo g1 = grafo_Random(10, 2, 1, 10);
-    grafo_Rinomina(g1, "azz ejfeifj efbell");
-    grafo g2 = grafo_fromString(grafo_toString(g1));
-    grafo_Stampa(g1);
-    printf("\n\n");
-    grafo_Stampa(g2);
+   mappa map;
+    while(1){
+        map = mappa_mapFromFile("asd");
+        grafo_Stampa(map->Strade);
+        press_enter();
+        clear_screen();
+        mappa_cancella(map);
+    }
     return 0;
 }
 

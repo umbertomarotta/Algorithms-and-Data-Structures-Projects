@@ -11,7 +11,8 @@
 #include "utils.h"
 
 #define DIM 1000
-#define FAST 0
+#define FAST 1
+#define MUTE 1
 
 citta* mappa_getCities(mappa map){
     return map->cities;
@@ -50,7 +51,7 @@ int mappa_stampaPercorso(mappa map, lista city, lista mezzi) {
     char nomeR[50];
 
     list_head(city, &curr_city, 1);
-    printf("Ti trovi a %s\n", mappa_getNomeCitta(map, curr_city));
+    printf("Ti trovi a %s (%d)\n", mappa_getNomeCitta(map, curr_city), curr_city);
     while(list_size(mezzi) && list_size(city))
     {
         list_head(mezzi, &nomeR, 1);
@@ -122,7 +123,7 @@ mappa mappa_nuova_hardcode(int numcitta){
             done++;
             if (difftime(time(NULL),tim) >= 1) {
                 clear_screen();
-                printf("CARICAMENTO: %d/%d (%1.2f%%)\n", done, work, (float)(done*100)/work);
+                if (!MUTE) printf("CARICAMENTO: %d/%d (%1.2f%%)\n", done, work, (float)(done*100)/work);
                 tim = time(NULL);
             }
             //printf("azz\n");
@@ -174,12 +175,14 @@ mappa mappa_nuova_hardcode(int numcitta){
 
     /* DEBUG */
     clear_screen();
-    printf("Numero Citta: %d\n", numcitta);
-    printf("Strade Interurbane: %d\n", str);
-    printf("Tratte Autostradali: %d\n", aut);
-    printf("Tratte Ferroviarie: %d\n", tre);
-    printf("Voli: %d\n", vol);
-    printf("\n");
+    if(!MUTE){
+        printf("Numero Citta: %d\n", numcitta);
+        printf("Strade Interurbane: %d\n", str);
+        printf("Tratte Autostradali: %d\n", aut);
+        printf("Tratte Ferroviarie: %d\n", tre);
+        printf("Voli: %d\n", vol);
+        printf("\n");
+    }
     return map;
 }
 
@@ -378,7 +381,7 @@ mappa mappa_mapFromFile(char* nomeF)
     {
         map = (mappa)malloc(sizeof(struct smappa));
         fscanf(fp,"%d ",&(map->NumCitta));
-        strgrafo=(char*)malloc(sizeof(char)*((map->NumCitta*map->NumCitta)*2)*100);
+        strgrafo = (char*)malloc(sizeof(char)*((map->NumCitta*map->NumCitta)*2)*100);
         fscanf(fp,"%f %f ", &(map->Costo_Aereo), &(map->Costo_Treno));
         fscanf(fp,"%f %f ", &(map->Costo_Pedaggio), &(map->Costo_Benzina));
         fscanf(fp,"%d %d ", &(map->Vel_Aereo), &(map->Vel_Treno));
@@ -395,13 +398,8 @@ mappa mappa_mapFromFile(char* nomeF)
         fscanf(fp,"%[^\n]\n",strgrafo);
         //fgets(strgrafo,INT_MAX,fp);
         map->Strade = grafo_fromString(strgrafo);
-        map->cities = calloc(map->NumCitta,sizeof(citta));
-        /*while(i<map->NumCitta)
-        {
-            fscanf(fp,"%s%[^\n]\n",citta);
-            map->cities[i]=citta_fromString(citta);
-            i++;
-        }*/
+        map->cities = calloc(map->NumCitta, sizeof(citta));
+
         city = map->cities;
         for (i=0; i < map->NumCitta; i++){
             fscanf(fp,"%[^\n]\n", strgrafo);
@@ -409,11 +407,24 @@ mappa mappa_mapFromFile(char* nomeF)
             //printf("%s\n",citta);
             city[i] = citta_fromString(strgrafo);
         }
+        free(strgrafo);
         fclose(fp);
         return map;
     }
     fclose(fp);
     return NULL;
+}
+
+int mappa_cancella(mappa map){
+    if(!map) return 1;
+    int i;
+    for (i=0; i < map->NumCitta; i++) citta_Cancella(map->cities[i]);
+    free(map->cities);
+    grafo_Cancella(map->Voli);
+    grafo_Cancella(map->Ferrovie);
+    grafo_Cancella(map->Autostrade);
+    grafo_Cancella(map->Strade);
+    return 1;
 }
 
 

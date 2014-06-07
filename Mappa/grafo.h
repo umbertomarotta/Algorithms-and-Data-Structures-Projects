@@ -54,7 +54,7 @@ list* grafo_NuovoArrayListe(int num);
 list* grafo_NuovoArrayListeRandom(int num, int npesi, int conness, int max);
 
 int grafo_CancellaMatrice(double*** matr, int num);
-int grafo_Cancella(grafo *G);
+int grafo_Cancella(grafo gra);
 int grafo_AggiungiArco(grafo G, int u, int v, int npesi, ... );
 int grafo_RimuoviArco(grafo G, int u, int v);
 int grafo_AggiungiNodi(grafo gra, int num);
