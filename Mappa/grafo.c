@@ -10,7 +10,7 @@
 #include "list.h"
 #include "grafo.h"
 
-#define MATR 1
+#define MATR 0
 
 /*  BASSO LIVELLO   */ //dipende dall'implementazione
 
@@ -468,6 +468,38 @@ int grafo_for_each_peso(grafo G, int u, int ipeso, iteratore iterator, list* cod
     return 0;
 }
 
+int grafo_for_each_pesi(grafo G, int u, iteratoreM iterator, list* coda){
+    assert(iterator != NULL);
+    if(!G || u >= G->nv) return 1;
+    double* pesi = calloc(G->npesi, sizeof(double));
+    if (MATR){
+        int i, y;
+        double v;
+        for(i=0; i<G->nv; i++){
+            for(y=0; y<G->npesi; y++) pesi[y] = G->matr[u][i][y];
+            if (v > 0) {
+                if(!G->ignore[i]) iterator(G, u, i, pesi, coda);
+            }
+        }
+    }
+    else{
+         //list_for_each(&(G->adj[u]), listIterator iterator)
+        int y;
+        arco edge;
+        list* list = &(G->adj[u]);
+        listNode* node = list->head;
+        while(node != NULL) {
+            edge = (arco)node->data;
+            //printf("\n\n%d %d (%.1f)\n\n", edge->start, edge->end ,edge->peso[ipeso]);
+            for(y=0; y<G->npesi; y++) pesi[y] = edge->peso[y];
+            if(!G->ignore[edge->end]) iterator(G, edge->start, edge->end, pesi, coda);
+            node = node->next;
+        }
+    }
+    free(pesi);
+    return 0;
+}
+
 int grafo_getPeso(grafo G, int u, int v){ //INUSATA
     if(!G || u >= G->nv || v >= G->nv) return 0;
     if(MATR) return G->matr[u][v][0];
@@ -688,10 +720,9 @@ int grafo_Ciclico(grafo G){
 
 iteratore grafo_iterDijkstra(grafo G, int u, int v, double peso, lista coda){
     if(!G || u >= G->nv || v >= G->nv) return NULL;
-    int ip = G->tempo;
-    double alt = G->dist[u][ip] + peso;
-    if(alt < G->dist[v][ip] && G->dist[u][ip] != DBL_MAX){
-        G->dist[v][ip] = alt; //G->dist[u] +
+    double alt = G->dist[u][0] + peso;
+    if(alt < G->dist[v][0] && G->dist[u][0] != DBL_MAX){
+        G->dist[v][0] = alt; //G->dist[u] +
         G->pred[v] = u;
         G->predG[v] = G;
         list_update_prior(coda, &v, alt);
@@ -699,13 +730,19 @@ iteratore grafo_iterDijkstra(grafo G, int u, int v, double peso, lista coda){
     return NULL;
 }
 
-iteratore grafo_iterUpdate(grafo G, int u, int v, double peso, lista coda){
+iteratoreM grafo_iterDijkstraM(grafo G, int u, int v, double* peso, lista coda){
     if(!G || u >= G->nv || v >= G->nv) return NULL;
-    int ip = G->tempo;
-    //int alt = G->dist[u][ip] + peso;
-    //if(alt < G->dist[v][ip] && G->dist[u][ip] != DBL_MAX){
-    G->dist[v][ip] =  G->dist[u][ip] + peso;
-
+    int ip = G->tempo, i;
+//    for(i=0; i<G->npesi; i++) printf("%.1f ",peso[i]);
+//    printf("\n\n");
+//    press_enter();
+    double alt = G->dist[u][ip] + peso[ip];
+    if(alt < G->dist[v][ip] && G->dist[u][ip] != DBL_MAX){
+        for(i=0; i<G->npesi; i++) G->dist[v][i] = G->dist[u][i] + peso[i];
+        G->pred[v] = u;
+        G->predG[v] = G;
+        list_update_prior(coda, &v, alt);
+    }
     return NULL;
 }
 
@@ -768,14 +805,14 @@ int grafo_getPath(grafo G, int s, int t, lista* path){
 int grafo_DijkstraM(lista grafi, int s, int ipeso){
     if(!grafi) return 1;
     grafo G, G1, G2;
+    int i, y;
     list_head(grafi, &G, TRUE);
     if(!G || s >= G->nv) return 1;
     grafo_Init(G);
     G->pred[s] = -1;
     G->predG[s] = NULL;
-    G->dist[s][ipeso] = 0;
+    for(i=0; i<G->npesi; i++) G->dist[s][i] = 0;
     lista coda = lista_interi();
-    int i, y;
     for(i=0; i<G->nv; i++) list_insert_prior(coda, &i, G->dist[i][ipeso]);
     int u;
     int num = list_size(grafi);
@@ -790,7 +827,7 @@ int grafo_DijkstraM(lista grafi, int s, int ipeso){
         //printf("azz21\n");
         list_head(coda, &u, TRUE);
         G->tempo = ipeso;
-        grafo_for_each_peso(G, u, ipeso, (iteratore)grafo_iterDijkstra, coda);
+        grafo_for_each_pesi(G, u, (iteratoreM)grafo_iterDijkstraM, coda);
         G1 = G;
         //printf("azz22\n");
         for(i=0; i<num; i++){
@@ -799,7 +836,7 @@ int grafo_DijkstraM(lista grafi, int s, int ipeso){
             G2->dist = G1->dist;
             G2->predG = G1->predG;
             G2->tempo = ipeso;
-            grafo_for_each_peso(G2, u, ipeso, (iteratore)grafo_iterDijkstra, coda);
+            grafo_for_each_pesi(G2, u, (iteratoreM)grafo_iterDijkstraM, coda);
             G1 = G2;
             list_append(grafi, &G2);
         }
@@ -807,10 +844,6 @@ int grafo_DijkstraM(lista grafi, int s, int ipeso){
     }
     //printf("azz3\n");
     for(i=0; i<num; i++){
-        for(y=0; y < G->npesi; y++) if(y!=ipeso){
-            G->tempo = y;
-            grafo_for_each_peso(G, i, y, (iteratore)grafo_iterDijkstra, coda);
-        }
         list_head(grafi, &G2, TRUE);
         G2->pred = NULL;
         G2->dist = NULL;

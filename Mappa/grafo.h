@@ -34,6 +34,7 @@ struct sarco{
 typedef struct sgrafo* grafo;
 typedef struct sarco* arco;
 
+typedef int (*iteratoreM)(grafo, int, int, double*, lista);
 typedef int (*iteratore)(grafo, int, int, double, lista);
 typedef int (*visita)(grafo, int);
 
@@ -61,6 +62,7 @@ int grafo_AggiungiNodi(grafo gra, int num);
 int grafo_RimuoviNodo(grafo gra, int id);
 int grafo_getPeso(grafo G, int u, int v);
 int grafo_for_each_peso(grafo G, int u, int ipeso, iteratore iterator, list* coda);
+int grafo_for_each_pesi(grafo G, int u, iteratoreM iterator, list* coda);
 int grafo_for_each(grafo G, int u, iteratore iterator, lista coda);
 
 /*  ALTO LIVELLO   */ //Non dipende dall'implementazione
@@ -75,6 +77,7 @@ iteratore grafo_DFSiter(grafo G, int u, int v, double peso, lista coda);
 iteratore grafo_DFSciclico(grafo G, int u, int v, double peso, lista coda);
 iteratore grafo_iterDijkstra(grafo G, int u, int v, double peso, lista coda);
 iteratore _grafo_toString(grafo G, int u, int v, double peso, lista coda);
+iteratoreM grafo_iterDijkstraM(grafo G, int u, int v, double* peso, lista coda);
 
 char* grafo_toString(grafo G);
 int grafo_Init(grafo G);

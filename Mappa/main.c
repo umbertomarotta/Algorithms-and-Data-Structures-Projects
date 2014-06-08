@@ -58,7 +58,6 @@ int main(){
             break;
         case 3:
             if(map){
-
                 mappa_StampaCitta(map);
                 printf("\n\n");
                 lista grafi = lista_grafi();
@@ -94,7 +93,7 @@ int main(){
                 if(!grafo_getPathM(grafi, source, dest, 0, &ord, &mez)){
                     list_head(grafi, &graph, FALSE);
                     printf("Ti ci vorranno %.1f Ore\n", graph->dist[dest][0]);
-                    //printf("Dovrai spendere %.1f Ore\n", graph->dist[dest][1]);
+                    printf("Ma dovrai spendere %.1f Euro\n", graph->dist[dest][1]);
                 }
 		        mappa_stampaPercorso(map, ord, mez);
 		        lista_cancella(&ord);
@@ -138,7 +137,11 @@ int main(){
 
                 lista ord = lista_interi();
                 lista mez = lista_stringhe();
-                grafo_getPathM(grafi, source, dest, 1, &ord, &mez);
+                if(!grafo_getPathM(grafi, source, dest, 1, &ord, &mez)){
+                    list_head(grafi, &graph, FALSE);
+                    printf("Dovrai spendere %.1f Euro\n", graph->dist[dest][1]);
+                    printf("Ma ci vorranno %.1f Ore\n", graph->dist[dest][0]);
+                }
 		        mappa_stampaPercorso(map, ord, mez);
 		        lista_cancella(&ord);
 		        lista_cancella(&mez);
