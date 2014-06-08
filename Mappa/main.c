@@ -7,6 +7,8 @@
 #include "mappa.h"
 #include "utils.h"
 
+int DEBUG=0;
+
 int main(){
     srand(time(NULL));
 
@@ -211,6 +213,7 @@ int main(){
             if(map)
                 printf("Import avvenuto con successo.\n");
             else printf("Import fallito\n");
+	    DEBUG++;
             break;
         case 0:
             clear_screen();

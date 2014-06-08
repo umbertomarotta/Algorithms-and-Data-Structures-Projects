@@ -174,10 +174,11 @@ int grafo_Cancella(grafo gra){
     int i;
     if (MATR && gra->matr) grafo_CancellaMatrice(gra->matr, gra->nv);
     else if(gra->adj) for (i=0; i<gra->nv; i++){
-        list_destroy(&gra->adj[i]);
+	if(&gra->adj[i])
+            list_destroy(&gra->adj[i]);
     }
     if(gra->ignore) free(gra->ignore);
-    if(gra->nome) free(gra->nome);
+    //if(gra->nome) free(gra->nome);
     if(gra->adj) free(gra->adj);
     if(gra->colore) free(gra->colore);
     if(gra->pred) free(gra->pred);
