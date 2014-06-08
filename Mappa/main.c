@@ -7,13 +7,12 @@
 #include "mappa.h"
 #include "utils.h"
 
-int DEBUG=0;
-
 int main(){
     srand(time(NULL));
 
     int num_city, source, dest, scelta = -1, id=0;
-    char yes, nomeF[50];;
+    char yes, nomeF[50];
+    double tempo, costo, dist;
     mappa map = NULL;
     grafo graph = NULL, voli = NULL, ferrovie = NULL, autostrade = NULL, strade = NULL;
     while(scelta != 0){
@@ -26,6 +25,8 @@ int main(){
         printf("\n [6] Rimuovi citta' dalla mappa\n");
         printf("\n [7] Esporta mappa su file\n");
         printf("\n [8] Importa mappa da file\n");
+        printf("\n [9] Aggiungi Collegamento\n");
+        printf("\n [10] Aggiungi citta' alla mappa\n");
         printf("\n [0] Esci\n\n");
         printf("Scegli: ");
         scanf("%d",&scelta);
@@ -90,7 +91,11 @@ int main(){
 
                 lista ord = lista_interi();
                 lista mez = lista_stringhe();
-                grafo_getPathM(grafi, source, dest, 0, &ord, &mez);
+                if(!grafo_getPathM(grafi, source, dest, 0, &ord, &mez)){
+                    list_head(grafi, &graph, FALSE);
+                    printf("Ti ci vorranno %.1f Ore\n", graph->dist[dest][0]);
+                    //printf("Dovrai spendere %.1f Ore\n", graph->dist[dest][1]);
+                }
 		        mappa_stampaPercorso(map, ord, mez);
 		        lista_cancella(&ord);
 		        lista_cancella(&mez);
@@ -213,7 +218,75 @@ int main(){
             if(map)
                 printf("Import avvenuto con successo.\n");
             else printf("Import fallito\n");
-	    DEBUG++;
+            break;
+        case 9:
+            if(map)
+            {
+                do{
+                    printf("Inserire Sorgente e Destinazione\n");
+                    scanf("%d %d", &source, &dest);
+                } while(source < 0 || dest < 0 || source >= map->NumCitta || dest >= map->NumCitta);
+                press_enter();
+                printf("\nSelezionare il tipo di collegamento\n");
+                printf("\n[1] Aereo\n");
+                printf("\n[2] Ferroviario\n");
+                printf("\n[3] Autostradale\n");
+                printf("\n[4] Stradale\n");
+                scanf("%d",&scelta);
+                graph = NULL;
+                dist = (double)citta_Distanza(map->cities[source], map->cities[dest]);
+                switch (scelta)
+                {
+                    case 1:
+                        graph = grafo_getVoli(map);
+                        tempo = (dist/map->Vel_Aereo);
+                        costo = (dist*map->Costo_Aereo);
+                        break;
+                    case 2:
+                        graph = grafo_getFerrovie(map);
+                        tempo = (dist/map->Vel_Treno);
+                        costo = (dist*map->Costo_Treno);
+                        break;
+                    case 3:
+                        graph = grafo_getAutostrade(map);
+                        tempo = (dist/map->Vel_Autostrade);
+                        costo = (dist*(map->Costo_Pedaggio + map->Costo_Benzina));
+                        break;
+                    case 4:
+                        graph = grafo_getStrade(map);
+                        tempo = dist/map->Vel_Strade;
+                        costo = dist*map->Costo_Pedaggio;
+                        break;
+                }
+                if(graph!=NULL)
+                {
+                    grafo_AggiungiArco(graph, source, dest, 2, tempo, costo);
+                }
+            }
+            else printf("devi prima avere una mappa!\n");
+            press_enter();
+            break;
+        case 10:
+            if(map)
+            {
+                clear_screen();
+                mappa_StampaCitta(map);
+                printf("\n\nInserire il nome della città da aggiungere: ");
+                scanf("%s",nomeF);
+                printf("Inserire la coppia di coordinate: ");
+                scanf("%d %d", &source, &dest);
+                source = source%WORLD_SIZE;
+                dest = dest%WORLD_SIZE;
+                printf("Inserire il livello: ");
+                scanf("%d", &id);
+                mappa_AggiungiCitta(map, nomeF, source, dest, id);
+                clear_screen();
+                mappa_StampaCitta(map);
+                printf("Fatto\n");
+                press_enter();
+            }
+            else printf("devi prima avere una mappa!\n");
+            press_enter();
             break;
         case 0:
             clear_screen();

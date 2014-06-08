@@ -44,5 +44,6 @@ int mappa_mapToFile(mappa map, char* nomeF);
 mappa mappa_mapFromFile(char* nomeF);
 
 int mappa_cancella(mappa map);
+int mappa_AggiungiCitta(mappa map, char* nome, int posx, int posy, int liv);
 
 #endif

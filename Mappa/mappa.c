@@ -68,7 +68,6 @@ int mappa_stampaPercorso(mappa map, lista city, lista mezzi) {
     return 0;
 }
 
-
 grafo grafo_getVoli(mappa map){
     return map->Voli;
 }
@@ -426,6 +425,21 @@ int mappa_cancella(mappa map){
     grafo_Cancella(map->Strade);
     return 1;
 }
+
+int mappa_AggiungiCitta(mappa map, char* nome, int posx, int posy, int liv){
+    if(!map) return 1;
+    map->NumCitta += 1;
+    if(map->NumCitta == 1) map->cities = calloc(map->NumCitta, sizeof(citta));
+    else map->cities = realloc(map->cities, sizeof(citta)*map->NumCitta);
+    map->cities[map->NumCitta-1] = citta_Nuova(nome, posx, posy, liv);
+    grafo_AggiungiNodi(map->Voli, 1);
+    grafo_AggiungiNodi(map->Ferrovie, 1);
+    grafo_AggiungiNodi(map->Autostrade, 1);
+    grafo_AggiungiNodi(map->Strade, 1);
+    return 0;
+}
+
+
 
 
 

@@ -12,7 +12,7 @@ struct sgrafo{
     int npesi;
 
     /*  ALTO LIVELLO   */
-    double* dist;
+    double** dist;
     char nome[50];
     char* colore;
     int* pred;

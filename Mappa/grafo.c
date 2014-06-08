@@ -10,7 +10,7 @@
 #include "list.h"
 #include "grafo.h"
 
-#define MATR 0
+#define MATR 1
 
 /*  BASSO LIVELLO   */ //dipende dall'implementazione
 
@@ -174,11 +174,10 @@ int grafo_Cancella(grafo gra){
     int i;
     if (MATR && gra->matr) grafo_CancellaMatrice(gra->matr, gra->nv);
     else if(gra->adj) for (i=0; i<gra->nv; i++){
-	if(&gra->adj[i])
-            list_destroy(&gra->adj[i]);
+        if(&gra->adj[i]) list_destroy(&gra->adj[i]);
     }
     if(gra->ignore) free(gra->ignore);
-    //if(gra->nome) free(gra->nome);
+    if(gra->nome) free(gra->nome);
     if(gra->adj) free(gra->adj);
     if(gra->colore) free(gra->colore);
     if(gra->pred) free(gra->pred);
@@ -489,19 +488,22 @@ int grafo_getPeso(grafo G, int u, int v){ //INUSATA
 int grafo_Init(grafo G){
     if(!G) return 1;
     int num = G->nv;
+    int i , j;
     if (!G->colore) G->colore = (char*)malloc(sizeof(char)*num);
     if (!G->pred) G->pred = (int*)malloc(sizeof(int)*num);
-    if (!G->dist) G->dist = (double*)malloc(sizeof(double)*num);
+    if (!G->dist) {
+        G->dist = (double**)malloc(sizeof(double*)*num);
+        for(i=0; i < num; i++) G->dist[i] = (double*)malloc(sizeof(double)*(G->npesi));
+    }
     if (!G->f) G->f = (int*)malloc(sizeof(int)*num);
     if (!G->d) G->d = (int*)malloc(sizeof(int)*num);
     if (!G->predG) G->predG = (grafo*)malloc(sizeof(grafo)*num);
-    int i;
     //printf("asfiajfsiu\n");
     for(i=0; i<(G->nv); i++){
         G->pred[i] = -1;
         G->predG[i] = NULL;
         G->colore[i] = 'b';
-        G->dist[i] = DBL_MAX;
+        for(j=0; j<(G->npesi); j++) G->dist[i][j] = DBL_MAX;
         G->f[i] = 0;
         G->d[i] = 0;
     }
@@ -522,10 +524,14 @@ visita grafo_visit_print(grafo G, int v){
 
 int grafo_Deinit(grafo G){
     if(!G) return 1;
+    int i;
     if(G->pred) free(G->pred);
     if(G->predG) free(G->predG);
     if(G->colore) free(G->colore);
-    if(G->dist) free(G->dist);
+    if(G->dist){
+        for(i=0; i < G->nv; i++) if(G->dist[i]) free(G->dist[i]);
+        free(G->dist);
+    }
     if(G->d) free(G->d);
     if(G->f) free(G->f);
     G->pred = NULL;
@@ -566,7 +572,7 @@ iteratore grafo_BFSiter(grafo G, int u, int v, double peso, lista coda){
     if(!G || u >= G->nv || v >= G->nv) return NULL;
     if(G->colore[v] == 'b'){
         G->colore[v] = 'g';
-        G->dist[v] = G->dist[u] + 1;
+        G->dist[v][0] = G->dist[u][0] + 1;
         G->pred[v] = u;
         list_append(coda, &v);
     }
@@ -581,7 +587,7 @@ int grafo_BFS(grafo G, int s, iteratore iter, visita visit){
     grafo_Init(G);
     G->colore[s] = 'g';
     G->pred[s] = -1;
-    G->dist[s] = 0;
+    G->dist[s][0] = 0;
     lista coda = lista_interi();
     list_append(coda, &s);
     int u;
@@ -682,13 +688,24 @@ int grafo_Ciclico(grafo G){
 
 iteratore grafo_iterDijkstra(grafo G, int u, int v, double peso, lista coda){
     if(!G || u >= G->nv || v >= G->nv) return NULL;
-    int alt = G->dist[u] + peso;
-    if(alt < G->dist[v] && G->dist[u] != DBL_MAX){
-        G->dist[v] = alt; //G->dist[u] +
+    int ip = G->tempo;
+    double alt = G->dist[u][ip] + peso;
+    if(alt < G->dist[v][ip] && G->dist[u][ip] != DBL_MAX){
+        G->dist[v][ip] = alt; //G->dist[u] +
         G->pred[v] = u;
         G->predG[v] = G;
         list_update_prior(coda, &v, alt);
     }
+    return NULL;
+}
+
+iteratore grafo_iterUpdate(grafo G, int u, int v, double peso, lista coda){
+    if(!G || u >= G->nv || v >= G->nv) return NULL;
+    int ip = G->tempo;
+    //int alt = G->dist[u][ip] + peso;
+    //if(alt < G->dist[v][ip] && G->dist[u][ip] != DBL_MAX){
+    G->dist[v][ip] =  G->dist[u][ip] + peso;
+
     return NULL;
 }
 
@@ -697,10 +714,10 @@ int grafo_Dijkstra(grafo G, int s){
 
     grafo_Init(G);
     G->pred[s] = -1;
-    G->dist[s] = 0;
+    G->dist[s][0] = 0;
     lista coda = lista_double();
     int i;
-    for(i=0; i<G->nv; i++) list_insert_prior(coda, &i, G->dist[i]);
+    for(i=0; i<G->nv; i++) list_insert_prior(coda, &i, G->dist[i][0]);
     int u;
     while(list_size(coda)){
         list_head(coda, &u, TRUE);
@@ -715,10 +732,10 @@ int grafo_DijkstraT(grafo G, int s, int t){
 
     grafo_Init(G);
     G->pred[s] = -1;
-    G->dist[s] = 0;
+    G->dist[s][0] = 0;
     lista coda = lista_interi();
     int i;
-    for(i=0; i<G->nv; i++) list_insert_prior(coda, &i, G->dist[i]);
+    for(i=0; i<G->nv; i++) list_insert_prior(coda, &i, G->dist[i][0]);
     int u;
     while(list_size(coda)){
         list_head(coda, &u, TRUE);
@@ -731,10 +748,10 @@ int grafo_DijkstraT(grafo G, int s, int t){
 
 int grafo_getPath(grafo G, int s, int t, lista* path){
     #define lis (*path)
-    //lista lis = lista_interi();
-    if(!G || !path || !lis || s >= G->nv || t >= G->nv) return 1;
     assert(lis->elementSize == sizeof(int));
+    if(!G || !path || !lis || s >= G->nv || t >= G->nv) return 1;
     grafo_Dijkstra(G, s);
+    if(t!=s && G->pred[t] == -1) return 1;
     int curr = t;
     list_prepend(lis, &curr);
     //int num = G->nv +1;
@@ -756,38 +773,52 @@ int grafo_DijkstraM(lista grafi, int s, int ipeso){
     grafo_Init(G);
     G->pred[s] = -1;
     G->predG[s] = NULL;
-    G->dist[s] = 0;
+    G->dist[s][ipeso] = 0;
     lista coda = lista_interi();
-    int i;
-    for(i=0; i<G->nv; i++) list_insert_prior(coda, &i, G->dist[i]);
+    int i, y;
+    for(i=0; i<G->nv; i++) list_insert_prior(coda, &i, G->dist[i][ipeso]);
     int u;
     int num = list_size(grafi);
+    //printf("azz1\n");
     for(i=0; i<num; i++){
         list_head(grafi, &G2, TRUE);
         grafo_Deinit(G2);
         list_append(grafi, &G2);
     }
+    //printf("azz2\n");
     while(list_size(coda)){
+        //printf("azz21\n");
         list_head(coda, &u, TRUE);
+        G->tempo = ipeso;
         grafo_for_each_peso(G, u, ipeso, (iteratore)grafo_iterDijkstra, coda);
         G1 = G;
+        //printf("azz22\n");
         for(i=0; i<num; i++){
             list_head(grafi, &G2, TRUE);
             G2->pred = G1->pred;
             G2->dist = G1->dist;
             G2->predG = G1->predG;
-            grafo_for_each(G2, u, (iteratore)grafo_iterDijkstra, coda);
+            G2->tempo = ipeso;
+            grafo_for_each_peso(G2, u, ipeso, (iteratore)grafo_iterDijkstra, coda);
             G1 = G2;
             list_append(grafi, &G2);
         }
+        //printf("azz23\n");
     }
+    //printf("azz3\n");
     for(i=0; i<num; i++){
+        for(y=0; y < G->npesi; y++) if(y!=ipeso){
+            G->tempo = y;
+            grafo_for_each_peso(G, i, y, (iteratore)grafo_iterDijkstra, coda);
+        }
         list_head(grafi, &G2, TRUE);
         G2->pred = NULL;
         G2->dist = NULL;
         G2->predG = NULL;
+        G2->tempo = 0;
         list_append(grafi, &G2);
     }
+    G->tempo = 0;
     list_prepend(grafi, &G);
     lista_cancella(&coda);
     return 0;
@@ -802,7 +833,7 @@ int grafo_getPathM(lista grafi, int s, int t, int ipeso, lista* path, lista* mez
     list_head(grafi, &G, FALSE);
     if(!G || s >= G->nv || t >= G->nv) return 1;
     grafo_DijkstraM(grafi, s, ipeso);
-    if(G->pred[t] == -1) return 1;
+    if(t!=s && G->pred[t] == -1) return 1;
     int curr = t;
     list_prepend(lis, &curr);
     if (G->predG[curr]) list_prepend(*mezzi, &((G->predG[curr])->nome));
@@ -873,7 +904,7 @@ double grafo_raggiunge(grafo G, int u, int v){
     if(!G || u >= G->nv || v >= G->nv) return 0;
     grafo_DijkstraT(G, u, v);
     //if (G->pred[v] == -1) return 0;
-    return G->dist[v];
+    return G->dist[v][0];
 }
 
 
