@@ -177,7 +177,7 @@ int grafo_Cancella(grafo gra){
         if(&gra->adj[i]) list_destroy(&gra->adj[i]);
     }
     if(gra->ignore) free(gra->ignore);
-    if(gra->nome) free(gra->nome);
+    //if(gra->nome) free(gra->nome);
     if(gra->adj) free(gra->adj);
     if(gra->colore) free(gra->colore);
     if(gra->pred) free(gra->pred);

@@ -10,7 +10,7 @@
 int main(){
     srand(time(NULL));
 
-    int num_city, source, dest, scelta = -1, id=0;
+    int num_city, source, dest, scelta = -1, id=0, i;
     char yes, nomeF[50];
     double tempo, costo, dist;
     mappa map = NULL;
@@ -69,15 +69,66 @@ int main(){
                 printf("Puoi prendere l'aereo? (s/n): ");
                 scanf("%c", &yes);
                 press_enter();
-                if (yes == 's' || yes == 'S')list_append(grafi, &(voli));
+                if (yes == 's' || yes == 'S'){
+                    printf("Per tutte le citta'?(s/n): ");
+                    scanf("%c", &yes);
+                    press_enter();
+                    if (yes != 's' && yes != 'S'){
+                        printf("Quante citta' vuoi ingorare?: ");
+                        scanf("%d", &dest);
+                        press_enter();
+                        if (dest) printf("Inserisci le %d citta: ", dest);
+                        for(i=0; i<dest; i++){
+                            scanf("%d", &id);
+                            if(id >= 0 && id < voli->nv) voli->ignore[id] = 1;
+                        }
+                        press_enter();
+
+                    }
+                    list_append(grafi, &(voli));
+                }
                 printf("Puoi prendere il treno? (s/n): ");
                 scanf("%c", &yes);
                 press_enter();
-                if (yes == 's' || yes == 'S') list_append(grafi, &(ferrovie));
+                if (yes == 's' || yes == 'S'){
+                    printf("Per tutte le citta'?(s/n): ");
+                    scanf("%c", &yes);
+                    press_enter();
+                    if (yes != 's' && yes != 'S'){
+                        printf("Quante citta' vuoi ingorare?: ");
+                        scanf("%d", &dest);
+                        press_enter();
+                        if (dest) printf("Inserisci le %d citta: ", dest);
+                        for(i=0; i<dest; i++){
+                            scanf("%d", &id);
+                            if(id >= 0 && id < ferrovie->nv) ferrovie->ignore[id] = 1;
+                        }
+                        press_enter();
+
+                    }
+                    list_append(grafi, &(ferrovie));
+                }
                 printf("Puoi prendere strade a pedaggio? (s/n): ");
                 scanf("%c", &yes);
                 press_enter();
-                if (yes == 's' || yes == 'S') list_append(grafi, &(autostrade));
+                if (yes == 's' || yes == 'S'){
+                    printf("Per tutte le citta'?(s/n): ");
+                    scanf("%c", &yes);
+                    press_enter();
+                    if (yes != 's' && yes != 'S'){
+                        printf("Quante citta' vuoi ingorare?: ", dest);
+                        scanf("%d", &dest);
+                        press_enter();
+                        if (dest) printf("Inserisci le %d citta: ");
+                        for(i=0; i<dest; i++){
+                            scanf("%d", &id);
+                            if(id >= 0 && id < autostrade->nv) autostrade->ignore[id] = 1;
+                        }
+                        press_enter();
+
+                    }
+                    list_append(grafi, &(autostrade));
+                }
                 list_append(grafi, &(strade));
 
                 printf("Da dove parti? (ID): ");
@@ -96,6 +147,13 @@ int main(){
                     printf("Ma dovrai spendere %.1f Euro\n", graph->dist[dest][1]);
                 }
 		        mappa_stampaPercorso(map, ord, mez);
+
+                for(i=0; i< strade->nv; i++){
+                    strade->ignore[id] = 0;
+                    autostrade->ignore[id] = 0;
+                    ferrovie->ignore[id] = 0;
+                    voli->ignore[id] = 0;
+                }
 		        lista_cancella(&ord);
 		        lista_cancella(&mez);
 		        lista_cancella(&grafi);
@@ -116,15 +174,66 @@ int main(){
                 printf("Puoi prendere l'aereo? (s/n): ");
                 scanf("%c", &yes);
                 press_enter();
-                if (yes == 's' || yes == 'S')list_append(grafi, &(voli));
+                if (yes == 's' || yes == 'S'){
+                    printf("Per tutte le citta'?(s/n): ");
+                    scanf("%c", &yes);
+                    press_enter();
+                    if (yes != 's' && yes != 'S'){
+                        printf("Quante citta' vuoi ingorare?: ");
+                        scanf("%d", &dest);
+                        press_enter();
+                        if (dest) printf("Inserisci le %d citta: ", dest);
+                        for(i=0; i<dest; i++){
+                            scanf("%d", &id);
+                            if(id >= 0 && id < voli->nv) voli->ignore[id] = 1;
+                        }
+                        press_enter();
+
+                    }
+                    list_append(grafi, &(voli));
+                }
                 printf("Puoi prendere il treno? (s/n): ");
                 scanf("%c", &yes);
                 press_enter();
-                if (yes == 's' || yes == 'S') list_append(grafi, &(ferrovie));
+                if (yes == 's' || yes == 'S'){
+                    printf("Per tutte le citta'?(s/n): ");
+                    scanf("%c", &yes);
+                    press_enter();
+                    if (yes != 's' && yes != 'S'){
+                        printf("Quante citta' vuoi ingorare?: ");
+                        scanf("%d", &dest);
+                        press_enter();
+                        if (dest) printf("Inserisci le %d citta: ", dest);
+                        for(i=0; i<dest; i++){
+                            scanf("%d", &id);
+                            if(id >= 0 && id < ferrovie->nv) ferrovie->ignore[id] = 1;
+                        }
+                        press_enter();
+
+                    }
+                    list_append(grafi, &(ferrovie));
+                }
                 printf("Puoi prendere strade a pedaggio? (s/n): ");
                 scanf("%c", &yes);
                 press_enter();
-                if (yes == 's' || yes == 'S') list_append(grafi, &(autostrade));
+                if (yes == 's' || yes == 'S'){
+                    printf("Per tutte le citta'?(s/n): ");
+                    scanf("%c", &yes);
+                    press_enter();
+                    if (yes != 's' && yes != 'S'){
+                        printf("Quante citta' vuoi ingorare?: ");
+                        scanf("%d", &dest);
+                        press_enter();
+                        if (dest) printf("Inserisci le %d citta: ", dest);
+                        for(i=0; i<dest; i++){
+                            scanf("%d", &id);
+                            if(id >= 0 && id < autostrade->nv) autostrade->ignore[id] = 1;
+                        }
+                        press_enter();
+
+                    }
+                    list_append(grafi, &(autostrade));
+                }
                 list_append(grafi, &(strade));
 
                 printf("Da dove parti? (ID): ");
@@ -143,6 +252,13 @@ int main(){
                     printf("Ma ci vorranno %.1f Ore\n", graph->dist[dest][0]);
                 }
 		        mappa_stampaPercorso(map, ord, mez);
+
+                for(i=0; i< strade->nv; i++){
+                    strade->ignore[id] = 0;
+                    autostrade->ignore[id] = 0;
+                    ferrovie->ignore[id] = 0;
+                    voli->ignore[id] = 0;
+                }
 		        lista_cancella(&ord);
 		        lista_cancella(&mez);
 		        lista_cancella(&grafi);
