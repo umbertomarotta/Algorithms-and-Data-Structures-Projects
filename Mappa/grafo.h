@@ -41,7 +41,6 @@ typedef int (*visita)(grafo, int);
 /*  BASSO LIVELLO   */ //dipende dall'implementazione
 
 arco arco_Nuovo(int start, int end, int npesi, ... );
-//arco arco_NuovoNE(int start, int end, int npesi, va_list listPointer);
 arco arco_NuovoRAND(int start, int end, int npesi, int max);
 
 grafo grafo_Nuovo(int nv, int npesi);

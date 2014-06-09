@@ -58,7 +58,6 @@ bool _lista_StampaStringhe(void *data) {
 }
 
 void lista_StampaStringhe(lista lis){
-        //assert(lis->elementSize == sizeof(char*));
         if(!lis) return;
         list_for_each(lis, (listIterator)_lista_StampaStringhe);
         printf("N");
@@ -85,7 +84,6 @@ nodo _nodo_insert_prior(nodo hed, nodo nu){
 nodo _nodo_destroy(nodo hed, void *element, lista list){
     if(!hed || !list) return hed;
     if(*((int*)hed->data) == *(int*)element){
-    //if(*(hed->data) == *element){
         nodo ret = hed->next;
         if(list->freeFn) {
             list->freeFn(hed->data);
@@ -112,7 +110,6 @@ void list_insert_prior(list *list, void *element, double prior){
         list->head = list->tail = node;
     } else {
         list->head = _nodo_insert_prior(list->head, node);
-        //list->tail->next = node;
         if(!node->next) list->tail = node;
     }
 

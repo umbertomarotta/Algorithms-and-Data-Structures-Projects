@@ -8,8 +8,6 @@
 #include <string.h>
 
 #include "citta.h"
-//#include "mappa.h"
-//#include "grafo.h"
 
 /*
 0 - Paesino
@@ -105,13 +103,10 @@ citta citta_Random(){
         "NonNapoli",
         };
     citta city = (citta)malloc(sizeof(struct scitta));
-    //city->nome = "prova";
     city->nome = calloc(100, sizeof(char));
     strcpy(city->nome, caso[rand()%54]);
-    //city->nome = caso[rand()%54];
     city->posX = rand()%WORLD_SIZE;
     city->posY = rand()%WORLD_SIZE;
-    //printf("x: %d\n", city->posX);
     city->fazione = 0;
     city->isola = 0;
     int liv = rand()%100;
@@ -123,7 +118,6 @@ citta citta_Random(){
     else if(liv > 2) city->livello = 4;
     else if(liv > 1) city->livello = 5;
     else city->livello = 6;
-    //city->livello = rand()%CITY_MAXLIV;
     return city;
 }
 
@@ -137,7 +131,6 @@ int citta_Cancella(citta city){
 int citta_Distanza(citta c1, citta c2){
     if(!c1 || !c2) return -1;
     int dist = sqrt(pow(c2->posX-c1->posX,2)+pow(c2->posY-c1->posY,2));
-    //if (dist > WORLD_DIST) dist = WORLD_SIZE - dist;
     assert(dist >= 0);
     return dist;
 }

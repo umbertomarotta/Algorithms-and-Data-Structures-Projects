@@ -1,7 +1,6 @@
 #ifndef __LIST_H
 #define __LIST_H
 
-// a common function used to free malloc'd objects
 typedef void (*freeFunction)(void *);
 
 typedef enum { FALSE, TRUE } bool;

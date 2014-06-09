@@ -58,12 +58,6 @@ int mappa_stampaPercorso(mappa map, lista city, lista mezzi) {
         list_head(city, &curr_city, 1);
         if(!list_size(mezzi)) printf("Infine ");
         printf("Prendi %s per %s (%d)\n", nomeR, mappa_getNomeCitta(map, curr_city), curr_city);
-//	    fprintf(stderr,"%s  >>(", mappa_getNomeCitta(map, curr_city));
-//        if(list_size(mezzi)){
-//            fprintf(stderr,"%s)>> ", nomeR);
-//        }
-//        else
-//            printf(")>>");
     }
     return 0;
 }
@@ -125,16 +119,13 @@ mappa mappa_nuova_hardcode(int numcitta){
                 if (!MUTE) printf("CARICAMENTO: %d/%d (%1.2f%%)\n", done, work, (float)(done*100)/work);
                 tim = time(NULL);
             }
-            //printf("azz\n");
             if (i==j) continue;
             dist = (double)citta_Distanza(city[i], city[j]);
             li = citta_livello(city[i]);
             lj = citta_livello(city[j]);
-            //printf("dist %d %d = %.2f\n", i, j, dist);
             tempo = (dist/map->Vel_Aereo);
             if( FAST || tempo*2 < grafo_raggiunge(map->Voli, i, j))
             if(i > j && ((dist > 1000 && li > 3 && lj > 3) || (dist > 180 && dist < 1000 && li > 2 && lj > 2))){
-                //printf("Vol\n");
                 costo = (dist*map->Costo_Aereo);
                 grafo_AggiungiArco(map->Voli, i, j, 2, tempo, costo);
                 grafo_AggiungiArco(map->Voli, j, i, 2, tempo, costo);
@@ -167,7 +158,6 @@ mappa mappa_nuova_hardcode(int numcitta){
                 grafo_AggiungiArco(map->Strade, i, j, 2, tempo, costo);
                 grafo_AggiungiArco(map->Strade, j, i, 2, tempo, costo);
                 str++;
-                //grafo_AggiungiArco(map->Strade, i, j, 2, 666, 666);
             }
         }
     }
@@ -237,10 +227,6 @@ int mappa_StampaCitta(mappa map){
     int res = 10;
     int i, j, x, y;
     int matr[res][res];
-//    grafo_Stampa(map->Voli);
-//    grafo_Stampa(map->Ferrovie);
-//    grafo_Stampa(map->Strade);
-//    grafo_Stampa(map->Autostrade);
     for(i=0; i<res; i++) for(j=0; j<res; j++) matr[i][j] = -1;
     for(i=0; i<map->NumCitta; i++){
         printf("ID: %04d ", i);
@@ -303,16 +289,11 @@ grafo mappa_CoperturaMin(citta* cities, int numc, float cost, int vel, int distm
         for(i = 0; i<numc; i++){
             for(j = 0; j<numc; j++) {
                 if(matr[i][j] && pres[i] && !pres[j] && matr[i][j] < matr[min[0]][min[1]]){
-                    //printf("buon\n");
                     min[0] = i;
                     min[1] = j;
                 }
             }
         }
-        //printf("azz: %d %d\n", min[0], min[1]);
-        //for(i = 0; i<numc; i++) printf("%d ", pres[i]);
-        //printf("\n");
-        //grafo_AggiungiArco(G,  min[0], min[1], 2, (double)(matr[min[0]][min[1]]/vel), (double)(matr[min[0]][min[1]]*vel));
         if(matr[min[0]][min[1]]){
             grafo_AggiungiArco(G,  min[0], min[1], 2, 1., 1.);
             grafo_AggiungiArco(G,  min[1], min[0], 2, 1., 1.);
@@ -403,7 +384,6 @@ mappa mappa_mapFromFile(char* nomeF)
         for (i=0; i < map->NumCitta; i++){
             fscanf(fp,"%[^\n]\n", strgrafo);
             //fgets(citta,INT_MAX,fp);
-            //printf("%s\n",citta);
             city[i] = citta_fromString(strgrafo);
         }
         free(strgrafo);

@@ -12,7 +12,7 @@ int main(){
 
     int num_city, source, dest, scelta = -1, id=0, i;
     char yes, nomeF[50];
-    double tempo, costo, dist;
+    double tempo=0, costo=0, dist=0;
     mappa map = NULL;
     grafo graph = NULL, voli = NULL, ferrovie = NULL, autostrade = NULL, strade = NULL;
     while(scelta != 0){
@@ -27,6 +27,7 @@ int main(){
         printf("\n [8] Importa mappa da file\n");
         printf("\n [9] Aggiungi Collegamento\n");
         printf("\n [10] Aggiungi citta' alla mappa\n");
+        printf("\n [11] Stampa Grafo\n");
         printf("\n [0] Esci\n\n");
         printf("Scegli: ");
         scanf("%d",&scelta);
@@ -42,16 +43,6 @@ int main(){
             if(map){
                 mappa_StampaCitta(map);
                 printf("\n\n");
-//                printf("LINKS\n\n");
-//                grafo_Stampa(grafo_getVoli(map));
-//                printf("\n\n");
-//                grafo_Stampa(grafo_getFerrovie(map));
-//                printf("\n\n");
-//                grafo_Stampa(grafo_getAutostrade(map));
-//                printf("\n\n");
-//                grafo_Stampa(grafo_getStrade(map));
-//                printf("\n\n");
-
             }
             else printf("devi prima avere una mappa!\n");
             press_enter();
@@ -380,6 +371,7 @@ int main(){
                 if(graph!=NULL)
                 {
                     grafo_AggiungiArco(graph, source, dest, 2, tempo, costo);
+                    grafo_AggiungiArco(graph, dest, source, 2, tempo, costo);
                 }
             }
             else printf("devi prima avere una mappa!\n");
@@ -407,6 +399,38 @@ int main(){
             else printf("devi prima avere una mappa!\n");
             press_enter();
             break;
+         case 11:
+            if(map){
+                printf("\nSelezionare il grafo\n");
+                printf("\n[1] Aereo\n");
+                printf("\n[2] Ferroviario\n");
+                printf("\n[3] Autostradale\n");
+                printf("\n[4] Stradale\n");
+                scanf("%d",&scelta);
+                graph = NULL;
+                switch (scelta)
+                {
+                    case 1:
+                        graph = grafo_getVoli(map);
+                        break;
+                    case 2:
+                        graph = grafo_getFerrovie(map);
+                        break;
+                    case 3:
+                        graph = grafo_getAutostrade(map);
+                        break;
+                    default:
+                        graph = grafo_getStrade(map);
+                        break;
+                }
+                printf("\n\n");
+                grafo_Stampa(graph);
+                printf("\n\n");
+                press_enter();
+            }
+            else printf("devi prima avere una mappa!\n");
+            press_enter();
+            break;
         case 0:
             clear_screen();
             printf("[0] Esci\n\n");
@@ -420,80 +444,5 @@ int main(){
             break;
         }
     }
-    return 0;
-}
-
-int main1(){
-    srand(time(NULL));
-   mappa map;
-    while(1){
-        map = mappa_mapFromFile("asd");
-        grafo_Stampa(map->Strade);
-        press_enter();
-        clear_screen();
-        mappa_cancella(map);
-    }
-    return 0;
-}
-
-int main2(){
-
-//    grafo gra = grafo_Nuovo(10, 0);
-//    grafo_AggiungiArcoEx(gra, 1, 9, 0);
-//    grafo_AggiungiArcoEx(gra, 1, 8, 0);
-//    grafo_Stampa(gra);
-
-//    citta c1 = citta_Random();
-//    citta c2 = citta_Random();
-//    printf("distanza: %d", citta_Distanza(c1,c2));
-//    printf("\n\n");
-
-    grafo gra = grafo_Random(11, 1, 10, 10);
-    grafo_Rinomina(gra, "gra");
-    grafo gra1 = grafo_Random(11, 1, 10, 10);
-    grafo_Rinomina(gra1, "gra1");
-    grafo gra2 = grafo_Random(11, 1, 10, 10);
-    grafo_Rinomina(gra2, "gra2");
-    //grafo gra3 = grafo_Random(11, 1, 10, 10);
-    grafo gra3 = grafo_fromString(grafo_toString(gra2));
-    grafo_Rinomina(gra3, "gra2 copia");
-
-//    ord = grafo_getPath(gra2, 9, 1);
-//    lista_StampaInteri(ord);
-//    printf("\n\n");
-//    lista_cancella(&ord);
-//    ord = grafo_getPath(gra1, 9, 1);
-//    lista_StampaInteri(ord);
-//    printf("\n\n");
-//    lista_cancella(&ord);
-//    ord = grafo_getPath(gra, 9, 1);
-//    lista_StampaInteri(ord);
-//    printf("\n\n");
-//    lista_cancella(&ord);
-
-    lista grafi = lista_grafi();
-    list_append(grafi, &gra3);
-    list_append(grafi, &gra2);
-    list_append(grafi, &gra1);
-    list_append(grafi, &gra);
-
-    grafo_Stampa(gra3);
-    printf("\n\n");
-    grafo_Stampa(gra2);
-    printf("\n\n");
-    grafo_Stampa(gra1);
-    printf("\n\n");
-    grafo_Stampa(gra);
-    printf("\n\n");
-
-    lista ord = lista_interi();
-    lista mez = lista_stringhe();
-    //grafo_getPath(gra, 9, 1, &ord);
-    grafo_getPathM(grafi, 9, 1, 0, &ord, &mez);
-    printf("Path: %d\n\n", list_size(ord));
-    lista_StampaInteri(ord);
-    printf("\n\n");
-    lista_StampaStringhe(mez);
-    printf("\n\n");
     return 0;
 }
