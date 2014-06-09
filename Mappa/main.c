@@ -116,10 +116,10 @@ int main(){
                     scanf("%c", &yes);
                     press_enter();
                     if (yes != 's' && yes != 'S'){
-                        printf("Quante citta' vuoi ingorare?: ", dest);
+                        printf("Quante citta' vuoi ingorare?: ");
                         scanf("%d", &dest);
                         press_enter();
-                        if (dest) printf("Inserisci le %d citta: ");
+                        if (dest) printf("Inserisci le %d citta: ", dest);
                         for(i=0; i<dest; i++){
                             scanf("%d", &id);
                             if(id >= 0 && id < autostrade->nv) autostrade->ignore[id] = 1;

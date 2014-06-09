@@ -106,7 +106,9 @@ citta citta_Random(){
         };
     citta city = (citta)malloc(sizeof(struct scitta));
     //city->nome = "prova";
-    city->nome = caso[rand()%54];
+    city->nome = calloc(100, sizeof(char));
+    strcpy(city->nome, caso[rand()%54]);
+    //city->nome = caso[rand()%54];
     city->posX = rand()%WORLD_SIZE;
     city->posY = rand()%WORLD_SIZE;
     //printf("x: %d\n", city->posX);
